@@ -151,20 +151,20 @@
                         <!-- Images Tab -->
                         <page string="Images" name="images">
                             <field name="image_ids">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="is_cover"/>
                                     <field name="name"/>
                                     <field name="image_url"/>
                                     <field name="thumbnail_url"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
 
                         <!-- Contacts Tab -->
                         <page string="Contacts" name="contacts">
                             <field name="contact_ids">
-                                <tree editable="bottom">
+                                <list editable="bottom">
                                     <field name="sequence" widget="handle"/>
                                     <field name="is_primary"/>
                                     <field name="partner_id"/>
@@ -172,7 +172,7 @@
                                     <field name="phone"/>
                                     <field name="email"/>
                                     <field name="notes"/>
-                                </tree>
+                                </list>
                             </field>
                         </page>
 
@@ -199,7 +199,7 @@
         <field name="name">c21.property.listing.tree</field>
         <field name="model">c21.property.listing</field>
         <field name="arch" type="xml">
-            <tree string="Property Listings" multi_edit="1">
+            <list string="Property Listings" multi_edit="1">
                 <field name="ref_code"/>
                 <field name="name"/>
                 <field name="listing_type" widget="badge"
@@ -222,7 +222,7 @@
                        decoration-info="approval_status == 'pending'"
                        decoration-success="approval_status == 'published'"
                        decoration-danger="approval_status == 'rejected'"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -337,7 +337,7 @@
     <record id="c21_property_listing_action" model="ir.actions.act_window">
         <field name="name">All Properties</field>
         <field name="res_model">c21.property.listing</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Create your first property listing
@@ -351,7 +351,7 @@
     <record id="c21_property_listing_action_coworking" model="ir.actions.act_window">
         <field name="name">Co-working Spaces</field>
         <field name="res_model">c21.property.listing</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('listing_type', '=', 'coworking')]</field>
         <field name="context">{'default_listing_type': 'coworking'}</field>
     </record>
@@ -359,7 +359,7 @@
     <record id="c21_property_listing_action_leasing" model="ir.actions.act_window">
         <field name="name">Leasing Properties</field>
         <field name="res_model">c21.property.listing</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('listing_type', '=', 'leasing')]</field>
         <field name="context">{'default_listing_type': 'leasing'}</field>
     </record>
@@ -367,14 +367,14 @@
     <record id="c21_property_listing_action_pending" model="ir.actions.act_window">
         <field name="name">Pending Approval</field>
         <field name="res_model">c21.property.listing</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('approval_status', '=', 'pending')]</field>
     </record>
 
     <record id="c21_property_listing_action_published" model="ir.actions.act_window">
         <field name="name">Published</field>
         <field name="res_model">c21.property.listing</field>
-        <field name="view_mode">tree,kanban,form</field>
+        <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('approval_status', '=', 'published')]</field>
     </record>
 </odoo>

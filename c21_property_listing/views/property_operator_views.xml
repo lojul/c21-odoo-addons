@@ -27,13 +27,13 @@
         <field name="name">c21.property.operator.tree</field>
         <field name="model">res.partner</field>
         <field name="arch" type="xml">
-            <tree string="Property Operators">
+            <list string="Property Operators">
                 <field name="name"/>
                 <field name="email"/>
                 <field name="phone"/>
                 <field name="city"/>
                 <field name="property_count"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -95,7 +95,7 @@
     <record id="c21_property_operator_action" model="ir.actions.act_window">
         <field name="name">Operators</field>
         <field name="res_model">res.partner</field>
-        <field name="view_mode">kanban,tree,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('is_property_operator', '=', True)]</field>
         <field name="context">{
             'default_is_property_operator': True,
@@ -104,7 +104,7 @@
         <field name="view_ids" eval="[
             (5, 0, 0),
             (0, 0, {'view_mode': 'kanban', 'view_id': ref('c21_property_operator_view_kanban')}),
-            (0, 0, {'view_mode': 'tree', 'view_id': ref('c21_property_operator_view_tree')}),
+            (0, 0, {'view_mode': 'list', 'view_id': ref('c21_property_operator_view_tree')}),
         ]"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
