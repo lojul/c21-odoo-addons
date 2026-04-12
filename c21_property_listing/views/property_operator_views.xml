@@ -9,12 +9,14 @@
             <field name="company_type" position="attributes">
                 <attribute name="invisible">is_property_operator</attribute>
             </field>
+            <field name="vat" position="attributes">
+                <attribute name="invisible">is_property_operator</attribute>
+            </field>
             <page name="sales_purchases" position="attributes">
                 <attribute name="invisible">is_property_operator</attribute>
             </page>
             <field name="category_id" position="after">
-                <field name="is_property_operator"/>
-                <field name="operator_logo_url" invisible="not is_property_operator"/>
+                <field name="is_property_operator" invisible="1"/>
             </field>
             <div name="button_box" position="inside">
                 <button name="%(c21_property_listing.c21_property_listing_action)d"
@@ -53,7 +55,6 @@
                 <field name="email"/>
                 <field name="phone"/>
                 <field name="property_count"/>
-                <field name="operator_logo_url"/>
                 <templates>
                     <t t-name="card">
                         <div class="oe_kanban_content">
