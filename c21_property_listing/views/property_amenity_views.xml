@@ -60,7 +60,7 @@
                 <filter name="filter_active" string="Active" domain="[('active', '=', True)]"/>
                 <filter name="filter_inactive" string="Archived" domain="[('active', '=', False)]"/>
                 <separator/>
-                <group string="Group By">
+                <group>
                     <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
                 </group>
             </search>

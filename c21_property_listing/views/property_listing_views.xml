@@ -320,7 +320,7 @@
                         domain="[('building_grade', '=', 'grade_b')]"/>
                 <separator/>
                 <!-- Group By -->
-                <group string="Group By">
+                <group>
                     <filter name="group_district" string="District" context="{'group_by': 'district'}"/>
                     <filter name="group_listing_type" string="Listing Type" context="{'group_by': 'listing_type'}"/>
                     <filter name="group_property_type" string="Property Type" context="{'group_by': 'property_type'}"/>
