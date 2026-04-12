@@ -218,7 +218,7 @@
                        decoration-danger="state == 'leased'"
                        decoration-muted="state == 'off_market'"/>
                 <field name="approval_status" widget="badge"
-                       decoration-secondary="approval_status == 'draft'"
+                       decoration-muted="approval_status == 'draft'"
                        decoration-info="approval_status == 'pending'"
                        decoration-success="approval_status == 'published'"
                        decoration-danger="approval_status == 'rejected'"/>
