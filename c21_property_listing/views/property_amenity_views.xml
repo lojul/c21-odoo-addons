@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Amenity Form View -->
+    <record id="c21_property_amenity_view_form" model="ir.ui.view">
+        <field name="name">c21.property.amenity.form</field>
+        <field name="model">c21.property.amenity</field>
+        <field name="arch" type="xml">
+            <form string="Amenity">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="name_cn"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="category"/>
+                            <field name="icon"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Amenity Tree View -->
+    <record id="c21_property_amenity_view_tree" model="ir.ui.view">
+        <field name="name">c21.property.amenity.tree</field>
+        <field name="model">c21.property.amenity</field>
+        <field name="arch" type="xml">
+            <tree string="Amenities" editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="name_cn"/>
+                <field name="category" widget="badge"
+                       decoration-info="category == 'coworking'"
+                       decoration-warning="category == 'leasing'"
+                       decoration-success="category == 'both'"/>
+                <field name="icon"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Amenity Search View -->
+    <record id="c21_property_amenity_view_search" model="ir.ui.view">
+        <field name="name">c21.property.amenity.search</field>
+        <field name="model">c21.property.amenity</field>
+        <field name="arch" type="xml">
+            <search string="Search Amenities">
+                <field name="name"/>
+                <field name="code"/>
+                <separator/>
+                <filter name="filter_coworking" string="Co-working"
+                        domain="[('category', 'in', ['coworking', 'both'])]"/>
+                <filter name="filter_leasing" string="Leasing"
+                        domain="[('category', 'in', ['leasing', 'both'])]"/>
+                <separator/>
+                <filter name="filter_active" string="Active" domain="[('active', '=', True)]"/>
+                <filter name="filter_inactive" string="Archived" domain="[('active', '=', False)]"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_category" string="Category" context="{'group_by': 'category'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Amenity Action -->
+    <record id="c21_property_amenity_action" model="ir.actions.act_window">
+        <field name="name">Amenities</field>
+        <field name="res_model">c21.property.amenity</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first amenity
+            </p>
+            <p>
+                Add amenities like WiFi, Meeting Rooms, Parking, etc.
+            </p>
+        </field>
+    </record>
+</odoo>

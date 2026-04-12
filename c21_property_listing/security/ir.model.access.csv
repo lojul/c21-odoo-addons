@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_c21_property_listing_user,c21.property.listing.user,model_c21_property_listing,group_c21_property_user,1,1,1,0
+access_c21_property_listing_manager,c21.property.listing.manager,model_c21_property_listing,group_c21_property_manager,1,1,1,1
+access_c21_property_image_user,c21.property.image.user,model_c21_property_image,group_c21_property_user,1,1,1,0
+access_c21_property_image_manager,c21.property.image.manager,model_c21_property_image,group_c21_property_manager,1,1,1,1
+access_c21_property_amenity_user,c21.property.amenity.user,model_c21_property_amenity,group_c21_property_user,1,0,0,0
+access_c21_property_amenity_admin,c21.property.amenity.admin,model_c21_property_amenity,group_c21_property_admin,1,1,1,1
+access_c21_property_contact_user,c21.property.contact.user,model_c21_property_contact,group_c21_property_user,1,1,1,0
+access_c21_property_contact_manager,c21.property.contact.manager,model_c21_property_contact,group_c21_property_manager,1,1,1,1

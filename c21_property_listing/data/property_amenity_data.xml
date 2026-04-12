@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Co-working Amenities -->
+        <record id="amenity_wifi" model="c21.property.amenity">
+            <field name="name">High-Speed WiFi</field>
+            <field name="name_cn">高速無線網絡</field>
+            <field name="code">wifi</field>
+            <field name="icon">fa-wifi</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_24hr" model="c21.property.amenity">
+            <field name="name">24-Hour Access</field>
+            <field name="name_cn">24小時出入</field>
+            <field name="code">24hr</field>
+            <field name="icon">fa-clock-o</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_meeting" model="c21.property.amenity">
+            <field name="name">Meeting Rooms</field>
+            <field name="name_cn">會議室</field>
+            <field name="code">meeting</field>
+            <field name="icon">fa-users</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_phone_booth" model="c21.property.amenity">
+            <field name="name">Phone Booths</field>
+            <field name="name_cn">電話亭</field>
+            <field name="code">phone_booth</field>
+            <field name="icon">fa-phone</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_printer" model="c21.property.amenity">
+            <field name="name">Printing Services</field>
+            <field name="name_cn">打印服務</field>
+            <field name="code">printer</field>
+            <field name="icon">fa-print</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_pantry" model="c21.property.amenity">
+            <field name="name">Pantry/Kitchen</field>
+            <field name="name_cn">茶水間</field>
+            <field name="code">pantry</field>
+            <field name="icon">fa-coffee</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_reception" model="c21.property.amenity">
+            <field name="name">Reception Services</field>
+            <field name="name_cn">前台服務</field>
+            <field name="code">reception</field>
+            <field name="icon">fa-concierge-bell</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_mail" model="c21.property.amenity">
+            <field name="name">Mail Handling</field>
+            <field name="name_cn">郵件處理</field>
+            <field name="code">mail</field>
+            <field name="icon">fa-envelope</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_locker" model="c21.property.amenity">
+            <field name="name">Lockers</field>
+            <field name="name_cn">儲物櫃</field>
+            <field name="code">locker</field>
+            <field name="icon">fa-lock</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_event_space" model="c21.property.amenity">
+            <field name="name">Event Space</field>
+            <field name="name_cn">活動空間</field>
+            <field name="code">event_space</field>
+            <field name="icon">fa-calendar</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_shower" model="c21.property.amenity">
+            <field name="name">Shower Facilities</field>
+            <field name="name_cn">淋浴設施</field>
+            <field name="code">shower</field>
+            <field name="icon">fa-shower</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <record id="amenity_bike_storage" model="c21.property.amenity">
+            <field name="name">Bike Storage</field>
+            <field name="name_cn">單車存放</field>
+            <field name="code">bike_storage</field>
+            <field name="icon">fa-bicycle</field>
+            <field name="category">coworking</field>
+        </record>
+
+        <!-- Leasing Amenities -->
+        <record id="amenity_aircon" model="c21.property.amenity">
+            <field name="name">Central Air Conditioning</field>
+            <field name="name_cn">中央冷氣</field>
+            <field name="code">aircon</field>
+            <field name="icon">fa-snowflake-o</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_lift" model="c21.property.amenity">
+            <field name="name">Lift/Elevator</field>
+            <field name="name_cn">電梯</field>
+            <field name="code">lift</field>
+            <field name="icon">fa-arrow-up</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_parking" model="c21.property.amenity">
+            <field name="name">Car Parking</field>
+            <field name="name_cn">停車場</field>
+            <field name="code">parking</field>
+            <field name="icon">fa-car</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_loading" model="c21.property.amenity">
+            <field name="name">Loading Bay</field>
+            <field name="name_cn">上落貨區</field>
+            <field name="code">loading</field>
+            <field name="icon">fa-truck</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_security_24hr" model="c21.property.amenity">
+            <field name="name">24hr Security</field>
+            <field name="name_cn">24小時保安</field>
+            <field name="code">security_24hr</field>
+            <field name="icon">fa-shield</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_cctv" model="c21.property.amenity">
+            <field name="name">CCTV</field>
+            <field name="name_cn">閉路電視</field>
+            <field name="code">cctv</field>
+            <field name="icon">fa-video-camera</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_fiber" model="c21.property.amenity">
+            <field name="name">Fiber Internet Ready</field>
+            <field name="name_cn">光纖網絡</field>
+            <field name="code">fiber</field>
+            <field name="icon">fa-bolt</field>
+            <field name="category">both</field>
+        </record>
+
+        <record id="amenity_sea_view" model="c21.property.amenity">
+            <field name="name">Sea View</field>
+            <field name="name_cn">海景</field>
+            <field name="code">sea_view</field>
+            <field name="icon">fa-ship</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_city_view" model="c21.property.amenity">
+            <field name="name">City View</field>
+            <field name="name_cn">城市景觀</field>
+            <field name="code">city_view</field>
+            <field name="icon">fa-building</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_furnished" model="c21.property.amenity">
+            <field name="name">Furnished</field>
+            <field name="name_cn">已裝修</field>
+            <field name="code">furnished</field>
+            <field name="icon">fa-couch</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_raised_floor" model="c21.property.amenity">
+            <field name="name">Raised Floor</field>
+            <field name="name_cn">架高地台</field>
+            <field name="code">raised_floor</field>
+            <field name="icon">fa-th</field>
+            <field name="category">leasing</field>
+        </record>
+
+        <record id="amenity_backup_power" model="c21.property.amenity">
+            <field name="name">Backup Power</field>
+            <field name="name_cn">後備電源</field>
+            <field name="code">backup_power</field>
+            <field name="icon">fa-plug</field>
+            <field name="category">leasing</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Module Category -->
+    <record id="module_category_c21_property" model="ir.module.category">
+        <field name="name">C21 Properties</field>
+        <field name="description">Category for C21 Property Listing module</field>
+        <field name="sequence">50</field>
+    </record>
+
+    <!-- User Group -->
+    <record id="group_c21_property_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_category_c21_property"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can view and create property listings</field>
+    </record>
+
+    <!-- Manager Group -->
+    <record id="group_c21_property_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="module_category_c21_property"/>
+        <field name="implied_ids" eval="[(4, ref('group_c21_property_user'))]"/>
+        <field name="comment">Can approve, publish, and delete property listings</field>
+    </record>
+
+    <!-- Admin Group -->
+    <record id="group_c21_property_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="module_category_c21_property"/>
+        <field name="implied_ids" eval="[(4, ref('group_c21_property_manager'))]"/>
+        <field name="comment">Full access including configuration</field>
+    </record>
+
+    <!-- Record Rules -->
+
+    <!-- Users can see published listings and their own drafts -->
+    <record id="c21_property_listing_rule_user" model="ir.rule">
+        <field name="name">Property Listing: User can see published + own</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="domain_force">[
+            '|',
+            ('approval_status', '=', 'published'),
+            ('create_uid', '=', user.id)
+        ]</field>
+        <field name="groups" eval="[(4, ref('group_c21_property_user'))]"/>
+    </record>
+
+    <!-- Managers can see all listings -->
+    <record id="c21_property_listing_rule_manager" model="ir.rule">
+        <field name="name">Property Listing: Manager sees all</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_c21_property_manager'))]"/>
+    </record>
+</odoo>

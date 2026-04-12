@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Form View -->
+    <record id="c21_property_listing_view_form" model="ir.ui.view">
+        <field name="name">c21.property.listing.form</field>
+        <field name="model">c21.property.listing</field>
+        <field name="arch" type="xml">
+            <form string="Property Listing">
+                <header>
+                    <button name="action_submit_for_review" string="Submit for Review"
+                            type="object" class="btn-primary"
+                            invisible="approval_status != 'draft'"/>
+                    <button name="action_approve" string="Approve"
+                            type="object" class="btn-primary"
+                            invisible="approval_status != 'pending'"
+                            groups="c21_property_listing.group_c21_property_manager"/>
+                    <button name="action_publish" string="Publish"
+                            type="object" class="btn-success"
+                            invisible="approval_status != 'approved'"
+                            groups="c21_property_listing.group_c21_property_manager"/>
+                    <button name="action_reject" string="Reject"
+                            type="object" class="btn-secondary"
+                            invisible="approval_status not in ('pending', 'approved')"
+                            groups="c21_property_listing.group_c21_property_manager"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft"
+                            type="object" class="btn-secondary"
+                            invisible="approval_status == 'draft'"/>
+                    <field name="approval_status" widget="statusbar"
+                           statusbar_visible="draft,pending,approved,published"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_images" type="object"
+                                class="oe_stat_button" icon="fa-image">
+                            <field name="image_count" widget="statinfo" string="Images"/>
+                        </button>
+                        <button name="action_view_contacts" type="object"
+                                class="oe_stat_button" icon="fa-users">
+                            <field name="contact_count" widget="statinfo" string="Contacts"/>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Draft" bg_color="text-bg-secondary"
+                            invisible="approval_status != 'draft'"/>
+                    <widget name="web_ribbon" title="Published" bg_color="text-bg-success"
+                            invisible="approval_status != 'published'"/>
+                    <widget name="web_ribbon" title="Rejected" bg_color="text-bg-danger"
+                            invisible="approval_status != 'rejected'"/>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1>
+                            <field name="name" placeholder="Property Name"/>
+                        </h1>
+                        <h2>
+                            <field name="name_cn" placeholder="Chinese Name (optional)"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="ref_code"/>
+                            <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
+                            <field name="state" widget="badge"
+                                   decoration-success="state == 'available'"
+                                   decoration-warning="state == 'under_negotiation'"
+                                   decoration-danger="state == 'leased'"
+                                   decoration-muted="state == 'off_market'"/>
+                        </group>
+                        <group>
+                            <field name="district"/>
+                            <field name="available_from"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <!-- Location Tab -->
+                        <page string="Location" name="location">
+                            <group>
+                                <group>
+                                    <field name="building_name"/>
+                                    <field name="floor"/>
+                                    <field name="unit"/>
+                                </group>
+                                <group>
+                                    <field name="latitude"/>
+                                    <field name="longitude"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="address" placeholder="Full address..."/>
+                            </group>
+                        </page>
+
+                        <!-- Co-working Details Tab -->
+                        <page string="Co-working Details" name="coworking"
+                              invisible="listing_type != 'coworking'">
+                            <group>
+                                <group>
+                                    <field name="operator_id"/>
+                                    <field name="size"/>
+                                </group>
+                                <group>
+                                    <field name="capacity"/>
+                                    <field name="available_capacity"/>
+                                </group>
+                            </group>
+                            <group string="Pricing (HKD/month)">
+                                <group>
+                                    <field name="hot_desk_price"/>
+                                    <field name="dedicated_desk_price"/>
+                                </group>
+                                <group>
+                                    <field name="office_price"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Leasing Details Tab -->
+                        <page string="Leasing Details" name="leasing"
+                              invisible="listing_type != 'leasing'">
+                            <group>
+                                <group>
+                                    <field name="property_type"/>
+                                    <field name="building_grade"/>
+                                    <field name="business_type"
+                                           invisible="property_type != 'retail'"/>
+                                </group>
+                                <group>
+                                    <field name="year_built"/>
+                                    <field name="total_floors"/>
+                                </group>
+                            </group>
+                            <group string="Area (sqft)">
+                                <group>
+                                    <field name="gross_area"/>
+                                    <field name="net_area"/>
+                                </group>
+                                <group>
+                                    <field name="asking_rent"/>
+                                    <field name="rent_per_sqft"/>
+                                </group>
+                            </group>
+                            <group>
+                                <field name="lease_terms"/>
+                            </group>
+                        </page>
+
+                        <!-- Amenities Tab -->
+                        <page string="Amenities" name="amenities">
+                            <field name="amenity_ids" widget="many2many_tags"/>
+                        </page>
+
+                        <!-- Images Tab -->
+                        <page string="Images" name="images">
+                            <field name="image_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="is_cover"/>
+                                    <field name="name"/>
+                                    <field name="image_url"/>
+                                    <field name="thumbnail_url"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!-- Contacts Tab -->
+                        <page string="Contacts" name="contacts">
+                            <field name="contact_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="is_primary"/>
+                                    <field name="partner_id"/>
+                                    <field name="role"/>
+                                    <field name="phone"/>
+                                    <field name="mobile"/>
+                                    <field name="email"/>
+                                    <field name="notes"/>
+                                </tree>
+                            </field>
+                        </page>
+
+                        <!-- Description Tab -->
+                        <page string="Description" name="description">
+                            <group>
+                                <field name="description" nolabel="1"
+                                       placeholder="Property description in English..."/>
+                            </group>
+                            <group>
+                                <field name="description_cn" nolabel="1"
+                                       placeholder="Property description in Chinese..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tree View -->
+    <record id="c21_property_listing_view_tree" model="ir.ui.view">
+        <field name="name">c21.property.listing.tree</field>
+        <field name="model">c21.property.listing</field>
+        <field name="arch" type="xml">
+            <tree string="Property Listings" multi_edit="1">
+                <field name="ref_code"/>
+                <field name="name"/>
+                <field name="listing_type" widget="badge"
+                       decoration-info="listing_type == 'coworking'"
+                       decoration-warning="listing_type == 'leasing'"/>
+                <field name="district"/>
+                <field name="property_type" optional="show"/>
+                <field name="building_grade" optional="show"/>
+                <field name="operator_id" optional="show"/>
+                <field name="net_area" optional="show"/>
+                <field name="capacity" optional="hide"/>
+                <field name="display_price"/>
+                <field name="state" widget="badge"
+                       decoration-success="state == 'available'"
+                       decoration-warning="state == 'under_negotiation'"
+                       decoration-danger="state == 'leased'"
+                       decoration-muted="state == 'off_market'"/>
+                <field name="approval_status" widget="badge"
+                       decoration-secondary="approval_status == 'draft'"
+                       decoration-info="approval_status == 'pending'"
+                       decoration-success="approval_status == 'published'"
+                       decoration-danger="approval_status == 'rejected'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Kanban View -->
+    <record id="c21_property_listing_view_kanban" model="ir.ui.view">
+        <field name="name">c21.property.listing.kanban</field>
+        <field name="model">c21.property.listing</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_mobile">
+                <field name="name"/>
+                <field name="ref_code"/>
+                <field name="listing_type"/>
+                <field name="district"/>
+                <field name="state"/>
+                <field name="approval_status"/>
+                <field name="display_price"/>
+                <field name="operator_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_content">
+                            <div class="o_kanban_record_top mb-2">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                    </strong>
+                                </div>
+                                <span class="badge text-bg-secondary">
+                                    <field name="ref_code"/>
+                                </span>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div><strong>District:</strong> <field name="district"/></div>
+                                <div><strong>Type:</strong>
+                                    <span t-if="record.listing_type.raw_value == 'coworking'" class="badge text-bg-info">Co-working</span>
+                                    <span t-if="record.listing_type.raw_value == 'leasing'" class="badge text-bg-warning">Leasing</span>
+                                </div>
+                                <div><strong>Price:</strong> <field name="display_price"/></div>
+                                <div t-if="record.operator_id.value">
+                                    <strong>Operator:</strong> <field name="operator_id"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Search View -->
+    <record id="c21_property_listing_view_search" model="ir.ui.view">
+        <field name="name">c21.property.listing.search</field>
+        <field name="model">c21.property.listing</field>
+        <field name="arch" type="xml">
+            <search string="Search Properties">
+                <field name="name"/>
+                <field name="ref_code"/>
+                <field name="building_name"/>
+                <field name="district"/>
+                <field name="operator_id"/>
+                <separator/>
+                <!-- Type Filters -->
+                <filter name="filter_coworking" string="Co-working"
+                        domain="[('listing_type', '=', 'coworking')]"/>
+                <filter name="filter_leasing" string="Leasing"
+                        domain="[('listing_type', '=', 'leasing')]"/>
+                <separator/>
+                <!-- Status Filters -->
+                <filter name="filter_available" string="Available"
+                        domain="[('state', '=', 'available')]"/>
+                <filter name="filter_negotiation" string="Under Negotiation"
+                        domain="[('state', '=', 'under_negotiation')]"/>
+                <filter name="filter_leased" string="Leased"
+                        domain="[('state', '=', 'leased')]"/>
+                <separator/>
+                <!-- Approval Filters -->
+                <filter name="filter_draft" string="Draft"
+                        domain="[('approval_status', '=', 'draft')]"/>
+                <filter name="filter_pending" string="Pending Review"
+                        domain="[('approval_status', '=', 'pending')]"/>
+                <filter name="filter_published" string="Published"
+                        domain="[('approval_status', '=', 'published')]"/>
+                <separator/>
+                <!-- Property Type Filters -->
+                <filter name="filter_office" string="Office"
+                        domain="[('property_type', '=', 'office')]"/>
+                <filter name="filter_retail" string="Retail"
+                        domain="[('property_type', '=', 'retail')]"/>
+                <filter name="filter_industrial" string="Industrial"
+                        domain="[('property_type', '=', 'industrial')]"/>
+                <separator/>
+                <!-- Grade Filters -->
+                <filter name="filter_grade_a" string="Grade A"
+                        domain="[('building_grade', '=', 'grade_a')]"/>
+                <filter name="filter_grade_b" string="Grade B"
+                        domain="[('building_grade', '=', 'grade_b')]"/>
+                <separator/>
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter name="group_district" string="District" context="{'group_by': 'district'}"/>
+                    <filter name="group_listing_type" string="Listing Type" context="{'group_by': 'listing_type'}"/>
+                    <filter name="group_property_type" string="Property Type" context="{'group_by': 'property_type'}"/>
+                    <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
+                    <filter name="group_approval" string="Approval Status" context="{'group_by': 'approval_status'}"/>
+                    <filter name="group_operator" string="Operator" context="{'group_by': 'operator_id'}"/>
+                    <filter name="group_grade" string="Building Grade" context="{'group_by': 'building_grade'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="c21_property_listing_action" model="ir.actions.act_window">
+        <field name="name">All Properties</field>
+        <field name="res_model">c21.property.listing</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first property listing
+            </p>
+            <p>
+                Add co-working spaces or leasing properties to manage your portfolio.
+            </p>
+        </field>
+    </record>
+
+    <record id="c21_property_listing_action_coworking" model="ir.actions.act_window">
+        <field name="name">Co-working Spaces</field>
+        <field name="res_model">c21.property.listing</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('listing_type', '=', 'coworking')]</field>
+        <field name="context">{'default_listing_type': 'coworking'}</field>
+    </record>
+
+    <record id="c21_property_listing_action_leasing" model="ir.actions.act_window">
+        <field name="name">Leasing Properties</field>
+        <field name="res_model">c21.property.listing</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('listing_type', '=', 'leasing')]</field>
+        <field name="context">{'default_listing_type': 'leasing'}</field>
+    </record>
+
+    <record id="c21_property_listing_action_pending" model="ir.actions.act_window">
+        <field name="name">Pending Approval</field>
+        <field name="res_model">c21.property.listing</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('approval_status', '=', 'pending')]</field>
+    </record>
+
+    <record id="c21_property_listing_action_published" model="ir.actions.act_window">
+        <field name="name">Published</field>
+        <field name="res_model">c21.property.listing</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('approval_status', '=', 'published')]</field>
+    </record>
+</odoo>
