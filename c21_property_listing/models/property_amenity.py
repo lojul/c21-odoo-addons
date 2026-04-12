@@ -17,6 +17,7 @@ class C21PropertyAmenity(models.Model):
     ], string='Category', default='both', required=True)
     active = fields.Boolean('Active', default=True)
 
-    _sql_constraints = [
-        ('code_unique', 'UNIQUE(code)', 'Amenity code must be unique!'),
-    ]
+    _code_unique = models.Constraint(
+        'UNIQUE(code)',
+        'Amenity code must be unique!',
+    )

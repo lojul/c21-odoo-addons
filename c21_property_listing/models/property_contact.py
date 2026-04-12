@@ -28,5 +28,4 @@ class C21PropertyContact(models.Model):
 
     # Related fields for easy access
     phone = fields.Char(related='partner_id.phone', string='Phone', readonly=True)
-    mobile = fields.Char(related='partner_id.mobile', string='Mobile', readonly=True)
     email = fields.Char(related='partner_id.email', string='Email', readonly=True)

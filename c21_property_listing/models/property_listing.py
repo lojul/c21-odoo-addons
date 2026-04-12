@@ -141,9 +141,10 @@ class C21PropertyListing(models.Model):
     contact_count = fields.Integer('Contact Count', compute='_compute_contact_count')
     display_price = fields.Char('Display Price', compute='_compute_display_price')
 
-    _sql_constraints = [
-        ('ref_code_unique', 'UNIQUE(ref_code)', 'Reference code must be unique!'),
-    ]
+    _ref_code_unique = models.Constraint(
+        'UNIQUE(ref_code)',
+        'Reference code must be unique!',
+    )
 
     @api.depends('asking_rent', 'net_area')
     def _compute_rent_per_sqft(self):

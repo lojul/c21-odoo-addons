@@ -170,7 +170,6 @@
                                     <field name="partner_id"/>
                                     <field name="role"/>
                                     <field name="phone"/>
-                                    <field name="mobile"/>
                                     <field name="email"/>
                                     <field name="notes"/>
                                 </tree>
