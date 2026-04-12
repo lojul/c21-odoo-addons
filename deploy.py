@@ -1,6 +1,6 @@
 """
 One-shot deploy script: downloads c21-odoo-addons from GitHub and installs
-the c21_property_listing module into /var/lib/odoo/addons/
+the c21_property_listing module into Odoo 19's runtime addons directory.
 Run inside the Railway container: python3 /tmp/deploy.py
 """
 import urllib.request
@@ -12,7 +12,7 @@ REPO_URL = "https://github.com/lojul/c21-odoo-addons/archive/refs/heads/main.tar
 TMP_ARCHIVE = "/tmp/c21_addons.tgz"
 TMP_EXTRACT = "/tmp/c21_addons_extract"
 MODULE_NAME = "c21_property_listing"
-DEST_DIR = "/var/lib/odoo/addons/" + MODULE_NAME
+DEST_DIR = "/var/lib/odoo/addons/19.0/" + MODULE_NAME
 
 print("Downloading repo archive...")
 urllib.request.urlretrieve(REPO_URL, TMP_ARCHIVE)

@@ -204,7 +204,7 @@ class C21PropertyListing(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Property Images',
             'res_model': 'c21.property.image',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('property_id', '=', self.id)],
             'context': {'default_property_id': self.id},
         }
@@ -215,7 +215,7 @@ class C21PropertyListing(models.Model):
             'type': 'ir.actions.act_window',
             'name': 'Property Contacts',
             'res_model': 'c21.property.contact',
-            'view_mode': 'tree,form',
+            'view_mode': 'list,form',
             'domain': [('property_id', '=', self.id)],
             'context': {'default_property_id': self.id},
         }
