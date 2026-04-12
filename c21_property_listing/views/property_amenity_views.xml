@@ -33,10 +33,7 @@
                 <field name="code"/>
                 <field name="name"/>
                 <field name="name_cn"/>
-                <field name="category" widget="badge"
-                       decoration-info="category == 'coworking'"
-                       decoration-warning="category == 'leasing'"
-                       decoration-success="category == 'both'"/>
+                  <field name="category"/>
                 <field name="icon"/>
                 <field name="active"/>
             </list>
