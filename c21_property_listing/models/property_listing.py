@@ -80,7 +80,7 @@ class C21PropertyListing(models.Model):
     # === Co-working Specific Fields ===
     operator_id = fields.Many2one(
         'res.partner', string='Operator',
-        domain=[('is_property_operator', '=', True)],
+        domain=[('is_property_operator', '=', True), ('is_company', '=', True)],
         tracking=True)
     capacity = fields.Integer('Total Capacity', help='Total people capacity')
     available_capacity = fields.Integer('Available Capacity')

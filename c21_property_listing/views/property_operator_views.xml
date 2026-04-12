@@ -96,10 +96,11 @@
         <field name="name">Operators</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="domain">[('is_property_operator', '=', True)]</field>
+        <field name="domain">[('is_property_operator', '=', True), ('is_company', '=', True)]</field>
         <field name="context">{
             'default_is_property_operator': True,
-            'default_is_company': True
+            'default_is_company': True,
+            'default_company_type': 'company'
         }</field>
         <field name="view_ids" eval="[
             (5, 0, 0),
