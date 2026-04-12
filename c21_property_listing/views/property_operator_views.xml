@@ -6,6 +6,12 @@
         <field name="model">res.partner</field>
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
+            <field name="company_type" position="attributes">
+                <attribute name="invisible">is_property_operator</attribute>
+            </field>
+            <page name="sales_purchases" position="attributes">
+                <attribute name="invisible">is_property_operator</attribute>
+            </page>
             <field name="category_id" position="after">
                 <field name="is_property_operator"/>
                 <field name="operator_logo_url" invisible="not is_property_operator"/>
