@@ -1,7 +1,10 @@
-# Translation for c21_property_listing (Traditional Chinese - Hong Kong)
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* c21_property_listing
 msgid ""
 msgstr ""
-"Project-Id-Version: c21_property_listing 19.0\n"
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-04-13 00:00+0000\n"
 "PO-Revision-Date: 2026-04-13 00:00+0000\n"
 "Last-Translator: C21 Team\n"
@@ -12,200 +15,142 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__ref_code
 msgid "Reference Code"
 msgstr "參考編號"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__name
 msgid "Name (English)"
 msgstr "名稱（英文）"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__name_cn
 msgid "Name (Chinese)"
 msgstr "名稱（中文）"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__listing_type
 msgid "Listing Type"
 msgstr "物業類型"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__district
 msgid "District"
 msgstr "地區"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__building_name
 msgid "Building Name"
 msgstr "大廈名稱"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__address
 msgid "Address"
 msgstr "地址"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__floor
 msgid "Floor"
 msgstr "樓層"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__unit
 msgid "Unit"
 msgstr "單位"
 
-msgid "Latitude"
-msgstr "緯度"
-
-msgid "Longitude"
-msgstr "經度"
-
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__state
 msgid "Status"
 msgstr "狀態"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__approval_status
 msgid "Approval Status"
 msgstr "審批狀態"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__available_from
 msgid "Available From"
 msgstr "可租日期"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__operator_id
 msgid "Operator"
 msgstr "營運商"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__capacity
 msgid "Total Capacity"
 msgstr "總容量"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__available_capacity
 msgid "Available Capacity"
 msgstr "可用容量"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__size
 msgid "Size (sqft)"
 msgstr "面積（平方呎）"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__hot_desk_price
 msgid "Hot Desk Price"
 msgstr "流動工位價格"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__dedicated_desk_price
 msgid "Dedicated Desk Price"
 msgstr "固定工位價格"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__office_price
 msgid "Private Office Price"
 msgstr "私人辦公室價格"
 
-msgid "Property Type"
-msgstr "物業用途"
-
-msgid "Building Grade"
-msgstr "大廈級別"
-
-msgid "Business Type"
-msgstr "業務類型"
-
-msgid "Gross Area (sqft)"
-msgstr "建築面積（平方呎）"
-
-msgid "Net Area (sqft)"
-msgstr "實用面積（平方呎）"
-
-msgid "Asking Rent"
-msgstr "叫租"
-
-msgid "Rent per Sqft"
-msgstr "每呎租金"
-
-msgid "Lease Terms"
-msgstr "租約條款"
-
-msgid "Year Built"
-msgstr "落成年份"
-
-msgid "Total Floors"
-msgstr "總樓層"
-
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__description
 msgid "Description (English)"
 msgstr "描述（英文）"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__description_cn
 msgid "Description (Chinese)"
 msgstr "描述（中文）"
 
-msgid "Images"
-msgstr "圖片"
-
-msgid "Amenities"
-msgstr "設施"
-
-msgid "Contacts"
-msgstr "聯絡人"
-
-msgid "Currency"
-msgstr "貨幣"
-
-msgid "Image Count"
-msgstr "圖片數量"
-
-msgid "Contact Count"
-msgstr "聯絡人數量"
-
-msgid "Display Price"
-msgstr "顯示價格"
-
-msgid "Description"
-msgstr "描述"
-
-msgid "Image URL"
-msgstr "圖片網址"
-
-msgid "Thumbnail URL"
-msgstr "縮圖網址"
-
-msgid "Sequence"
-msgstr "排序"
-
-msgid "Is Cover Image"
-msgstr "是否封面圖"
-
-msgid "Contact"
-msgstr "聯絡人"
-
-msgid "Role"
-msgstr "角色"
-
-msgid "Is Primary Contact"
-msgstr "主要聯絡人"
-
-msgid "Notes"
-msgstr "備註"
-
-msgid "Code"
-msgstr "代碼"
-
-msgid "Icon"
-msgstr "圖示"
-
-msgid "Category"
-msgstr "分類"
-
-msgid "Active"
-msgstr "啟用"
-
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_res_partner__is_property_operator
 msgid "Is Property Operator"
 msgstr "是否物業營運商"
 
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_res_partner__operator_logo_url
 msgid "Operator Logo URL"
 msgstr "營運商標誌網址"
 
-msgid "Properties"
-msgstr "物業"
-
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_res_partner__property_count
 msgid "Property Count"
 msgstr "物業數量"
 
-msgid "Draft"
-msgstr "草稿"
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__image_ids
+msgid "Images"
+msgstr "圖片"
 
-msgid "Pending Review"
-msgstr "待審核"
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__contact_ids
+msgid "Contacts"
+msgstr "聯絡人"
 
-msgid "Approved"
-msgstr "已批准"
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__image_count
+msgid "Image Count"
+msgstr "圖片數量"
 
-msgid "Published"
-msgstr "已發佈"
-
-msgid "Rejected"
-msgstr "已拒絕"
-
-msgid "Available"
-msgstr "可租"
-
-msgid "Under Negotiation"
-msgstr "洽談中"
-
-msgid "Leased"
-msgstr "已出租"
-
-msgid "Off Market"
-msgstr "已下架"
+#. module: c21_property_listing
+#: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__contact_count
+msgid "Contact Count"
+msgstr "聯絡人數量"
