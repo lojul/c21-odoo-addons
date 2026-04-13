@@ -6,16 +6,16 @@ class ResPartner(models.Model):
     _inherit = 'res.partner'
 
     is_property_operator = fields.Boolean(
-        'Is Property Operator', default=False,
+        'Is Property Operator / 是否物業營運商', default=False,
         help='Check if this partner is a co-working space operator')
     operator_logo_url = fields.Char(
-        'Operator Logo URL',
+        'Operator Logo URL / 營運商標誌網址',
         help='External URL to operator logo image')
     property_ids = fields.One2many(
         'c21.property.listing', 'operator_id',
-        string='Properties')
+        string='Properties / 物業')
     property_count = fields.Integer(
-        'Property Count', compute='_compute_property_count')
+        'Property Count / 物業數量', compute='_compute_property_count')
 
     @api.depends('property_ids')
     def _compute_property_count(self):

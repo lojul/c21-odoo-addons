@@ -40,24 +40,24 @@ class C21PropertyListing(models.Model):
 
     # === Identification ===
     ref_code = fields.Char(
-        'Reference Code', required=True, index=True, tracking=True,
+        'Reference Code / 參考編號', required=True, index=True, tracking=True,
         help='Unique reference code (e.g., C0000063 for co-working, LS-0001 for leasing)')
-    name = fields.Char('Name (English)', required=True, tracking=True)
-    name_cn = fields.Char('Name (Chinese)', tracking=True)
+    name = fields.Char('Name (English) / 名稱（英文）', required=True, tracking=True)
+    name_cn = fields.Char('Name (Chinese) / 名稱（中文）', tracking=True)
     listing_type = fields.Selection([
         ('coworking', 'Co-working Space'),
         ('leasing', 'Leasing Property'),
-    ], string='Listing Type', required=True, default='leasing', tracking=True)
+    ], string='Listing Type / 物業類型', required=True, default='leasing', tracking=True)
 
     # === Location ===
     district = fields.Selection(
-        DISTRICT_SELECTION, string='District', required=True, index=True, tracking=True)
-    building_name = fields.Char('Building Name')
-    address = fields.Text('Address')
-    floor = fields.Char('Floor')
-    unit = fields.Char('Unit')
-    latitude = fields.Float('Latitude', digits=(10, 7))
-    longitude = fields.Float('Longitude', digits=(10, 7))
+        DISTRICT_SELECTION, string='District / 地區', required=True, index=True, tracking=True)
+    building_name = fields.Char('Building Name / 大廈名稱')
+    address = fields.Text('Address / 地址')
+    floor = fields.Char('Floor / 樓層')
+    unit = fields.Char('Unit / 單位')
+    latitude = fields.Float('Latitude / 緯度', digits=(10, 7))
+    longitude = fields.Float('Longitude / 經度', digits=(10, 7))
 
     # === Status & Workflow ===
     state = fields.Selection([
@@ -65,7 +65,7 @@ class C21PropertyListing(models.Model):
         ('under_negotiation', 'Under Negotiation'),
         ('leased', 'Leased'),
         ('off_market', 'Off Market'),
-    ], string='Status', default='available', tracking=True, index=True)
+    ], string='Status / 狀態', default='available', tracking=True, index=True)
 
     approval_status = fields.Selection([
         ('draft', 'Draft'),
@@ -73,34 +73,34 @@ class C21PropertyListing(models.Model):
         ('approved', 'Approved'),
         ('published', 'Published'),
         ('rejected', 'Rejected'),
-    ], string='Approval Status', default='draft', tracking=True, index=True)
+    ], string='Approval Status / 審批狀態', default='draft', tracking=True, index=True)
 
-    available_from = fields.Date('Available From')
+    available_from = fields.Date('Available From / 可租日期')
 
     # === Co-working Specific Fields ===
     operator_id = fields.Many2one(
-        'res.partner', string='Operator',
+        'res.partner', string='Operator / 營運商',
         domain=[('is_property_operator', '=', True), ('is_company', '=', True)],
         tracking=True)
-    capacity = fields.Integer('Total Capacity', help='Total people capacity')
-    available_capacity = fields.Integer('Available Capacity')
-    size = fields.Integer('Size (sqft)', help='Total size in square feet')
-    hot_desk_price = fields.Monetary('Hot Desk Price', help='Monthly price for hot desk in HKD')
-    dedicated_desk_price = fields.Monetary('Dedicated Desk Price', help='Monthly price for dedicated desk in HKD')
-    office_price = fields.Monetary('Private Office Price', help='Monthly starting price for private office in HKD')
+    capacity = fields.Integer('Total Capacity / 總容量', help='Total people capacity')
+    available_capacity = fields.Integer('Available Capacity / 可用容量')
+    size = fields.Integer('Size (sqft) / 面積（平方呎）', help='Total size in square feet')
+    hot_desk_price = fields.Monetary('Hot Desk Price / 流動工位價格', help='Monthly price for hot desk in HKD')
+    dedicated_desk_price = fields.Monetary('Dedicated Desk Price / 固定工位價格', help='Monthly price for dedicated desk in HKD')
+    office_price = fields.Monetary('Private Office Price / 私人辦公室價格', help='Monthly starting price for private office in HKD')
 
     # === Leasing Specific Fields ===
     property_type = fields.Selection([
         ('office', 'Office'),
         ('retail', 'Retail'),
         ('industrial', 'Industrial'),
-    ], string='Property Type', tracking=True)
+    ], string='Property Type / 物業用途', tracking=True)
 
     building_grade = fields.Selection([
         ('grade_a', 'Grade A'),
         ('grade_b', 'Grade B'),
         ('grade_c', 'Grade C'),
-    ], string='Building Grade', tracking=True)
+    ], string='Building Grade / 大廈級別', tracking=True)
 
     business_type = fields.Selection([
         ('dining', 'Dining'),
@@ -111,35 +111,35 @@ class C21PropertyListing(models.Model):
         ('medical', 'Medical'),
         ('education', 'Education'),
         ('other', 'Other'),
-    ], string='Business Type', help='For retail properties')
+    ], string='Business Type / 業務類型', help='For retail properties')
 
-    gross_area = fields.Float('Gross Area (sqft)', digits=(12, 2))
-    net_area = fields.Float('Net Area (sqft)', digits=(12, 2))
-    asking_rent = fields.Monetary('Asking Rent', help='Monthly asking rent in HKD')
+    gross_area = fields.Float('Gross Area (sqft) / 建築面積（平方呎）', digits=(12, 2))
+    net_area = fields.Float('Net Area (sqft) / 實用面積（平方呎）', digits=(12, 2))
+    asking_rent = fields.Monetary('Asking Rent / 叫租', help='Monthly asking rent in HKD')
     rent_per_sqft = fields.Float(
-        'Rent per Sqft', digits=(12, 2), compute='_compute_rent_per_sqft', store=True)
-    lease_terms = fields.Char('Lease Terms', help='e.g., 2 years minimum')
-    year_built = fields.Char('Year Built')
-    total_floors = fields.Integer('Total Floors')
+        'Rent per Sqft / 每呎租金', digits=(12, 2), compute='_compute_rent_per_sqft', store=True)
+    lease_terms = fields.Char('Lease Terms / 租約條款', help='e.g., 2 years minimum')
+    year_built = fields.Char('Year Built / 落成年份')
+    total_floors = fields.Integer('Total Floors / 總樓層')
 
     # === Descriptions ===
-    description = fields.Html('Description (English)')
-    description_cn = fields.Html('Description (Chinese)')
+    description = fields.Html('Description (English) / 描述（英文）')
+    description_cn = fields.Html('Description (Chinese) / 描述（中文）')
 
     # === Relations ===
-    image_ids = fields.One2many('c21.property.image', 'property_id', string='Images')
+    image_ids = fields.One2many('c21.property.image', 'property_id', string='Images / 圖片')
     amenity_ids = fields.Many2many(
         'c21.property.amenity', 'c21_property_listing_amenity_rel',
-        'property_id', 'amenity_id', string='Amenities')
-    contact_ids = fields.One2many('c21.property.contact', 'property_id', string='Contacts')
+        'property_id', 'amenity_id', string='Amenities / 設施')
+    contact_ids = fields.One2many('c21.property.contact', 'property_id', string='Contacts / 聯絡人')
     currency_id = fields.Many2one(
-        'res.currency', string='Currency',
+        'res.currency', string='Currency / 貨幣',
         default=lambda self: self.env.company.currency_id)
 
     # === Computed Fields ===
-    image_count = fields.Integer('Image Count', compute='_compute_image_count')
-    contact_count = fields.Integer('Contact Count', compute='_compute_contact_count')
-    display_price = fields.Char('Display Price', compute='_compute_display_price')
+    image_count = fields.Integer('Image Count / 圖片數量', compute='_compute_image_count')
+    contact_count = fields.Integer('Contact Count / 聯絡人數量', compute='_compute_contact_count')
+    display_price = fields.Char('Display Price / 顯示價格', compute='_compute_display_price')
 
     _ref_code_unique = models.Constraint(
         'UNIQUE(ref_code)',
