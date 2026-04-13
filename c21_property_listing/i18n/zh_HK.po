@@ -1,0 +1,217 @@
+# Translation for c21_property_listing (Traditional Chinese - Hong Kong)
+msgid ""
+msgstr ""
+"Project-Id-Version: c21_property_listing 19.0\n"
+"POT-Creation-Date: 2026-04-13 00:00+0000\n"
+"PO-Revision-Date: 2026-04-13 00:00+0000\n"
+"Last-Translator: C21 Team\n"
+"Language-Team: zh_HK\n"
+"Language: zh_HK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Field labels - property listing
+msgid "Reference Code"
+msgstr "參考編號"
+
+msgid "Name (English)"
+msgstr "名稱（英文）"
+
+msgid "Name (Chinese)"
+msgstr "名稱（中文）"
+
+msgid "Listing Type"
+msgstr "物業類型"
+
+msgid "District"
+msgstr "地區"
+
+msgid "Building Name"
+msgstr "大廈名稱"
+
+msgid "Address"
+msgstr "地址"
+
+msgid "Floor"
+msgstr "樓層"
+
+msgid "Unit"
+msgstr "單位"
+
+msgid "Latitude"
+msgstr "緯度"
+
+msgid "Longitude"
+msgstr "經度"
+
+msgid "Status"
+msgstr "狀態"
+
+msgid "Approval Status"
+msgstr "審批狀態"
+
+msgid "Available From"
+msgstr "可租日期"
+
+msgid "Operator"
+msgstr "營運商"
+
+msgid "Total Capacity"
+msgstr "總容量"
+
+msgid "Available Capacity"
+msgstr "可用容量"
+
+msgid "Size (sqft)"
+msgstr "面積（平方呎）"
+
+msgid "Hot Desk Price"
+msgstr "流動工位價格"
+
+msgid "Dedicated Desk Price"
+msgstr "固定工位價格"
+
+msgid "Private Office Price"
+msgstr "私人辦公室價格"
+
+msgid "Property Type"
+msgstr "物業用途"
+
+msgid "Building Grade"
+msgstr "大廈級別"
+
+msgid "Business Type"
+msgstr "業務類型"
+
+msgid "Gross Area (sqft)"
+msgstr "建築面積（平方呎）"
+
+msgid "Net Area (sqft)"
+msgstr "實用面積（平方呎）"
+
+msgid "Asking Rent"
+msgstr "叫租"
+
+msgid "Rent per Sqft"
+msgstr "每呎租金"
+
+msgid "Lease Terms"
+msgstr "租約條款"
+
+msgid "Year Built"
+msgstr "落成年份"
+
+msgid "Total Floors"
+msgstr "總樓層"
+
+msgid "Description (English)"
+msgstr "描述（英文）"
+
+msgid "Description (Chinese)"
+msgstr "描述（中文）"
+
+msgid "Images"
+msgstr "圖片"
+
+msgid "Amenities"
+msgstr "設施"
+
+msgid "Contacts"
+msgstr "聯絡人"
+
+msgid "Currency"
+msgstr "貨幣"
+
+msgid "Image Count"
+msgstr "圖片數量"
+
+msgid "Contact Count"
+msgstr "聯絡人數量"
+
+msgid "Display Price"
+msgstr "顯示價格"
+
+#. Field labels - property image
+msgid "Description"
+msgstr "描述"
+
+msgid "Image URL"
+msgstr "圖片網址"
+
+msgid "Thumbnail URL"
+msgstr "縮圖網址"
+
+msgid "Sequence"
+msgstr "排序"
+
+msgid "Is Cover Image"
+msgstr "是否封面圖"
+
+#. Field labels - property contact
+msgid "Contact"
+msgstr "聯絡人"
+
+msgid "Role"
+msgstr "角色"
+
+msgid "Is Primary Contact"
+msgstr "主要聯絡人"
+
+msgid "Notes"
+msgstr "備註"
+
+#. Field labels - amenities
+msgid "Code"
+msgstr "代碼"
+
+msgid "Icon"
+msgstr "圖示"
+
+msgid "Category"
+msgstr "分類"
+
+msgid "Active"
+msgstr "啟用"
+
+#. Field labels - operator extension
+msgid "Is Property Operator"
+msgstr "是否物業營運商"
+
+msgid "Operator Logo URL"
+msgstr "營運商標誌網址"
+
+msgid "Properties"
+msgstr "物業"
+
+msgid "Property Count"
+msgstr "物業數量"
+
+#. Common statuses
+msgid "Draft"
+msgstr "草稿"
+
+msgid "Pending Review"
+msgstr "待審核"
+
+msgid "Approved"
+msgstr "已批准"
+
+msgid "Published"
+msgstr "已發佈"
+
+msgid "Rejected"
+msgstr "已拒絕"
+
+msgid "Available"
+msgstr "可租"
+
+msgid "Under Negotiation"
+msgstr "洽談中"
+
+msgid "Leased"
+msgstr "已出租"
+
+msgid "Off Market"
+msgstr "已下架"
