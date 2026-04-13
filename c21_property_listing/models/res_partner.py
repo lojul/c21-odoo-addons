@@ -19,7 +19,7 @@ class ResPartner(models.Model):
     operator_contact_person = fields.Char(
         'Contact Person / 聯絡人', compute='_compute_operator_contact_person')
     operator_contact_partner_id = fields.Many2one(
-        'res.partner', string='Contact Person / 聯絡人', compute='_compute_operator_contact_person')
+        'res.partner', string='Contact Record / 聯絡記錄', compute='_compute_operator_contact_person')
 
     @api.depends('property_ids')
     def _compute_property_count(self):
