@@ -16,11 +16,19 @@ class ResPartner(models.Model):
         string='Properties / 物業')
     property_count = fields.Integer(
         'Property Count / 物業數量', compute='_compute_property_count')
+    operator_contact_person = fields.Char(
+        'Contact Person / 聯絡人', compute='_compute_operator_contact_person')
 
     @api.depends('property_ids')
     def _compute_property_count(self):
         for partner in self:
             partner.property_count = len(partner.property_ids)
+
+    @api.depends('child_ids.name', 'child_ids.is_company', 'child_ids.type')
+    def _compute_operator_contact_person(self):
+        for partner in self:
+            contacts = partner.child_ids.filtered(lambda c: (c.type == 'contact') or (not c.is_company))
+            partner.operator_contact_person = contacts[:1].name if contacts else False
 
     @api.onchange('is_property_operator')
     def _onchange_is_property_operator(self):
