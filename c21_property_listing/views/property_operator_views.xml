@@ -41,11 +41,6 @@
                 <field name="email" string="Email / 電郵"/>
                 <field name="website" string="Website / 網站"/>
                 <field name="phone" string="Phone / 電話"/>
-                <button name="action_open_operator_properties"
-                        type="object"
-                        class="btn-link"
-                        string="Open / 開啟"
-                        icon="fa-external-link"/>
                 <field name="property_count" string="Property Count / 物業數量"/>
             </list>
         </field>
