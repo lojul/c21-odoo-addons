@@ -15,6 +15,15 @@
             <page name="sales_purchases" position="attributes">
                 <attribute name="invisible">is_property_operator</attribute>
             </page>
+            <field name="lang" position="attributes">
+                <attribute name="invisible">is_property_operator</attribute>
+            </field>
+            <field name="website" position="attributes">
+                <attribute name="invisible">is_property_operator</attribute>
+            </field>
+            <field name="phone" position="after">
+                <field name="website" invisible="not is_property_operator"/>
+            </field>
             <field name="category_id" position="after">
                 <field name="is_property_operator" invisible="1"/>
             </field>
