@@ -30,9 +30,11 @@ This module is standalone with no dependencies on CRM or other custom modules.
         'security/ir.model.access.csv',
         # Data
         'data/property_amenity_data.xml',
+        'data/country_whitelist_data.xml',
         # Views
         'views/property_listing_views.xml',
         'views/property_operator_views.xml',
+        'views/res_country_views.xml',
         'views/property_amenity_views.xml',
         'views/menu.xml',
     ],

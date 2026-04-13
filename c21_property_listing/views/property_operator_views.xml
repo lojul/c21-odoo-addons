@@ -15,6 +15,18 @@
             <page name="sales_purchases" position="attributes">
                 <attribute name="invisible">is_property_operator</attribute>
             </page>
+            <field name="country_id" position="after">
+                <field name="c21_is_hk_address" invisible="1"/>
+            </field>
+            <field name="country_id" position="attributes">
+                <attribute name="domain">[('c21_allowed_for_address', '=', True)]</attribute>
+            </field>
+            <field name="state_id" position="attributes">
+                <attribute name="invisible">c21_is_hk_address</attribute>
+            </field>
+            <field name="zip" position="attributes">
+                <attribute name="invisible">c21_is_hk_address</attribute>
+            </field>
             <field name="lang" position="attributes">
                 <attribute name="invisible">is_property_operator</attribute>
             </field>

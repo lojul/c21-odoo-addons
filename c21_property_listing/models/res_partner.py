@@ -16,6 +16,8 @@ class ResPartner(models.Model):
         string='Properties / 物業')
     property_count = fields.Integer(
         'Property Count / 物業數量', compute='_compute_property_count')
+    c21_is_hk_address = fields.Boolean(
+        'C21 HK Address', compute='_compute_c21_is_hk_address')
     operator_contact_person = fields.Char(
         'Contact Person / 聯絡人', compute='_compute_operator_contact_person')
     operator_contact_partner_id = fields.Many2one(
@@ -25,6 +27,11 @@ class ResPartner(models.Model):
     def _compute_property_count(self):
         for partner in self:
             partner.property_count = len(partner.property_ids)
+
+    @api.depends('country_id.code')
+    def _compute_c21_is_hk_address(self):
+        for partner in self:
+            partner.c21_is_hk_address = (partner.country_id.code == 'HK')
 
     @api.depends('child_ids.name', 'child_ids.is_company', 'child_ids.type')
     def _compute_operator_contact_person(self):
