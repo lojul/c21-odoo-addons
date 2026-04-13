@@ -12,7 +12,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#. Field labels - property listing
 msgid "Reference Code"
 msgstr "參考編號"
 
@@ -133,7 +132,6 @@ msgstr "聯絡人數量"
 msgid "Display Price"
 msgstr "顯示價格"
 
-#. Field labels - property image
 msgid "Description"
 msgstr "描述"
 
@@ -149,7 +147,6 @@ msgstr "排序"
 msgid "Is Cover Image"
 msgstr "是否封面圖"
 
-#. Field labels - property contact
 msgid "Contact"
 msgstr "聯絡人"
 
@@ -162,7 +159,6 @@ msgstr "主要聯絡人"
 msgid "Notes"
 msgstr "備註"
 
-#. Field labels - amenities
 msgid "Code"
 msgstr "代碼"
 
@@ -175,7 +171,6 @@ msgstr "分類"
 msgid "Active"
 msgstr "啟用"
 
-#. Field labels - operator extension
 msgid "Is Property Operator"
 msgstr "是否物業營運商"
 
@@ -188,7 +183,6 @@ msgstr "物業"
 msgid "Property Count"
 msgstr "物業數量"
 
-#. Common statuses
 msgid "Draft"
 msgstr "草稿"
 
