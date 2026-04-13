@@ -41,12 +41,6 @@
                 <field name="email" string="Email / 電郵"/>
                 <field name="website" string="Website / 網站"/>
                 <field name="phone" string="Phone / 電話"/>
-                <field name="operator_contact_person" string="Contact Person / 聯絡人"/>
-                <button name="action_open_operator_contact"
-                    type="object"
-                    class="btn-link"
-                    string="Contact / 聯絡"
-                    icon="fa-user"/>
                 <button name="action_open_operator_properties"
                         type="object"
                         class="btn-link"
