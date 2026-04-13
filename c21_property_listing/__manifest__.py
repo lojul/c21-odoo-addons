@@ -36,6 +36,11 @@ This module is standalone with no dependencies on CRM or other custom modules.
         'views/property_amenity_views.xml',
         'views/menu.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'c21_property_listing/static/src/css/operator_list.css',
+        ],
+    },
     'demo': [],
     'installable': True,
     'application': True,

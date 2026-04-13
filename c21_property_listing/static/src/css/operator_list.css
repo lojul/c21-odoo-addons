@@ -1,0 +1,6 @@
+.c21_operator_list_view th .o_column_title {
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    line-height: 1.2;
+}
