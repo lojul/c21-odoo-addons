@@ -45,6 +45,21 @@ class ResPartner(models.Model):
             'context': {'default_operator_id': self.id},
         }
 
+    def action_open_operator_contact(self):
+        self.ensure_one()
+        contacts = self.child_ids.filtered(lambda c: (c.type == 'contact') or (not c.is_company))
+        contact = contacts[:1]
+        if not contact:
+            return {'type': 'ir.actions.act_window_close'}
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Contact',
+            'res_model': 'res.partner',
+            'view_mode': 'form',
+            'res_id': contact.id,
+            'target': 'current',
+        }
+
     @api.onchange('is_property_operator')
     def _onchange_is_property_operator(self):
         # Operator records must be companies so they can own child contact persons.
