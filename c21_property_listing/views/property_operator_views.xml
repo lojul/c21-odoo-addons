@@ -38,10 +38,15 @@
             <list string="Property Operators" class="c21_operator_list_view">
                 <field name="image_128" string="Logo / 標誌" widget="image" options="{'size': [40, 40]}"/>
                 <field name="name" string="Operator / 營運商"/>
-                <field name="operator_contact_person" string="Contact Person / 聯絡人"/>
                 <field name="email" string="Email / 電郵"/>
                 <field name="website" string="Website / 網站"/>
                 <field name="phone" string="Phone / 電話"/>
+                <field name="operator_contact_partner_id" string="Contact Person / 聯絡人"/>
+                <button name="action_open_operator_properties"
+                        type="object"
+                        class="btn-link"
+                        string="Open / 開啟"
+                        icon="fa-external-link"/>
                 <field name="property_count" string="Property Count / 物業數量"/>
             </list>
         </field>

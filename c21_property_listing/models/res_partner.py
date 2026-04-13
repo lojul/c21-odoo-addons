@@ -18,6 +18,8 @@ class ResPartner(models.Model):
         'Property Count / 物業數量', compute='_compute_property_count')
     operator_contact_person = fields.Char(
         'Contact Person / 聯絡人', compute='_compute_operator_contact_person')
+    operator_contact_partner_id = fields.Many2one(
+        'res.partner', string='Contact Person / 聯絡人', compute='_compute_operator_contact_person')
 
     @api.depends('property_ids')
     def _compute_property_count(self):
@@ -28,7 +30,20 @@ class ResPartner(models.Model):
     def _compute_operator_contact_person(self):
         for partner in self:
             contacts = partner.child_ids.filtered(lambda c: (c.type == 'contact') or (not c.is_company))
-            partner.operator_contact_person = contacts[:1].name if contacts else False
+            first = contacts[:1]
+            partner.operator_contact_person = first.name if first else False
+            partner.operator_contact_partner_id = first.id if first else False
+
+    def action_open_operator_properties(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Properties',
+            'res_model': 'c21.property.listing',
+            'view_mode': 'list,kanban,form',
+            'domain': [('operator_id', '=', self.id)],
+            'context': {'default_operator_id': self.id},
+        }
 
     @api.onchange('is_property_operator')
     def _onchange_is_property_operator(self):
