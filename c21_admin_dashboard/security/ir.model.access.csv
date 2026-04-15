@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_c21_admin_changelog_user,c21.admin.changelog.user,model_c21_admin_changelog,group_c21_admin_user,1,1,1,1

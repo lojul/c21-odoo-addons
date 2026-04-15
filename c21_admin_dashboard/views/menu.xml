@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="c21_admin_menu_root"
+              name="C21 Admin"
+              sequence="200"
+              groups="c21_admin_dashboard.group_c21_admin_user"
+              web_icon="c21_admin_dashboard,static/description/icon.png"/>
+
+    <!-- Changelog Menu -->
+    <menuitem id="c21_admin_menu_changelog"
+              name="Changelog"
+              parent="c21_admin_menu_root"
+              action="c21_admin_changelog_action"
+              sequence="10"/>
+
+    <!-- Modules Menu -->
+    <menuitem id="c21_admin_menu_modules"
+              name="Modules"
+              parent="c21_admin_menu_root"
+              sequence="20"/>
+
+    <menuitem id="c21_admin_menu_custom_modules"
+              name="Custom C21 Modules"
+              parent="c21_admin_menu_modules"
+              action="c21_custom_modules_action"
+              sequence="10"/>
+
+    <menuitem id="c21_admin_menu_third_party"
+              name="Third Party Modules"
+              parent="c21_admin_menu_modules"
+              action="c21_third_party_modules_action"
+              sequence="20"/>
+
+    <menuitem id="c21_admin_menu_all_modules"
+              name="All Installed"
+              parent="c21_admin_menu_modules"
+              action="c21_all_modules_action"
+              sequence="30"/>
+
+</odoo>

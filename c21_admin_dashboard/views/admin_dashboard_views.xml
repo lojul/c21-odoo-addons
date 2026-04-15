@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Changelog List View -->
+    <record id="c21_admin_changelog_view_list" model="ir.ui.view">
+        <field name="name">c21.admin.changelog.list</field>
+        <field name="model">c21.admin.changelog</field>
+        <field name="arch" type="xml">
+            <list string="Changelog" editable="bottom">
+                <field name="date"/>
+                <field name="change_type" widget="badge"
+                       decoration-info="change_type == 'feature'"
+                       decoration-success="change_type == 'fix'"
+                       decoration-warning="change_type == 'improvement'"
+                       decoration-muted="change_type in ('config', 'data', 'other')"/>
+                <field name="module_name"/>
+                <field name="description"/>
+                <field name="author"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Changelog Form View -->
+    <record id="c21_admin_changelog_view_form" model="ir.ui.view">
+        <field name="name">c21.admin.changelog.form</field>
+        <field name="model">c21.admin.changelog</field>
+        <field name="arch" type="xml">
+            <form string="Changelog Entry">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="change_type"/>
+                            <field name="module_name"/>
+                        </group>
+                        <group>
+                            <field name="author"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Changelog Search View -->
+    <record id="c21_admin_changelog_view_search" model="ir.ui.view">
+        <field name="name">c21.admin.changelog.search</field>
+        <field name="model">c21.admin.changelog</field>
+        <field name="arch" type="xml">
+            <search string="Search Changelog">
+                <field name="description"/>
+                <field name="module_name"/>
+                <field name="author"/>
+                <separator/>
+                <filter name="filter_feature" string="Features" domain="[('change_type', '=', 'feature')]"/>
+                <filter name="filter_fix" string="Bug Fixes" domain="[('change_type', '=', 'fix')]"/>
+                <filter name="filter_improvement" string="Improvements" domain="[('change_type', '=', 'improvement')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_module" string="Module" context="{'group_by': 'module_name'}"/>
+                    <filter name="group_type" string="Type" context="{'group_by': 'change_type'}"/>
+                    <filter name="group_date" string="Date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Changelog Action -->
+    <record id="c21_admin_changelog_action" model="ir.actions.act_window">
+        <field name="name">Changelog</field>
+        <field name="res_model">c21.admin.changelog</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first changelog entry
+            </p>
+            <p>
+                Track changes, features, and fixes to your C21 modules.
+            </p>
+        </field>
+    </record>
+
+    <!-- Custom Modules View (ir.module.module filtered) -->
+    <record id="c21_custom_modules_action" model="ir.actions.act_window">
+        <field name="name">Custom Modules</field>
+        <field name="res_model">ir.module.module</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('name', 'ilike', 'c21'), ('state', '=', 'installed')]</field>
+    </record>
+
+    <!-- All Installed Modules Action -->
+    <record id="c21_all_modules_action" model="ir.actions.act_window">
+        <field name="name">All Installed Modules</field>
+        <field name="res_model">ir.module.module</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'installed')]</field>
+    </record>
+
+    <!-- Third Party Modules Action -->
+    <record id="c21_third_party_modules_action" model="ir.actions.act_window">
+        <field name="name">Third Party Modules</field>
+        <field name="res_model">ir.module.module</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'installed'), ('author', 'not ilike', 'Odoo'), ('author', '!=', False)]</field>
+    </record>
+
+</odoo>

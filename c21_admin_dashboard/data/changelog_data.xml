@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Initial Changelog Entries -->
+        <record id="changelog_001" model="c21.admin.changelog">
+            <field name="date">2024-04-10</field>
+            <field name="change_type">feature</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Initial module deployment - Property listing for co-working and leasing properties with bilingual support, amenities, and approval workflow.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_002" model="c21.admin.changelog">
+            <field name="date">2024-04-11</field>
+            <field name="change_type">fix</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Odoo 19 compatibility fixes - Updated deprecated tree views to list, fixed SQL constraints, removed invalid category_id handling.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_003" model="c21.admin.changelog">
+            <field name="date">2024-04-11</field>
+            <field name="change_type">improvement</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Operator form improvements - Hide person/company toggle, hide Sales/Purchase tab, hide Tax ID for operators.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_004" model="c21.admin.changelog">
+            <field name="date">2024-04-12</field>
+            <field name="change_type">data</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Seeded 5 sample operators: TheDesk, SPACES, WeWork, OfficePlus, Conson with logos and website URLs.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_005" model="c21.admin.changelog">
+            <field name="date">2024-04-12</field>
+            <field name="change_type">feature</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Added HK address behavior - Hide ZIP/state fields, configurable country whitelist for address dropdowns.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_006" model="c21.admin.changelog">
+            <field name="date">2024-04-15</field>
+            <field name="change_type">feature</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Added mass update server actions - Mass Approve, Mass Publish, Mass Reset to Draft, Mass Reject, and status change actions.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_007" model="c21.admin.changelog">
+            <field name="date">2024-04-15</field>
+            <field name="change_type">improvement</field>
+            <field name="module_name">c21_property_listing</field>
+            <field name="description">Simplified list view - Hidden Reference Code, Property Type, Building Grade, Net Area, Display Price columns by default (available via column selector).</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_008" model="c21.admin.changelog">
+            <field name="date">2024-04-15</field>
+            <field name="change_type">config</field>
+            <field name="module_name">server_action_mass_edit</field>
+            <field name="description">Installed OCA Server Action Mass Edit module for flexible mass editing capabilities.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+
+        <record id="changelog_009" model="c21.admin.changelog">
+            <field name="date">2024-04-15</field>
+            <field name="change_type">feature</field>
+            <field name="module_name">c21_admin_dashboard</field>
+            <field name="description">Created C21 Admin Dashboard module - Separate module for tracking installed modules, custom modules, and changelog.</field>
+            <field name="author">C21 Dev Team</field>
+        </record>
+    </data>
+</odoo>

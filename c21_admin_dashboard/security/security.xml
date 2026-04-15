@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- C21 Admin Dashboard Module Category -->
+    <record id="module_category_c21_admin" model="ir.module.category">
+        <field name="name">C21 Admin</field>
+        <field name="description">C21 Admin Dashboard and System Management</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <!-- Admin Group -->
+    <record id="group_c21_admin_user" model="res.groups">
+        <field name="name">C21 Admin User</field>
+        <field name="category_id" ref="module_category_c21_admin"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+</odoo>
