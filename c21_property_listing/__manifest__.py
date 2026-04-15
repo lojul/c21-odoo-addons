@@ -1,6 +1,6 @@
 {
     'name': 'C21 Property Listing',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'category': 'Real Estate',
     'summary': 'Manage co-working spaces and leasing properties',
     'description': """
@@ -37,7 +37,10 @@ This module is standalone with no dependencies on CRM or other custom modules.
         'views/property_operator_views.xml',
         'views/res_country_views.xml',
         'views/property_amenity_views.xml',
+        'views/admin_dashboard_views.xml',
         'views/menu.xml',
+        # Initial Data
+        'data/changelog_data.xml',
     ],
     'assets': {
         'web.assets_backend': [

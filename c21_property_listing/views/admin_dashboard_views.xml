@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Changelog List View -->
+    <record id="c21_admin_changelog_view_list" model="ir.ui.view">
+        <field name="name">c21.admin.changelog.list</field>
+        <field name="model">c21.admin.changelog</field>
+        <field name="arch" type="xml">
+            <list string="Changelog" editable="bottom">
+                <field name="date"/>
+                <field name="change_type" widget="badge"
+                       decoration-info="change_type == 'feature'"
+                       decoration-success="change_type == 'fix'"
+                       decoration-warning="change_type == 'improvement'"
+                       decoration-muted="change_type in ('config', 'data', 'other')"/>
+                <field name="module_name"/>
+                <field name="description"/>
+                <field name="author"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Changelog Form View -->
+    <record id="c21_admin_changelog_view_form" model="ir.ui.view">
+        <field name="name">c21.admin.changelog.form</field>
+        <field name="model">c21.admin.changelog</field>
+        <field name="arch" type="xml">
+            <form string="Changelog Entry">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="change_type"/>
+                            <field name="module_name"/>
+                        </group>
+                        <group>
+                            <field name="author"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="description"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Changelog Action -->
+    <record id="c21_admin_changelog_action" model="ir.actions.act_window">
+        <field name="name">Changelog</field>
+        <field name="res_model">c21.admin.changelog</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first changelog entry
+            </p>
+            <p>
+                Track changes, features, and fixes to your C21 modules.
+            </p>
+        </field>
+    </record>
+
+    <!-- Custom Modules View (ir.module.module filtered) -->
+    <record id="c21_custom_modules_action" model="ir.actions.act_window">
+        <field name="name">Custom Modules</field>
+        <field name="res_model">ir.module.module</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('name', 'ilike', 'c21'), ('state', '=', 'installed')]</field>
+        <field name="context">{'search_default_installed': 1}</field>
+    </record>
+
+    <!-- All Installed Modules Action -->
+    <record id="c21_all_modules_action" model="ir.actions.act_window">
+        <field name="name">All Installed Modules</field>
+        <field name="res_model">ir.module.module</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('state', '=', 'installed')]</field>
+    </record>
+
+    <!-- Dashboard View using Form -->
+    <record id="c21_admin_dashboard_view" model="ir.ui.view">
+        <field name="name">c21.admin.dashboard</field>
+        <field name="model">c21.admin.changelog</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form string="C21 Admin Dashboard" create="0" edit="0" delete="0">
+                <sheet>
+                    <div class="oe_title mb-4">
+                        <h1>C21 Admin Dashboard</h1>
+                    </div>
+
+                    <!-- Quick Stats Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Custom Modules</h5>
+                                    <p class="card-text">View C21 custom modules</p>
+                                    <button name="%(c21_custom_modules_action)d" type="action"
+                                            class="btn btn-light">View Modules</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">All Installed</h5>
+                                    <p class="card-text">All installed modules</p>
+                                    <button name="%(c21_all_modules_action)d" type="action"
+                                            class="btn btn-light">View All</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <h5 class="card-title">Changelog</h5>
+                                    <p class="card-text">View change history</p>
+                                    <button name="%(c21_admin_changelog_action)d" type="action"
+                                            class="btn btn-light">View Changelog</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Dashboard Action (shows as a special view) -->
+    <record id="c21_admin_dashboard_action" model="ir.actions.act_window">
+        <field name="name">Admin Dashboard</field>
+        <field name="res_model">c21.admin.changelog</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="c21_admin_dashboard_view"/>
+        <field name="target">inline</field>
+        <field name="flags">{'mode': 'readonly'}</field>
+    </record>
+
+</odoo>
