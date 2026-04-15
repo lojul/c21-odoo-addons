@@ -63,35 +63,4 @@
               parent="c21_property_menu_config"
               action="c21_property_amenity_action"
               sequence="10"/>
-
-    <!-- Admin Menu -->
-    <menuitem id="c21_admin_menu"
-              name="Admin"
-              parent="c21_property_menu_root"
-              sequence="100"
-              groups="c21_property_listing.group_c21_property_admin"/>
-
-    <menuitem id="c21_admin_menu_dashboard"
-              name="Dashboard"
-              parent="c21_admin_menu"
-              action="c21_admin_dashboard_action"
-              sequence="10"/>
-
-    <menuitem id="c21_admin_menu_changelog"
-              name="Changelog"
-              parent="c21_admin_menu"
-              action="c21_admin_changelog_action"
-              sequence="20"/>
-
-    <menuitem id="c21_admin_menu_custom_modules"
-              name="Custom Modules"
-              parent="c21_admin_menu"
-              action="c21_custom_modules_action"
-              sequence="30"/>
-
-    <menuitem id="c21_admin_menu_all_modules"
-              name="All Installed Modules"
-              parent="c21_admin_menu"
-              action="c21_all_modules_action"
-              sequence="40"/>
 </odoo>
