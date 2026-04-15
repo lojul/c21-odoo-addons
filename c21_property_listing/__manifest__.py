@@ -1,11 +1,11 @@
 {
-    'name': 'C21 Property Listing',
-    'version': '19.0.1.1.0',
+    'name': 'C21 Property Management',
+    'version': '19.0.1.2.0',
     'category': 'Real Estate',
     'summary': 'Manage co-working spaces and leasing properties',
     'description': """
-C21 Property Listing
-====================
+C21 Property Management
+=======================
 
 Unified property management for:
 - Co-working spaces (hot desk, dedicated desk, private office)
@@ -16,9 +16,14 @@ Features:
 - Multi-image management (external CDN URLs)
 - Amenities tracking
 - Approval workflow
+- Mass update actions
 - REST API for website integration (Phase 3)
 
 This module is standalone with no dependencies on CRM or other custom modules.
+
+Export/Import:
+- Copy module folder to target system's addons path
+- Update Apps List and install
     """,
     'author': 'C21',
     'website': '',
