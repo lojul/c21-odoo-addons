@@ -200,18 +200,18 @@
         <field name="model">c21.property.listing</field>
         <field name="arch" type="xml">
             <list string="Property Listings" multi_edit="1">
-                <field name="ref_code"/>
                 <field name="name"/>
                 <field name="listing_type" widget="badge"
                        decoration-info="listing_type == 'coworking'"
                        decoration-warning="listing_type == 'leasing'"/>
                 <field name="district"/>
-                <field name="property_type" optional="show"/>
-                <field name="building_grade" optional="show"/>
                 <field name="operator_id" optional="show"/>
-                <field name="net_area" optional="show"/>
                 <field name="capacity" optional="hide"/>
-                <field name="display_price"/>
+                <field name="ref_code" optional="hide"/>
+                <field name="property_type" optional="hide"/>
+                <field name="building_grade" optional="hide"/>
+                <field name="net_area" optional="hide"/>
+                <field name="display_price" optional="hide"/>
                 <field name="state" widget="badge"
                        decoration-success="state == 'available'"
                        decoration-warning="state == 'under_negotiation'"

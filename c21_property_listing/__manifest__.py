@@ -31,6 +31,7 @@ This module is standalone with no dependencies on CRM or other custom modules.
         # Data
         'data/property_amenity_data.xml',
         'data/country_whitelist_data.xml',
+        'data/server_actions.xml',
         # Views
         'views/property_listing_views.xml',
         'views/property_operator_views.xml',

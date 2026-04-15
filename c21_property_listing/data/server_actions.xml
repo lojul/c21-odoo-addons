@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mass Update Server Actions for Property Listings -->
+
+    <!-- Approval Status Actions -->
+    <record id="action_mass_approve" model="ir.actions.server">
+        <field name="name">Mass Approve</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+for record in records:
+    if record.approval_status in ('draft', 'pending'):
+        record.write({'approval_status': 'approved'})
+        </field>
+    </record>
+
+    <record id="action_mass_publish" model="ir.actions.server">
+        <field name="name">Mass Publish</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+for record in records:
+    if record.approval_status in ('draft', 'pending', 'approved'):
+        record.write({'approval_status': 'published'})
+        </field>
+    </record>
+
+    <record id="action_mass_reset_draft" model="ir.actions.server">
+        <field name="name">Mass Reset to Draft</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.write({'approval_status': 'draft'})
+        </field>
+    </record>
+
+    <record id="action_mass_reject" model="ir.actions.server">
+        <field name="name">Mass Reject</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.write({'approval_status': 'rejected'})
+        </field>
+    </record>
+
+    <!-- Status Actions -->
+    <record id="action_mass_set_available" model="ir.actions.server">
+        <field name="name">Set Status: Available</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.write({'state': 'available'})
+        </field>
+    </record>
+
+    <record id="action_mass_set_negotiation" model="ir.actions.server">
+        <field name="name">Set Status: Under Negotiation</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.write({'state': 'under_negotiation'})
+        </field>
+    </record>
+
+    <record id="action_mass_set_leased" model="ir.actions.server">
+        <field name="name">Set Status: Leased</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.write({'state': 'leased'})
+        </field>
+    </record>
+
+    <record id="action_mass_set_off_market" model="ir.actions.server">
+        <field name="name">Set Status: Off Market</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+records.write({'state': 'off_market'})
+        </field>
+    </record>
+
+</odoo>
