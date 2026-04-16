@@ -1,0 +1,42 @@
+name: Auto Deploy to Railway
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'c21_property_listing/**'
+      - 'c21_admin_dashboard/**'
+      - 'Dockerfile'
+      - 'railway.json'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Deploy to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway link 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1
+          railway up --detach
+          echo "✅ Deployed to Railway!"
+
+      - name: Deployment Summary
+        run: |
+          echo "### 🚀 Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Project:** odoo-c21" >> $GITHUB_STEP_SUMMARY
+          echo "**Commit:** ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Branch:** ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Next steps:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Wait ~5 minutes for Railway build" >> $GITHUB_STEP_SUMMARY
+          echo "2. Go to Odoo → Apps → Update Apps List" >> $GITHUB_STEP_SUMMARY
+          echo "3. Search 'C21' → Click 'Upgrade'" >> $GITHUB_STEP_SUMMARY
