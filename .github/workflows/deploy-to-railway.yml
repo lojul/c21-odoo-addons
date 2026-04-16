@@ -1,0 +1,44 @@
+name: Deploy to Railway Volume
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Railway CLI
+        run: npm i -g @railway/cli
+
+      - name: Deploy to Railway Volume
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+        run: |
+          railway link 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1
+
+          # Create update script
+          cat > /tmp/update.sh <<'EOF'
+          #!/bin/bash
+          set -e
+          cd /tmp
+          curl -sL https://github.com/lojul/c21-odoo-addons/archive/refs/heads/main.tar.gz -o c21.tar.gz
+          tar -xzf c21.tar.gz
+          rm -rf /var/lib/odoo/addons/19.0/c21_property_listing
+          cp -r c21-odoo-addons-main/c21_property_listing /var/lib/odoo/addons/19.0/
+          rm -rf /var/lib/odoo/addons/19.0/c21_admin_dashboard
+          cp -r c21-odoo-addons-main/c21_admin_dashboard /var/lib/odoo/addons/19.0/
+          echo "✅ Modules updated!"
+          ls -la /var/lib/odoo/addons/19.0/c21_property_listing/views/ | grep property_image
+          rm -rf /tmp/c21.tar.gz /tmp/c21-odoo-addons-main
+          EOF
+
+          # Execute in Railway container
+          railway run bash < /tmp/update.sh
+
+      - name: Notify completion
+        run: echo "✅ Deployment to Railway volume complete!"

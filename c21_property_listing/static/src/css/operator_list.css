@@ -1,3 +1,52 @@
+/* ═══════════════════════════════════════════════
+   C21 Module — Global Form Design
+   Applies to all C21 forms via .c21_property_form_aligned
+   ═══════════════════════════════════════════════ */
+
+/* ── 1. Label column: fixed width, no wrapping ── */
+.c21_property_form_aligned .o_td_label {
+    width: 220px !important;
+    min-width: 220px !important;
+    vertical-align: middle;
+}
+
+.c21_property_form_aligned .o_form_label {
+    white-space: nowrap;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ── 2. Colon after every label ── */
+.c21_property_form_aligned .o_form_label::after {
+    content: ":";
+    margin-left: 3px;
+    font-weight: 400;
+    color: #6b7280;
+}
+
+/* ── 3. Suppress colon on hidden/technical fields ── */
+.c21_property_form_aligned .o_form_label[for="currency_id"]::after,
+.c21_property_form_aligned .o_form_label[for="id"]::after {
+    content: "";
+}
+
+/* ── 4. Field value cell: consistent vertical alignment ── */
+.c21_property_form_aligned .o_field_widget {
+    vertical-align: middle;
+}
+
+/* ── 5. Consistent row spacing inside all groups ── */
+.c21_property_form_aligned .o_group tr {
+    height: 36px;
+}
+
+/* ── 6. Notebook tab content: same label rules apply ── */
+.c21_property_form_aligned .o_notebook .o_td_label {
+    width: 220px !important;
+    min-width: 220px !important;
+}
+
+/* ── 7. Operator list: column headers wrap cleanly ── */
 .c21_operator_list_view th .o_column_title {
     white-space: normal !important;
     overflow: visible !important;

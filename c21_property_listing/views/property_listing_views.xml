@@ -5,11 +5,7 @@
         <field name="name">c21.property.listing.form</field>
         <field name="model">c21.property.listing</field>
         <field name="arch" type="xml">
-            <form string="Property Listing">
-                <header>
-                    <field name="approval_status" widget="statusbar"
-                           statusbar_visible="draft,ready,published"/>
-                </header>
+            <form string="Property Listing" class="c21_property_form_aligned">
                 <sheet>
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_images" type="object"
@@ -21,34 +17,17 @@
                             <field name="contact_count" widget="statinfo" string="Contacts"/>
                         </button>
                     </div>
-                    <widget name="web_ribbon" title="Draft" bg_color="text-bg-secondary"
-                            invisible="approval_status != 'draft'"/>
-                    <widget name="web_ribbon" title="Ready" bg_color="text-bg-info"
-                            invisible="approval_status != 'ready'"/>
-                    <widget name="web_ribbon" title="Published" bg_color="text-bg-success"
-                            invisible="approval_status != 'published'"/>
-                    <div class="oe_title">
-                        <label for="name"/>
-                        <h1>
-                            <field name="name" placeholder="Property Name"/>
-                        </h1>
-                        <h2>
-                            <field name="name_cn" placeholder="Chinese Name (optional)"/>
-                        </h2>
-                    </div>
                     <group>
                         <group>
+                            <field name="name" string="English Name / 英文名稱"/>
+                            <field name="name_cn" string="Chinese Name / 中文名稱"/>
                             <field name="ref_code"/>
                             <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
-                            <field name="state" widget="badge"
-                                   decoration-success="state == 'available'"
-                                   decoration-warning="state == 'under_negotiation'"
-                                   decoration-danger="state == 'leased'"
-                                   decoration-muted="state == 'off_market'"/>
+                            <field name="state"/>
                         </group>
                         <group>
                             <field name="district"/>
-                            <field name="available_from"/>
+                            <field name="approval_status" string="Publish / 發佈"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
                     </group>

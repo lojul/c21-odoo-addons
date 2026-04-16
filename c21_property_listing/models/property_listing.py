@@ -41,8 +41,8 @@ class C21PropertyListing(models.Model):
     ref_code = fields.Char(
         'Ref Code / 編號', required=True, index=True,
         help='Unique reference code (e.g., C0000063 for co-working, LS-0001 for leasing)')
-    name = fields.Char('Name (EN) / 名稱', required=True)
-    name_cn = fields.Char('Name (CN) / 中文名', )
+    name = fields.Char('English Name / 英文名稱', required=True)
+    name_cn = fields.Char('Chinese Name / 中文名稱')
     listing_type = fields.Selection([
         ('coworking', 'Co-working Space'),
         ('leasing', 'Leasing Property'),

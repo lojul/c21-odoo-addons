@@ -14,8 +14,9 @@ This repository is connected to Railway for automatic deployment.
 
 ### Railway Setup
 
-1. Volume mounted at `/mnt/extra-addons`
-2. Environment variable: `ODOO_EXTRA_ADDONS=/mnt/extra-addons`
+1. Runtime persistent addons path: /var/lib/odoo/addons/19.0
+2. Image addons source path: /mnt/extra-addons
+3. Container startup script auto-syncs modules from image to volume before Odoo starts
 
 ### To Deploy
 
@@ -25,7 +26,13 @@ git commit -m "Your changes"
 git push origin main
 ```
 
-Railway will automatically sync changes.
+Railway will deploy a new image, and startup sync will copy the latest modules into the mounted volume automatically.
+
+After deploy:
+
+1. Open Odoo Apps
+2. Click Update Apps List
+3. Upgrade C21 modules
 
 ## Module: c21_property_listing
 

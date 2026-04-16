@@ -105,7 +105,7 @@ for img in images:
     try:
         image_data = img._download_image_from_url(img.image_url)
         if image_data:
-            img.image = image_data
+            img.write({'image': image_data})
             success_count += 1
         else:
             failed_count += 1
@@ -156,7 +156,7 @@ for img in records:
         try:
             image_data = img._download_image_from_url(img.image_url)
             if image_data:
-                img.image = image_data
+                img.write({'image': image_data})
                 success_count += 1
             else:
                 failed_count += 1
