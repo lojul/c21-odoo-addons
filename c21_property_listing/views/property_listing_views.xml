@@ -352,4 +352,65 @@
         <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('approval_status', '=', 'published')]</field>
     </record>
+
+    <!-- Property Image Views (temporarily merged here) -->
+    <record id="c21_property_image_view_form" model="ir.ui.view">
+        <field name="name">c21.property.image.form</field>
+        <field name="model">c21.property.image</field>
+        <field name="arch" type="xml">
+            <form string="Property Image">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="name" placeholder="Image description..."/>
+                            <field name="sequence"/>
+                            <field name="is_cover"/>
+                        </group>
+                        <group>
+                            <field name="image_url" placeholder="Paste image URL here to auto-download"
+                                   help="Enter URL and save to automatically download the image"/>
+                            <button name="action_download_from_url" type="object"
+                                    string="Download from URL" class="btn-primary"
+                                    invisible="not image_url"
+                                    icon="fa-download"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="image" widget="image" options="{'size': [0, 400]}"/>
+                    </group>
+                    <group string="Resized Versions (auto-generated)">
+                        <label for="image_medium" string="Medium (512x512)"/>
+                        <field name="image_medium" widget="image" options="{'size': [0, 200]}" nolabel="1"/>
+                        <label for="image_small" string="Small (256x256)"/>
+                        <field name="image_small" widget="image" options="{'size': [0, 100]}" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="c21_property_image_view_tree" model="ir.ui.view">
+        <field name="name">c21.property.image.tree</field>
+        <field name="model">c21.property.image</field>
+        <field name="arch" type="xml">
+            <list string="Property Images" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="is_cover"/>
+                <field name="image_small" widget="image" options="{'size': [64, 64]}"/>
+                <field name="name"/>
+                <field name="property_id"/>
+                <field name="image_url" optional="hide" placeholder="Paste URL to auto-download"/>
+                <button name="action_download_from_url" type="object"
+                        icon="fa-download" title="Download from URL"
+                        invisible="not image_url"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="c21_property_image_action" model="ir.actions.act_window">
+        <field name="name">Property Images</field>
+        <field name="res_model">c21.property.image</field>
+        <field name="view_mode">list,form</field>
+    </record>
 </odoo>
