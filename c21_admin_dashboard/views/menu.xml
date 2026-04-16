@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Root Menu -->
+    <!-- Root Menu - visible to Settings/Admin users -->
     <menuitem id="c21_admin_menu_root"
               name="C21 Admin"
               sequence="200"
-              groups="c21_admin_dashboard.group_c21_admin_user"
+              groups="base.group_system"
               web_icon="c21_admin_dashboard,static/description/icon.png"/>
 
     <!-- Changelog Menu -->
