@@ -28,7 +28,7 @@ Export/Import:
     'author': 'C21',
     'website': '',
     'license': 'LGPL-3',
-    'depends': ['base', 'mail'],
+    'depends': ['base'],
     'data': [
         # Security
         'security/security.xml',
