@@ -201,7 +201,7 @@
         <field name="arch" type="xml">
             <list string="Property Listings" multi_edit="1" editable="bottom">
                 <field name="name"/>
-                <field name="listing_type"/>
+                <field name="listing_type" optional="show"/>
                 <field name="district"/>
                 <field name="operator_id" optional="show"/>
                 <field name="capacity" optional="hide"/>
