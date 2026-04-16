@@ -65,3 +65,9 @@ Thumbs.db
 # Local config
 .env
 .env.local
+
+# Local development
+.claude/
+tmp/
+csv/
+WORK_SUMMARY.md
