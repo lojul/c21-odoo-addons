@@ -211,3 +211,14 @@ class C21PropertyListing(models.Model):
             'domain': [('property_id', '=', self.id)],
             'context': {'default_property_id': self.id},
         }
+
+    def action_open_form(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_window',
+            'name': self.name,
+            'res_model': 'c21.property.listing',
+            'view_mode': 'form',
+            'res_id': self.id,
+            'target': 'current',
+        }
