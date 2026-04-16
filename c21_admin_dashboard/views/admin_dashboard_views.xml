@@ -86,6 +86,7 @@
     <record id="c21_custom_modules_view_list" model="ir.ui.view">
         <field name="name">c21.custom.modules.list</field>
         <field name="model">ir.module.module</field>
+        <field name="priority">1</field>
         <field name="arch" type="xml">
             <list string="Custom Modules">
                 <field name="name"/>
@@ -97,13 +98,7 @@
                        decoration-info="state == 'to upgrade'"
                        decoration-warning="state == 'to install'"/>
                 <button name="button_immediate_upgrade" type="object"
-                        string="Upgrade" icon="fa-refresh"
-                        class="btn-secondary"
-                        invisible="installed_version == latest_version or not latest_version"/>
-                <button name="button_immediate_upgrade" type="object"
-                        string="Up to date" icon="fa-check"
-                        class="btn-link text-muted" disabled="1"
-                        invisible="installed_version != latest_version and latest_version"/>
+                        string="Upgrade" icon="fa-refresh" title="Upgrade Module"/>
             </list>
         </field>
     </record>
