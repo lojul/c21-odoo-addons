@@ -10,6 +10,7 @@
     <menuitem id="c21_property_menu_properties"
               name="Properties"
               parent="c21_property_menu_root"
+              action="c21_property_listing_action_properties"
               sequence="10"/>
 
     <menuitem id="c21_property_menu_all"
