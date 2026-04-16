@@ -31,12 +31,11 @@
               action="c21_property_listing_action_leasing"
               sequence="30"/>
 
-    <menuitem id="c21_property_menu_pending"
-              name="Pending Approval"
+    <menuitem id="c21_property_menu_ready"
+              name="Ready to Publish"
               parent="c21_property_menu_properties"
-              action="c21_property_listing_action_pending"
-              sequence="40"
-              groups="c21_property_listing.group_c21_property_manager"/>
+              action="c21_property_listing_action_ready"
+              sequence="40"/>
 
     <menuitem id="c21_property_menu_published"
               name="Published"

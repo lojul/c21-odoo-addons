@@ -7,26 +7,8 @@
         <field name="arch" type="xml">
             <form string="Property Listing">
                 <header>
-                    <button name="action_submit_for_review" string="Submit for Review"
-                            type="object" class="btn-primary"
-                            invisible="approval_status != 'draft'"/>
-                    <button name="action_approve" string="Approve"
-                            type="object" class="btn-primary"
-                            invisible="approval_status != 'pending'"
-                            groups="c21_property_listing.group_c21_property_manager"/>
-                    <button name="action_publish" string="Publish"
-                            type="object" class="btn-success"
-                            invisible="approval_status != 'approved'"
-                            groups="c21_property_listing.group_c21_property_manager"/>
-                    <button name="action_reject" string="Reject"
-                            type="object" class="btn-secondary"
-                            invisible="approval_status not in ('pending', 'approved')"
-                            groups="c21_property_listing.group_c21_property_manager"/>
-                    <button name="action_reset_to_draft" string="Reset to Draft"
-                            type="object" class="btn-secondary"
-                            invisible="approval_status == 'draft'"/>
                     <field name="approval_status" widget="statusbar"
-                           statusbar_visible="draft,pending,approved,published"/>
+                           statusbar_visible="draft,ready,published"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -41,10 +23,10 @@
                     </div>
                     <widget name="web_ribbon" title="Draft" bg_color="text-bg-secondary"
                             invisible="approval_status != 'draft'"/>
+                    <widget name="web_ribbon" title="Ready" bg_color="text-bg-info"
+                            invisible="approval_status != 'ready'"/>
                     <widget name="web_ribbon" title="Published" bg_color="text-bg-success"
                             invisible="approval_status != 'published'"/>
-                    <widget name="web_ribbon" title="Rejected" bg_color="text-bg-danger"
-                            invisible="approval_status != 'rejected'"/>
                     <div class="oe_title">
                         <label for="name"/>
                         <h1>
@@ -287,11 +269,11 @@
                 <filter name="filter_leased" string="Leased"
                         domain="[('state', '=', 'leased')]"/>
                 <separator/>
-                <!-- Approval Filters -->
+                <!-- Publish Status Filters -->
                 <filter name="filter_draft" string="Draft"
                         domain="[('approval_status', '=', 'draft')]"/>
-                <filter name="filter_pending" string="Pending Review"
-                        domain="[('approval_status', '=', 'pending')]"/>
+                <filter name="filter_ready" string="Ready to Publish"
+                        domain="[('approval_status', '=', 'ready')]"/>
                 <filter name="filter_published" string="Published"
                         domain="[('approval_status', '=', 'published')]"/>
                 <separator/>
@@ -315,7 +297,7 @@
                     <filter name="group_listing_type" string="Listing Type" context="{'group_by': 'listing_type'}"/>
                     <filter name="group_property_type" string="Property Type" context="{'group_by': 'property_type'}"/>
                     <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
-                    <filter name="group_approval" string="Approval Status" context="{'group_by': 'approval_status'}"/>
+                    <filter name="group_approval" string="Publish Status" context="{'group_by': 'approval_status'}"/>
                     <filter name="group_operator" string="Operator" context="{'group_by': 'operator_id'}"/>
                     <filter name="group_grade" string="Building Grade" context="{'group_by': 'building_grade'}"/>
                 </group>
@@ -354,11 +336,11 @@
         <field name="context">{'default_listing_type': 'leasing'}</field>
     </record>
 
-    <record id="c21_property_listing_action_pending" model="ir.actions.act_window">
-        <field name="name">Pending Approval</field>
+    <record id="c21_property_listing_action_ready" model="ir.actions.act_window">
+        <field name="name">Ready to Publish</field>
         <field name="res_model">c21.property.listing</field>
         <field name="view_mode">list,kanban,form</field>
-        <field name="domain">[('approval_status', '=', 'pending')]</field>
+        <field name="domain">[('approval_status', '=', 'ready')]</field>
     </record>
 
     <record id="c21_property_listing_action_published" model="ir.actions.act_window">

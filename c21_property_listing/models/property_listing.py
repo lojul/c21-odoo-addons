@@ -69,11 +69,9 @@ class C21PropertyListing(models.Model):
 
     approval_status = fields.Selection([
         ('draft', 'Draft'),
-        ('pending', 'Pending Review'),
-        ('approved', 'Approved'),
+        ('ready', 'Ready to Publish'),
         ('published', 'Published'),
-        ('rejected', 'Rejected'),
-    ], string='Approval Status / 審批狀態', default='draft', tracking=True, index=True)
+    ], string='Publish Status / 發佈狀態', default='draft', tracking=True, index=True)
 
     available_from = fields.Date('Available From / 可租日期')
 
@@ -183,17 +181,11 @@ class C21PropertyListing(models.Model):
                     record.display_price = 'Contact for pricing'
 
     # === Actions ===
-    def action_submit_for_review(self):
-        self.write({'approval_status': 'pending'})
-
-    def action_approve(self):
-        self.write({'approval_status': 'approved'})
+    def action_set_ready(self):
+        self.write({'approval_status': 'ready'})
 
     def action_publish(self):
         self.write({'approval_status': 'published'})
-
-    def action_reject(self):
-        self.write({'approval_status': 'rejected'})
 
     def action_reset_to_draft(self):
         self.write({'approval_status': 'draft'})

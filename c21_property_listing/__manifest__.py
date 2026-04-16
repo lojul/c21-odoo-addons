@@ -1,6 +1,6 @@
 {
     'name': 'C21 Property Management',
-    'version': '19.0.1.3.0',
+    'version': '19.0.1.4.0',
     'category': 'Real Estate',
     'summary': 'Manage co-working spaces and leasing properties',
     'description': """
