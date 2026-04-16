@@ -1,6 +1,6 @@
 {
     'name': 'C21 Admin Dashboard',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'category': 'Administration',
     'summary': 'Admin dashboard for tracking modules and changes',
     'description': """
