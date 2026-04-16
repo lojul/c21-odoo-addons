@@ -67,8 +67,8 @@ msgstr "狀態"
 
 #. module: c21_property_listing
 #: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__approval_status
-msgid "Approval Status"
-msgstr "審批狀態"
+msgid "Publish Status"
+msgstr "發佈狀態"
 
 #. module: c21_property_listing
 #: model_terms:ir.model.fields,field_description:c21_property_listing.field_c21_property_listing__available_from
