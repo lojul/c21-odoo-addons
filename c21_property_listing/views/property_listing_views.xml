@@ -201,9 +201,7 @@
         <field name="arch" type="xml">
             <list string="Property Listings" multi_edit="1" editable="bottom">
                 <field name="name"/>
-                <field name="listing_type" widget="badge"
-                       decoration-info="listing_type == 'coworking'"
-                       decoration-warning="listing_type == 'leasing'"/>
+                <field name="listing_type"/>
                 <field name="district"/>
                 <field name="operator_id" optional="show"/>
                 <field name="capacity" optional="hide"/>
@@ -212,16 +210,8 @@
                 <field name="building_grade" optional="hide"/>
                 <field name="net_area" optional="hide"/>
                 <field name="display_price" optional="hide"/>
-                <field name="state" widget="badge"
-                       decoration-success="state == 'available'"
-                       decoration-warning="state == 'under_negotiation'"
-                       decoration-danger="state == 'leased'"
-                       decoration-muted="state == 'off_market'"/>
-                <field name="approval_status" widget="badge"
-                       decoration-muted="approval_status == 'draft'"
-                       decoration-info="approval_status == 'pending'"
-                       decoration-success="approval_status == 'published'"
-                       decoration-danger="approval_status == 'rejected'"/>
+                <field name="state"/>
+                <field name="approval_status"/>
             </list>
         </field>
     </record>
