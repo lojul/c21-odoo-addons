@@ -1,0 +1,10 @@
+.git
+.github
+.claude
+*.md
+tmp/
+csv/
+__pycache__
+*.pyc
+*.pyo
+.DS_Store
