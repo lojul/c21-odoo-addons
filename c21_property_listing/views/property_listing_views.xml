@@ -199,7 +199,7 @@
         <field name="name">c21.property.listing.tree</field>
         <field name="model">c21.property.listing</field>
         <field name="arch" type="xml">
-            <list string="Property Listings" multi_edit="1">
+            <list string="Property Listings" multi_edit="1" editable="bottom">
                 <field name="name"/>
                 <field name="listing_type" widget="badge"
                        decoration-info="listing_type == 'coworking'"

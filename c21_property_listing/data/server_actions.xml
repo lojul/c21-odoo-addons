@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <data noupdate="0">
     <!-- Mass Update Server Actions for Property Listings -->
 
     <!-- Approval Status Actions -->
@@ -96,4 +97,5 @@ records.write({'state': 'off_market'})
         </field>
     </record>
 
+    </data>
 </odoo>
