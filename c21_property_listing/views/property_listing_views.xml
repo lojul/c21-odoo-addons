@@ -194,7 +194,7 @@
                 <field name="display_price" optional="hide"/>
                 <field name="state"/>
                 <field name="approval_status"/>
-                <button name="action_open_form" type="object" string="Edit" class="btn-secondary"/>
+                <button name="action_open_form" type="object" icon="fa-pencil" title="Edit"/>
             </list>
         </field>
     </record>
