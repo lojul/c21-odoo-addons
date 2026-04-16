@@ -82,5 +82,114 @@ records.write({'state': 'off_market'})
         </field>
     </record>
 
+    <!-- Image Migration Actions -->
+    <record id="action_download_property_images" model="ir.actions.server">
+        <field name="name">Download Images from URLs</field>
+        <field name="model_id" ref="model_c21_property_listing"/>
+        <field name="binding_model_id" ref="model_c21_property_listing"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+# Download images from URLs for selected properties
+PropertyImage = env['c21.property.image']
+images = PropertyImage.search([
+    ('property_id', 'in', records.ids),
+    ('image_url', '!=', False),
+    ('image', '=', False)
+])
+
+success_count = 0
+failed_count = 0
+
+for img in images:
+    try:
+        image_data = img._download_image_from_url(img.image_url)
+        if image_data:
+            img.image = image_data
+            success_count += 1
+        else:
+            failed_count += 1
+    except Exception as e:
+        failed_count += 1
+
+if success_count > 0 or failed_count > 0:
+    message = f"Downloaded {success_count} images successfully"
+    if failed_count > 0:
+        message += f", {failed_count} failed"
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'Image Download Complete',
+            'message': message,
+            'type': 'success' if failed_count == 0 else 'warning',
+            'sticky': False,
+        }
+    }
+else:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'No Images to Download',
+            'message': 'All images have already been downloaded',
+            'type': 'info',
+            'sticky': False,
+        }
+    }
+        </field>
+    </record>
+
+    <record id="action_download_all_images" model="ir.actions.server">
+        <field name="name">🔄 Download All Images from URLs</field>
+        <field name="model_id" ref="model_c21_property_image"/>
+        <field name="binding_model_id" ref="model_c21_property_image"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+# Download images from URLs for all images in the database
+success_count = 0
+failed_count = 0
+
+for img in records:
+    if img.image_url and not img.image:
+        try:
+            image_data = img._download_image_from_url(img.image_url)
+            if image_data:
+                img.image = image_data
+                success_count += 1
+            else:
+                failed_count += 1
+        except Exception as e:
+            failed_count += 1
+
+if success_count > 0 or failed_count > 0:
+    message = f"Downloaded {success_count} images successfully"
+    if failed_count > 0:
+        message += f", {failed_count} failed"
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'Image Download Complete',
+            'message': message,
+            'type': 'success' if failed_count == 0 else 'warning',
+            'sticky': False,
+        }
+    }
+else:
+    action = {
+        'type': 'ir.actions.client',
+        'tag': 'display_notification',
+        'params': {
+            'title': 'No Images to Download',
+            'message': 'All selected images have already been downloaded',
+            'type': 'info',
+            'sticky': False,
+        }
+    }
+        </field>
+    </record>
+
     </data>
 </odoo>

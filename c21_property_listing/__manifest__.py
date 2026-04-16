@@ -1,6 +1,6 @@
 {
     'name': 'C21 Property Management',
-    'version': '19.0.1.4.0',
+    'version': '19.0.2.0.0',
     'category': 'Real Estate',
     'summary': 'Manage co-working spaces and leasing properties',
     'description': """
@@ -13,7 +13,8 @@ Unified property management for:
 
 Features:
 - Bilingual support (English/Chinese)
-- Multi-image management (external CDN URLs)
+- Image storage with automatic resizing (small/medium/large)
+- Auto-download images from URLs
 - Amenities tracking
 - Approval workflow
 - Mass update actions
@@ -29,6 +30,9 @@ Export/Import:
     'website': '',
     'license': 'LGPL-3',
     'depends': ['base'],
+    'external_dependencies': {
+        'python': ['requests'],
+    },
     'data': [
         # Security
         'security/security.xml',
@@ -39,6 +43,7 @@ Export/Import:
         'data/server_actions.xml',
         # Views
         'views/property_listing_views.xml',
+        'views/property_image_views.xml',
         'views/property_operator_views.xml',
         'views/res_country_views.xml',
         'views/property_amenity_views.xml',
