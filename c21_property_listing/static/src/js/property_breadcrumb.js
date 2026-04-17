@@ -1,5 +1,7 @@
 /** @odoo-module **/
 
+import { reactive } from "@odoo/owl";
+
 function getNativeBreadcrumbItems() {
     const breadcrumbRoot = document.querySelector(
         ".o_control_panel .breadcrumb, .o_control_panel .o_control_panel_breadcrumbs"
@@ -76,3 +78,5 @@ if (document.readyState === "loading") {
 } else {
     startBreadcrumbSync();
 }
+
+export default {}

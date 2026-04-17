@@ -52,7 +52,6 @@ Export/Import:
     'assets': {
         'web.assets_backend': [
             'c21_property_listing/static/src/css/operator_list.css',
-            'c21_property_listing/static/src/js/property_breadcrumb.js',
         ],
     },
     'demo': [],
