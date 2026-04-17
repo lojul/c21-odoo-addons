@@ -1,138 +1,140 @@
 # Odoo 19 + Railway Deployment Runbook (C21 Modules)
 
-## Problem Summary
+## Current Standard
 
-Deploying with `railway up` updated the Docker image, but Odoo still loaded old module code.
+Use manual Railway CLI deployment from the local workspace. Do not rely on GitHub Actions for deployment.
 
-Root cause:
+Reason:
 
-- Odoo loads custom modules from `/var/lib/odoo/addons/19.0` first.
-- That path is on a persistent Railway volume.
-- Volume files are not replaced by image deploys.
-- New code existed in `/mnt/extra-addons`, but runtime loaded old files from volume.
+- Railway CLI deploy from the local machine works reliably.
+- GitHub Actions auto-deploy was disabled because Railway auth from GitHub was not reliable in this setup.
+- Odoo still loads custom addons from the persistent volume first, so post-deploy sync is required.
 
-## What Was Changed
+## Root Cause
 
-### 1) Startup sync script added
+Deploying with `railway up` updates the image, but Odoo loads custom modules from the persistent volume first.
 
-File changed:
+- Odoo loads custom modules from `/var/lib/odoo/addons/19.0`
+- That path is on a persistent Railway volume
+- New image code is copied to `/mnt/extra-addons`
+- If the volume is not synced, Odoo continues using old code from the volume
+
+## Required Runtime Pieces
+
+### 1. Sync script
+
+File:
 
 - `scripts/sync_addons_and_start.sh`
 
-Script behavior:
+Behavior:
 
-- Copies these modules from image path to volume path:
-  - `c21_property_listing`
-  - `c21_admin_dashboard`
+- Copies `c21_property_listing` and `c21_admin_dashboard`
 - Source: `/mnt/extra-addons`
 - Destination: `/var/lib/odoo/addons/19.0`
-- Then starts Odoo.
 
-### 2) Dockerfile updated
+### 2. Docker image contents
 
-File changed:
+Files involved:
 
 - `Dockerfile`
+- `scripts/sync_addons_and_start.sh`
 
-Updates:
+### 3. Deployment target
 
-- Copies `scripts/sync_addons_and_start.sh` into image.
-- Marks script executable.
-- Sets `ENTRYPOINT` to the sync script.
+Use these explicit Railway identifiers:
 
-### 3) Odoo safe-eval fix in server action code
+- Project: `357d3bd3-d006-46ad-aa91-7ac88b3fb7c1`
+- Service: `Odoo`
+- Environment: `production`
 
-File changed:
-
-- `c21_property_listing/data/server_actions.xml`
-
-Fix applied:
-
-- Replaced forbidden attribute assignment:
-  - `img.image = image_data`
-- With safe ORM write:
-  - `img.write({'image': image_data})`
-
-This removed `STORE_ATTR` parse errors during module upgrade.
-
-## Current Runtime Reality
-
-Even after image changes, current Railway runtime still starts directly with:
-
-- `/usr/bin/python3 /usr/bin/odoo --http-port=8080`
-
-So in practice, manual sync is still required before upgrade.
-
-## Proven Deployment Procedure
+## Standard Deploy Procedure
 
 Use this exact sequence after code changes:
 
 ```bash
 cd "/Users/kincheonglau/Claude Cowork/odoo19"
-railway up
-railway ssh -- /usr/local/bin/sync_addons_and_start.sh
+railway up --detach --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 --service Odoo --environment production
+railway ssh --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 --service Odoo --environment production -- /usr/local/bin/sync_addons_and_start.sh
 ```
 
 Then in Odoo UI:
 
-1. Apps -> Update Apps List
-2. Upgrade `C21 Property Management`
-3. Hard refresh browser
+1. Apps -> Upgrade the affected module
+2. Hard refresh browser
 
-## Quick Verification Commands
+For this repo, most UI/view changes require upgrading:
 
-Check runtime addons path order:
+- `C21 Property Management`
 
-```bash
-railway logs --tail 200 | grep -i "addons paths"
-```
+## Important Note About GitHub Actions
 
-Check files in volume module path:
+Current status:
 
-```bash
-railway ssh ls -la /var/lib/odoo/addons/19.0/c21_property_listing/views/
-```
+- Auto GitHub Action deploy is disabled
+- Workflow file remains in the repo for manual use only
+- Pushes to `main` should no longer trigger deployment automatically
 
-Check files in image module path:
+Do not wait for GitHub Actions before checking production. The real deploy path is manual Railway CLI.
 
-```bash
-railway ssh ls -la /mnt/extra-addons/c21_property_listing/views/
-```
+## How To Verify Deployment
 
-## If Upgrade Fails Again
-
-Pull the error quickly:
+Check latest Railway deployment:
 
 ```bash
-railway logs --tail 250 | grep -A 30 -E "ERROR|Traceback|ParseError|c21_property_listing"
+cd "/Users/kincheonglau/Claude Cowork/odoo19"
+railway deployment list --service Odoo | sed -n '1,6p'
 ```
 
-Typical pattern seen:
+Re-run sync if needed:
 
-- `forbidden opcode(s) ... STORE_ATTR`
-- Cause: server action Python code using attribute assignment in XML code blocks.
+```bash
+cd "/Users/kincheonglau/Claude Cowork/odoo19"
+railway ssh --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 --service Odoo --environment production -- /usr/local/bin/sync_addons_and_start.sh
+```
 
-Fix pattern:
+Check volume module path:
 
-- Use `record.write({...})` instead of `record.field = value`.
+```bash
+railway ssh --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 --service Odoo --environment production -- ls -la /var/lib/odoo/addons/19.0/c21_property_listing/views/
+```
 
-## Is This a Common Problem?
+Check image module path:
 
-Yes. This is common when:
+```bash
+railway ssh --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 --service Odoo --environment production -- ls -la /mnt/extra-addons/c21_property_listing/views/
+```
 
-- Odoo custom addons are loaded from a persistent volume, and
-- deploys only update image content.
+## If Something Looks Unchanged
 
-If source-of-truth is volume, you must sync volume on each deploy.
+Use this order:
 
-## Recommended Next Improvement
+1. Confirm `railway up` finished successfully
+2. Run sync script again
+3. Upgrade the affected Odoo module
+4. Hard refresh browser
 
-Make startup sync truly automatic by ensuring Railway service start command does not bypass image `ENTRYPOINT`.
+If the UI still looks stale, assume volume code is stale before assuming the deploy failed.
 
-Target behavior:
+## Common Failure Pattern
 
-- Deploy image
-- Container starts
-- Sync script runs automatically
-- Odoo starts
-- Only then upgrade module in UI
+For module upgrade parse errors in server actions:
+
+- Bad pattern: `record.field = value`
+- Good pattern: `record.write({'field': value})`
+
+Known example already fixed in this repo:
+
+- `c21_property_listing/data/server_actions.xml`
+
+## Future AI Guidance
+
+When the user asks to deploy:
+
+1. Make code changes
+2. Commit and push if requested
+3. Deploy manually with Railway CLI
+4. Run the sync script manually
+5. Tell the user to upgrade the module in Odoo if the change affects views, assets, or XML
+
+Do not rely on GitHub Actions as the primary deploy mechanism for this project.

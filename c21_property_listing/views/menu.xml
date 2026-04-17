@@ -31,6 +31,12 @@
               action="c21_property_listing_action_leasing"
               sequence="30"/>
 
+    <menuitem id="c21_property_menu_draft"
+              name="Draft"
+              parent="c21_property_menu_properties"
+              action="c21_property_listing_action_draft"
+              sequence="35"/>
+
     <menuitem id="c21_property_menu_ready"
               name="Ready to Publish"
               parent="c21_property_menu_properties"
