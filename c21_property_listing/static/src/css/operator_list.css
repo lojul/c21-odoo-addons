@@ -53,3 +53,13 @@
     text-overflow: clip !important;
     line-height: 1.2;
 }
+
+/* ── 8. Hide chatter for operator forms ── */
+.c21_operator_form ~ .o-mail-ChatterContainer,
+.c21_operator_form ~ .o-mail-Chatter,
+.c21_operator_form ~ .oe_chatter,
+.o_form_view:has(.c21_operator_form) .o-mail-ChatterContainer,
+.o_form_view:has(.c21_operator_form) .o-mail-Chatter,
+.o_form_view:has(.c21_operator_form) .oe_chatter {
+    display: none !important;
+}
