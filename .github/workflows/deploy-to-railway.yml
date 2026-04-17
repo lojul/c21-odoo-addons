@@ -1,5 +1,8 @@
 name: Deploy to Railway Volume
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 on:
   push:
     branches: [ main ]
@@ -24,6 +27,13 @@ jobs:
             echo "RAILWAY_TOKEN is not set" >&2
             exit 1
           fi
+
+          railway up \
+            --detach \
+            --ci \
+            --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 \
+            --service Odoo \
+            --environment production
 
           railway ssh \
             --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 \
