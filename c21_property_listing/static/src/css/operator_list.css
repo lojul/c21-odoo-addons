@@ -47,6 +47,11 @@
 }
 
 /* ── 7. Custom breadcrumb in property form header ── */
+body:has(.c21_property_form_aligned .c21_breadcrumb_bar) .o_control_panel .breadcrumb,
+body:has(.c21_property_form_aligned .c21_breadcrumb_bar) .o_control_panel .o_control_panel_breadcrumbs {
+    display: none !important;
+}
+
 .c21_property_form_aligned .c21_breadcrumb_bar {
     display: flex;
     align-items: center;
