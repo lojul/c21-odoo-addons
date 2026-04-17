@@ -114,22 +114,8 @@
                             </group>
                         </div>
 
-                        <!-- RIGHT COLUMN: Contact Person and Images -->
+                        <!-- RIGHT COLUMN: Images and Contact -->
                         <div class="c21_side_column">
-                            <!-- Contact Person Section -->
-                            <separator string="Contact Person"/>
-                            <field name="contact_ids">
-                                <list editable="bottom">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="partner_id" string="Name / 姓名"/>
-                                    <field name="role" string="Title / 職稱"/>
-                                    <field name="phone" string="Phone / 電話"/>
-                                    <field name="email" string="Email / 電郵"/>
-                                    <field name="is_primary" string="Primary? / 主要?"/>
-                                    <field name="notes" string="Note / 備註"/>
-                                </list>
-                            </field>
-
                             <!-- Images Section -->
                             <separator string="Images"/>
                             <field name="image_ids">
@@ -138,10 +124,17 @@
                                     <field name="is_cover" string="Cover / 封面"/>
                                     <field name="image_small" widget="image" options="{'size': [64, 64]}" string="Preview / 預覽"/>
                                     <field name="name" string="Description / 描述"/>
-                                    <field name="image_url" optional="hide" placeholder="Paste URL to auto-download" string="URL"/>
-                                    <button name="action_download_from_url" type="object"
-                                            icon="fa-download" title="Download from URL"
-                                            invisible="not image_url"/>
+                                </list>
+                            </field>
+
+                            <!-- Contact Section -->
+                            <separator string="Contact"/>
+                            <field name="contact_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="partner_id" string="Name / 姓名"/>
+                                    <field name="role" string="Title / 職稱"/>
+                                    <field name="phone" string="Phone / 電話"/>
                                 </list>
                             </field>
                         </div>
