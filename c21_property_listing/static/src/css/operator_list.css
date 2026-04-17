@@ -46,52 +46,7 @@
     min-width: 220px !important;
 }
 
-/* ── 7. Custom breadcrumb in property form header ── */
-body:has(.c21_property_form_aligned .c21_breadcrumb_bar) .o_control_panel .breadcrumb,
-body:has(.c21_property_form_aligned .c21_breadcrumb_bar) .o_control_panel .o_control_panel_breadcrumbs {
-    display: none !important;
-}
-
-.c21_property_form_aligned .c21_breadcrumb_bar {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin: 8px 0 14px 0;
-    font-size: 15px;
-    line-height: 1.2;
-}
-
-.c21_property_form_aligned .c21_breadcrumb_link {
-    padding: 0 !important;
-    color: #6b5f9f !important;
-    text-decoration: none !important;
-    min-height: auto !important;
-    font-weight: 600;
-}
-
-.c21_property_form_aligned .c21_breadcrumb_link:hover {
-    text-decoration: underline !important;
-}
-
-.c21_property_form_aligned .c21_breadcrumb_sep {
-    color: #6b7280;
-    font-weight: 500;
-}
-
-.c21_property_form_aligned .c21_breadcrumb_current {
-    color: #1f2937;
-    font-weight: 600;
-}
-
-.c21_property_form_aligned .c21_breadcrumb_current .o_input {
-    border: 0;
-    padding: 0;
-    background: transparent;
-    font-weight: 600;
-    color: #1f2937;
-}
-
-/* ── 8. Operator list: column headers wrap cleanly ── */
+/* ── 7. Operator list: column headers wrap cleanly ── */
 .c21_operator_list_view th .o_column_title {
     white-space: normal !important;
     overflow: visible !important;
