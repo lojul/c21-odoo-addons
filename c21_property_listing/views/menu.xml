@@ -63,6 +63,12 @@
               sequence="90"
               groups="c21_property_listing.group_c21_property_admin"/>
 
+    <menuitem id="c21_property_menu_images"
+              name="All Images"
+              parent="c21_property_menu_config"
+              action="c21_property_image_action"
+              sequence="5"/>
+
     <menuitem id="c21_property_menu_amenities"
               name="Amenities"
               parent="c21_property_menu_config"
