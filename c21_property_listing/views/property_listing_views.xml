@@ -20,10 +20,11 @@
                     <div class="c21_breadcrumb_bar">
                         <button type="action" name="%(c21_property_listing_action_properties)d"
                                 string="Properties" class="btn btn-link c21_breadcrumb_link"/>
-                        <span class="c21_breadcrumb_sep">&gt;</span>
-                        <button type="action" name="%(c21_property_listing_action)d"
-                                string="All Properties" class="btn btn-link c21_breadcrumb_link"/>
-                        <span class="c21_breadcrumb_sep">&gt;</span>
+                        <span class="c21_breadcrumb_sep c21_breadcrumb_sep_section">&gt;</span>
+                        <button type="button" class="btn btn-link c21_breadcrumb_link c21_breadcrumb_section_link">
+                            Section
+                        </button>
+                        <span class="c21_breadcrumb_sep c21_breadcrumb_sep_current">&gt;</span>
                         <field name="name" readonly="1" nolabel="1" class="c21_breadcrumb_current"/>
                     </div>
                     <group>
