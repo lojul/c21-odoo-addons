@@ -39,6 +39,10 @@
                     <field name="property_count" widget="statinfo" string="Properties"/>
                 </button>
             </div>
+            <!-- Hide chatter for property operators -->
+            <chatter position="attributes">
+                <attribute name="invisible">is_property_operator</attribute>
+            </chatter>
         </field>
     </record>
 
