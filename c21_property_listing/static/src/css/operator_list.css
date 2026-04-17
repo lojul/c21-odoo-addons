@@ -54,6 +54,17 @@
     line-height: 1.2;
 }
 
+/* ── 8. Section headers: larger and colored ── */
+.c21_property_form_aligned .o_horizontal_separator {
+    font-size: 16px !important;
+    font-weight: 700 !important;
+    color: #714B67 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding-top: 16px !important;
+    margin-bottom: 8px !important;
+}
+
 /* ── 8. Hide chatter for operator forms ── */
 .c21_operator_form ~ .o-mail-ChatterContainer,
 .c21_operator_form ~ .o-mail-Chatter,

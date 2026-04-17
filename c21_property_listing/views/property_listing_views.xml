@@ -24,12 +24,11 @@
                             <field name="name" string="English Name / 英文名稱"/>
                             <field name="name_cn" string="Chinese Name / 中文名稱"/>
                             <field name="ref_code"/>
-                            <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
-                            <field name="state"/>
                         </group>
                         <group>
-                            <field name="district"/>
+                            <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
                             <field name="approval_status" string="Publish / 發佈"/>
+                            <field name="state"/>
                             <field name="currency_id" invisible="1"/>
                         </group>
                     </group>
@@ -37,17 +36,16 @@
                     <separator string="Location"/>
                     <group>
                         <group>
-                            <field name="building_name"/>
-                            <field name="floor"/>
                             <field name="unit"/>
+                            <field name="floor"/>
+                            <field name="building_name"/>
+                            <field name="address" string="Street / 街道" placeholder="Street address..."/>
+                            <field name="district"/>
                         </group>
                         <group>
-                            <field name="latitude"/>
-                            <field name="longitude"/>
+                            <field name="latitude" invisible="1"/>
+                            <field name="longitude" invisible="1"/>
                         </group>
-                    </group>
-                    <group>
-                        <field name="address" placeholder="Full address..."/>
                     </group>
 
                     <!-- Co-working Details Section -->
@@ -56,18 +54,12 @@
                         <group>
                             <field name="operator_id"/>
                             <field name="size"/>
-                        </group>
-                        <group>
                             <field name="capacity"/>
                             <field name="available_capacity"/>
                         </group>
-                    </group>
-                    <group string="Pricing (HKD/month)" invisible="listing_type != 'coworking'">
                         <group>
                             <field name="hot_desk_price"/>
                             <field name="dedicated_desk_price"/>
-                        </group>
-                        <group>
                             <field name="office_price"/>
                         </group>
                     </group>
@@ -109,39 +101,39 @@
                     <field name="image_ids">
                         <list editable="bottom">
                             <field name="sequence" widget="handle"/>
-                            <field name="is_cover"/>
-                            <field name="image_small" widget="image" options="{'size': [64, 64]}"/>
-                            <field name="name"/>
-                            <field name="image_url" optional="hide" placeholder="Paste URL to auto-download"/>
+                            <field name="is_cover" string="Cover / 封面"/>
+                            <field name="image_small" widget="image" options="{'size': [64, 64]}" string="Preview / 預覽"/>
+                            <field name="name" string="Description / 描述"/>
+                            <field name="image_url" optional="hide" placeholder="Paste URL to auto-download" string="URL"/>
                             <button name="action_download_from_url" type="object"
                                     icon="fa-download" title="Download from URL"
                                     invisible="not image_url"/>
                         </list>
                     </field>
 
-                    <!-- Contacts Section -->
-                    <separator string="Contacts"/>
+                    <!-- Contact Person Section -->
+                    <separator string="Contact Person"/>
                     <field name="contact_ids">
                         <list editable="bottom">
                             <field name="sequence" widget="handle"/>
-                            <field name="is_primary"/>
-                            <field name="partner_id"/>
-                            <field name="role"/>
-                            <field name="phone"/>
-                            <field name="email"/>
-                            <field name="notes"/>
+                            <field name="partner_id" string="Name / 姓名"/>
+                            <field name="role" string="Title / 職稱"/>
+                            <field name="phone" string="Phone / 電話"/>
+                            <field name="email" string="Email / 電郵"/>
+                            <field name="is_primary" string="Primary? / 主要?"/>
+                            <field name="notes" string="Note / 備註"/>
                         </list>
                     </field>
 
-                    <!-- Description Section -->
-                    <separator string="Description"/>
+                    <!-- Comment Section -->
+                    <separator string="Comment"/>
                     <group>
                         <field name="description" nolabel="1"
-                               placeholder="Property description in English..."/>
+                               placeholder="Comment in English..."/>
                     </group>
                     <group>
                         <field name="description_cn" nolabel="1"
-                               placeholder="Property description in Chinese..."/>
+                               placeholder="Comment in Chinese..."/>
                     </group>
                 </sheet>
             </form>
