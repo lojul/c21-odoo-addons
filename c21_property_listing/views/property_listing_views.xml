@@ -17,124 +17,135 @@
                             <field name="contact_count" widget="statinfo" string="Contacts"/>
                         </button>
                     </div>
-                    <!-- Overview Section -->
-                    <separator string="Overview"/>
-                    <group>
-                        <group>
-                            <field name="name" string="English Name / 英文名稱"/>
-                            <field name="name_cn" string="Chinese Name / 中文名稱"/>
-                            <field name="ref_code"/>
-                        </group>
-                        <group>
-                            <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
-                            <field name="approval_status" string="Publish / 發佈"/>
-                            <field name="state"/>
-                            <field name="currency_id" invisible="1"/>
-                        </group>
-                    </group>
-                    <!-- Location Section -->
-                    <separator string="Location"/>
-                    <group>
-                        <group>
-                            <field name="unit"/>
-                            <field name="floor"/>
-                            <field name="building_name"/>
-                            <field name="address" string="Street / 街道" placeholder="Street address..."/>
-                            <field name="district"/>
-                        </group>
-                        <group>
-                            <field name="latitude" invisible="1"/>
-                            <field name="longitude" invisible="1"/>
-                        </group>
-                    </group>
 
-                    <!-- Co-working Details Section -->
-                    <separator string="Co-working Details" invisible="listing_type != 'coworking'"/>
-                    <group invisible="listing_type != 'coworking'">
-                        <group>
-                            <field name="operator_id"/>
-                            <field name="size"/>
-                            <field name="capacity"/>
-                            <field name="available_capacity"/>
-                        </group>
-                        <group>
-                            <field name="hot_desk_price"/>
-                            <field name="dedicated_desk_price"/>
-                            <field name="office_price"/>
-                        </group>
-                    </group>
+                    <!-- Two-column layout container -->
+                    <div class="c21_two_column_layout">
+                        <!-- LEFT COLUMN: Main property info -->
+                        <div class="c21_main_column">
+                            <!-- Overview Section -->
+                            <separator string="Overview"/>
+                            <group>
+                                <group>
+                                    <field name="name" string="English Name / 英文名稱"/>
+                                    <field name="name_cn" string="Chinese Name / 中文名稱"/>
+                                    <field name="ref_code"/>
+                                </group>
+                                <group>
+                                    <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
+                                    <field name="approval_status" string="Publish / 發佈"/>
+                                    <field name="state"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </group>
+                            </group>
 
-                    <!-- Leasing Details Section -->
-                    <separator string="Leasing Details" invisible="listing_type != 'leasing'"/>
-                    <group invisible="listing_type != 'leasing'">
-                        <group>
-                            <field name="property_type"/>
-                            <field name="building_grade"/>
-                            <field name="business_type"
-                                   invisible="property_type != 'retail'"/>
-                        </group>
-                        <group>
-                            <field name="year_built"/>
-                            <field name="total_floors"/>
-                        </group>
-                    </group>
-                    <group string="Area (sqft)" invisible="listing_type != 'leasing'">
-                        <group>
-                            <field name="gross_area"/>
-                            <field name="net_area"/>
-                        </group>
-                        <group>
-                            <field name="asking_rent"/>
-                            <field name="rent_per_sqft"/>
-                        </group>
-                    </group>
-                    <group invisible="listing_type != 'leasing'">
-                        <field name="lease_terms"/>
-                    </group>
+                            <!-- Location Section -->
+                            <separator string="Location"/>
+                            <group>
+                                <group>
+                                    <field name="unit"/>
+                                    <field name="floor"/>
+                                    <field name="building_name"/>
+                                    <field name="address" string="Street / 街道" placeholder="Street address..."/>
+                                    <field name="district"/>
+                                </group>
+                                <group>
+                                    <field name="latitude" invisible="1"/>
+                                    <field name="longitude" invisible="1"/>
+                                </group>
+                            </group>
 
-                    <!-- Amenities Section -->
-                    <separator string="Amenities"/>
-                    <field name="amenity_ids" widget="many2many_tags"/>
+                            <!-- Co-working Details Section -->
+                            <separator string="Co-working Details" invisible="listing_type != 'coworking'"/>
+                            <group invisible="listing_type != 'coworking'">
+                                <group>
+                                    <field name="operator_id"/>
+                                    <field name="size"/>
+                                    <field name="capacity"/>
+                                    <field name="available_capacity"/>
+                                </group>
+                                <group>
+                                    <field name="hot_desk_price"/>
+                                    <field name="dedicated_desk_price"/>
+                                    <field name="office_price"/>
+                                </group>
+                            </group>
 
-                    <!-- Images Section -->
-                    <separator string="Images"/>
-                    <field name="image_ids">
-                        <list editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="is_cover" string="Cover / 封面"/>
-                            <field name="image_small" widget="image" options="{'size': [64, 64]}" string="Preview / 預覽"/>
-                            <field name="name" string="Description / 描述"/>
-                            <field name="image_url" optional="hide" placeholder="Paste URL to auto-download" string="URL"/>
-                            <button name="action_download_from_url" type="object"
-                                    icon="fa-download" title="Download from URL"
-                                    invisible="not image_url"/>
-                        </list>
-                    </field>
+                            <!-- Leasing Details Section -->
+                            <separator string="Leasing Details" invisible="listing_type != 'leasing'"/>
+                            <group invisible="listing_type != 'leasing'">
+                                <group>
+                                    <field name="property_type"/>
+                                    <field name="building_grade"/>
+                                    <field name="business_type"
+                                           invisible="property_type != 'retail'"/>
+                                </group>
+                                <group>
+                                    <field name="year_built"/>
+                                    <field name="total_floors"/>
+                                </group>
+                            </group>
+                            <group string="Area (sqft)" invisible="listing_type != 'leasing'">
+                                <group>
+                                    <field name="gross_area"/>
+                                    <field name="net_area"/>
+                                </group>
+                                <group>
+                                    <field name="asking_rent"/>
+                                    <field name="rent_per_sqft"/>
+                                </group>
+                            </group>
+                            <group invisible="listing_type != 'leasing'">
+                                <field name="lease_terms"/>
+                            </group>
 
-                    <!-- Contact Person Section -->
-                    <separator string="Contact Person"/>
-                    <field name="contact_ids">
-                        <list editable="bottom">
-                            <field name="sequence" widget="handle"/>
-                            <field name="partner_id" string="Name / 姓名"/>
-                            <field name="role" string="Title / 職稱"/>
-                            <field name="phone" string="Phone / 電話"/>
-                            <field name="email" string="Email / 電郵"/>
-                            <field name="is_primary" string="Primary? / 主要?"/>
-                            <field name="notes" string="Note / 備註"/>
-                        </list>
-                    </field>
+                            <!-- Amenities Section -->
+                            <separator string="Amenities"/>
+                            <field name="amenity_ids" widget="many2many_tags"/>
 
-                    <!-- Comment Section -->
-                    <separator string="Comment"/>
-                    <group>
-                        <field name="description" nolabel="1"
-                               placeholder="Comment in English..."/>
-                    </group>
-                    <group>
-                        <field name="description_cn" nolabel="1"
-                               placeholder="Comment in Chinese..."/>
-                    </group>
+                            <!-- Comment Section -->
+                            <separator string="Comment"/>
+                            <group>
+                                <field name="description" nolabel="1"
+                                       placeholder="Comment in English..."/>
+                            </group>
+                            <group>
+                                <field name="description_cn" nolabel="1"
+                                       placeholder="Comment in Chinese..."/>
+                            </group>
+                        </div>
+
+                        <!-- RIGHT COLUMN: Contact Person and Images -->
+                        <div class="c21_side_column">
+                            <!-- Contact Person Section -->
+                            <separator string="Contact Person"/>
+                            <field name="contact_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="partner_id" string="Name / 姓名"/>
+                                    <field name="role" string="Title / 職稱"/>
+                                    <field name="phone" string="Phone / 電話"/>
+                                    <field name="email" string="Email / 電郵"/>
+                                    <field name="is_primary" string="Primary? / 主要?"/>
+                                    <field name="notes" string="Note / 備註"/>
+                                </list>
+                            </field>
+
+                            <!-- Images Section -->
+                            <separator string="Images"/>
+                            <field name="image_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="is_cover" string="Cover / 封面"/>
+                                    <field name="image_small" widget="image" options="{'size': [64, 64]}" string="Preview / 預覽"/>
+                                    <field name="name" string="Description / 描述"/>
+                                    <field name="image_url" optional="hide" placeholder="Paste URL to auto-download" string="URL"/>
+                                    <button name="action_download_from_url" type="object"
+                                            icon="fa-download" title="Download from URL"
+                                            invisible="not image_url"/>
+                                </list>
+                            </field>
+                        </div>
+                    </div>
                 </sheet>
             </form>
         </field>

@@ -24,10 +24,12 @@
     color: #6b7280;
 }
 
-/* ── 3. Suppress colon on hidden/technical fields ── */
+/* ── 3. Suppress colon on hidden/technical fields and radio labels ── */
 .c21_property_form_aligned .o_form_label[for="currency_id"]::after,
-.c21_property_form_aligned .o_form_label[for="id"]::after {
-    content: "";
+.c21_property_form_aligned .o_form_label[for="id"]::after,
+.c21_property_form_aligned .o_radio_item label::after,
+.c21_property_form_aligned .o_field_radio label::after {
+    content: "" !important;
 }
 
 /* ── 4. Field value cell: consistent vertical alignment ── */
@@ -63,6 +65,43 @@
     letter-spacing: 0.5px;
     padding-top: 16px !important;
     margin-bottom: 8px !important;
+}
+
+/* ── 9. Two-column layout for property form ── */
+.c21_two_column_layout {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.c21_main_column {
+    flex: 2;
+    min-width: 0;
+}
+
+.c21_side_column {
+    flex: 1;
+    min-width: 320px;
+    max-width: 400px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    border: 1px solid #e9ecef;
+}
+
+.c21_side_column .o_horizontal_separator:first-child {
+    padding-top: 0 !important;
+}
+
+/* Responsive: stack columns on smaller screens */
+@media (max-width: 1200px) {
+    .c21_two_column_layout {
+        flex-direction: column;
+    }
+    .c21_side_column {
+        max-width: 100%;
+        width: 100%;
+    }
 }
 
 /* ── 8. Hide chatter for operator forms ── */
