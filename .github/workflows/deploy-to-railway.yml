@@ -19,9 +19,16 @@ jobs:
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
         run: |
+          set -euo pipefail
+          if [ -z "${RAILWAY_TOKEN:-}" ]; then
+            echo "RAILWAY_TOKEN is not set" >&2
+            exit 1
+          fi
+
           railway ssh \
             --project 357d3bd3-d006-46ad-aa91-7ac88b3fb7c1 \
             --service Odoo \
+            --environment production \
             -- /usr/local/bin/sync_addons_and_start.sh
 
       - name: Notify completion
