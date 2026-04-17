@@ -27,9 +27,6 @@
             <field name="lang" position="attributes">
                 <attribute name="invisible">is_property_operator</attribute>
             </field>
-            <xpath expr="//chatter" position="attributes">
-                <attribute name="invisible">is_property_operator</attribute>
-            </xpath>
             <field name="category_id" position="after">
                 <field name="is_property_operator" invisible="1"/>
             </field>
