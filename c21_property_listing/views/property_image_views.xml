@@ -42,39 +42,11 @@
         </field>
     </record>
 
-    <!-- Property Image Kanban View -->
-    <record id="c21_property_image_view_kanban" model="ir.ui.view">
-        <field name="name">c21.property.image.kanban</field>
-        <field name="model">c21.property.image</field>
-        <field name="arch" type="xml">
-            <kanban>
-                <field name="id"/>
-                <field name="name"/>
-                <field name="is_cover"/>
-                <field name="property_id"/>
-                <templates>
-                    <t t-name="card">
-                        <div class="o_kanban_image">
-                            <field name="image_medium" widget="image"/>
-                        </div>
-                        <div class="o_kanban_details">
-                            <strong><field name="name"/></strong>
-                            <div><field name="property_id"/></div>
-                            <div t-if="record.is_cover.raw_value">
-                                <span class="badge text-bg-success">Cover Image</span>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
-        </field>
-    </record>
-
     <!-- Property Image Action -->
     <record id="c21_property_image_action" model="ir.actions.act_window">
         <field name="name">Property Images</field>
         <field name="res_model">c21.property.image</field>
-        <field name="view_mode">kanban,list,form</field>
+        <field name="view_mode">list,form</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Upload property images
