@@ -26,6 +26,6 @@ class C21PropertyContact(models.Model):
     sequence = fields.Integer('Sequence', default=10)
     notes = fields.Text('Notes / 備註')
 
-    # Related fields for easy access
-    phone = fields.Char(related='partner_id.phone', string='Phone / 電話', readonly=True)
-    email = fields.Char(related='partner_id.email', string='Email / 電郵', readonly=True)
+    # Writable related fields so edits here update the linked partner record.
+    phone = fields.Char(related='partner_id.phone', string='Phone / 電話', readonly=False)
+    email = fields.Char(related='partner_id.email', string='Email / 電郵', readonly=False)
