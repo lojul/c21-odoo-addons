@@ -122,14 +122,14 @@
 
 /* Image cards */
 .c21_image_cards .o_kanban_record {
-    width: 90px;
+    width: 72px;
 }
 
 .c21_image_card {
     background: #fff;
     border: 1px solid #dee2e6;
     border-radius: 6px;
-    padding: 6px;
+    padding: 4px;
     text-align: center;
 }
 
@@ -138,8 +138,8 @@
 }
 
 .c21_card_image img {
-    width: 76px;
-    height: 76px;
+    width: 60px;
+    height: 60px;
     object-fit: cover;
     border-radius: 4px;
 }

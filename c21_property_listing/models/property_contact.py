@@ -10,7 +10,7 @@ class C21PropertyContact(models.Model):
         'c21.property.listing', string='Property',
         required=True, ondelete='cascade', index=True)
     partner_id = fields.Many2one(
-        'res.partner', string='Contact / 聯絡人',
+        'res.partner', string='Name / 姓名',
         required=True, index=True)
     role = fields.Selection([
         ('landlord', 'Landlord'),
@@ -21,9 +21,9 @@ class C21PropertyContact(models.Model):
         ('accounts', 'Accounts/Finance'),
         ('maintenance', 'Maintenance'),
         ('other', 'Other'),
-    ], string='Role / 角色', required=True, default='property_manager')
-    is_primary = fields.Boolean('Is Primary Contact / 主要聯絡人', default=False)
-    sequence = fields.Integer('Sequence / 排序', default=10)
+    ], string='Title / 職稱', required=True, default='property_manager')
+    is_primary = fields.Boolean('Primary Contact / 主要聯絡人', default=False)
+    sequence = fields.Integer('Sequence', default=10)
     notes = fields.Text('Notes / 備註')
 
     # Related fields for easy access

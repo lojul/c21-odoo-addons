@@ -121,14 +121,13 @@
                             <field name="image_ids" class="c21_card_grid">
                                 <kanban class="c21_image_cards">
                                     <field name="id"/>
-                                    <field name="sequence"/>
                                     <field name="is_cover"/>
                                     <field name="image_small"/>
                                     <field name="name"/>
                                     <templates>
                                         <t t-name="card" class="c21_image_card">
                                             <div class="c21_card_image">
-                                                <field name="image_small" widget="image" options="{'size': [80, 80]}"/>
+                                                <field name="image_small" widget="image" options="{'size': [60, 60]}"/>
                                                 <span t-if="record.is_cover.raw_value" class="c21_cover_badge">Cover</span>
                                             </div>
                                             <div class="c21_card_label" t-if="record.name.value">
@@ -144,11 +143,9 @@
                             <field name="contact_ids" class="c21_card_grid">
                                 <kanban class="c21_contact_cards">
                                     <field name="id"/>
-                                    <field name="sequence"/>
                                     <field name="partner_id"/>
                                     <field name="role"/>
                                     <field name="phone"/>
-                                    <field name="email"/>
                                     <field name="is_primary"/>
                                     <templates>
                                         <t t-name="card" class="c21_contact_card">
@@ -371,37 +368,50 @@
         <field name="domain">[('approval_status', '=', 'draft')]</field>
     </record>
 
-    <!-- Property Image Views (temporarily merged here) -->
+    <!-- Property Contact Form View -->
+    <record id="c21_property_contact_view_form" model="ir.ui.view">
+        <field name="name">c21.property.contact.form</field>
+        <field name="model">c21.property.contact</field>
+        <field name="arch" type="xml">
+            <form string="Contact">
+                <sheet>
+                    <group>
+                        <field name="property_id"/>
+                        <field name="partner_id"/>
+                        <field name="role"/>
+                        <field name="phone"/>
+                        <field name="email"/>
+                        <field name="is_primary"/>
+                        <field name="notes" placeholder="Additional notes..."/>
+                        <field name="sequence" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Property Image Form View -->
     <record id="c21_property_image_view_form" model="ir.ui.view">
         <field name="name">c21.property.image.form</field>
         <field name="model">c21.property.image</field>
         <field name="arch" type="xml">
-            <form string="Property Image">
+            <form string="Image">
                 <sheet>
                     <group>
                         <group>
                             <field name="property_id"/>
-                            <field name="name" placeholder="Image description..."/>
-                            <field name="sequence"/>
-                            <field name="is_cover"/>
+                            <field name="name" string="Description / 描述" placeholder="Image description..."/>
+                            <field name="is_cover" string="Cover Image? / 封面圖?"/>
+                            <field name="image" widget="image" options="{'size': [0, 250]}"/>
+                            <field name="sequence" invisible="1"/>
+                            <field name="image_url" invisible="1"/>
                         </group>
                         <group>
-                            <field name="image_url" placeholder="Paste image URL here to auto-download"
-                                   help="Enter URL and save to automatically download the image"/>
                             <button name="action_download_from_url" type="object"
-                                    string="Download from URL" class="btn-primary"
+                                    string="Download" class="btn-primary"
                                     invisible="not image_url"
                                     icon="fa-download"/>
                         </group>
-                    </group>
-                    <group>
-                        <field name="image" widget="image" options="{'size': [0, 400]}"/>
-                    </group>
-                    <group string="Resized Versions (auto-generated)">
-                        <label for="image_medium" string="Medium (512x512)"/>
-                        <field name="image_medium" widget="image" options="{'size': [0, 200]}" nolabel="1"/>
-                        <label for="image_small" string="Small (256x256)"/>
-                        <field name="image_small" widget="image" options="{'size': [0, 100]}" nolabel="1"/>
                     </group>
                 </sheet>
             </form>
@@ -412,16 +422,11 @@
         <field name="name">c21.property.image.tree</field>
         <field name="model">c21.property.image</field>
         <field name="arch" type="xml">
-            <list string="Property Images" editable="bottom">
-                <field name="sequence" widget="handle"/>
-                <field name="is_cover"/>
-                <field name="image_small" widget="image" options="{'size': [64, 64]}"/>
-                <field name="name"/>
+            <list string="Property Images">
+                <field name="is_cover" string="Cover"/>
+                <field name="image_small" widget="image" options="{'size': [48, 48]}"/>
+                <field name="name" string="Description"/>
                 <field name="property_id"/>
-                <field name="image_url" optional="hide" placeholder="Paste URL to auto-download"/>
-                <button name="action_download_from_url" type="object"
-                        icon="fa-download" title="Download from URL"
-                        invisible="not image_url"/>
             </list>
         </field>
     </record>

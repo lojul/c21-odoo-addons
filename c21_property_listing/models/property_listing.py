@@ -52,7 +52,7 @@ class C21PropertyListing(models.Model):
     district = fields.Selection(
         DISTRICT_SELECTION, string='District / 地區', required=True, index=True)
     building_name = fields.Char('Building / 大廈')
-    address = fields.Text('Address / 地址')
+    address = fields.Char('Street / 街道')
     floor = fields.Char('Floor / 樓層')
     unit = fields.Char('Unit / 單位')
     latitude = fields.Float('Lat / 緯度', digits=(10, 7))
