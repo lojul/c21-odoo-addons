@@ -104,6 +104,126 @@
     }
 }
 
+/* ── 10. Compact card grid for Images and Contacts ── */
+.c21_card_grid .o_kanban_renderer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+}
+
+.c21_card_grid .o_kanban_record {
+    flex: 0 0 auto;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+/* Image cards */
+.c21_image_cards .o_kanban_record {
+    width: 90px;
+}
+
+.c21_image_card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 6px;
+    text-align: center;
+}
+
+.c21_card_image {
+    position: relative;
+}
+
+.c21_card_image img {
+    width: 76px;
+    height: 76px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.c21_cover_badge {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background: #714B67;
+    color: #fff;
+    font-size: 9px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-weight: 600;
+}
+
+.c21_card_label {
+    font-size: 11px;
+    color: #495057;
+    margin-top: 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Contact cards */
+.c21_contact_cards .o_kanban_record {
+    width: 100%;
+}
+
+.c21_contact_card {
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.c21_contact_name {
+    font-weight: 600;
+    color: #212529;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.c21_contact_name .fa-user {
+    color: #714B67;
+}
+
+.c21_primary_badge {
+    background: #198754;
+    color: #fff;
+    font-size: 9px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-weight: 600;
+    margin-left: auto;
+}
+
+.c21_contact_role {
+    font-size: 12px;
+    color: #6c757d;
+    margin-top: 2px;
+    padding-left: 18px;
+}
+
+.c21_contact_phone {
+    font-size: 12px;
+    color: #495057;
+    margin-top: 4px;
+}
+
+.c21_contact_phone .fa-phone {
+    color: #714B67;
+    font-size: 11px;
+}
+
+/* Kanban add button styling in sidebar */
+.c21_side_column .o_kanban_renderer .o_kanban_quick_add,
+.c21_side_column .o_kanban_button_new {
+    margin-top: 8px;
+}
+
 /* ── 8. Hide chatter for operator forms ── */
 .c21_operator_form ~ .o-mail-ChatterContainer,
 .c21_operator_form ~ .o-mail-Chatter,

@@ -118,24 +118,55 @@
                         <div class="c21_side_column">
                             <!-- Images Section -->
                             <separator string="Images"/>
-                            <field name="image_ids">
-                                <list editable="bottom">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="is_cover" string="Cover / 封面"/>
-                                    <field name="image_small" widget="image" options="{'size': [64, 64]}" string="Preview / 預覽"/>
-                                    <field name="name" string="Description / 描述"/>
-                                </list>
+                            <field name="image_ids" class="c21_card_grid">
+                                <kanban class="c21_image_cards">
+                                    <field name="id"/>
+                                    <field name="sequence"/>
+                                    <field name="is_cover"/>
+                                    <field name="image_small"/>
+                                    <field name="name"/>
+                                    <templates>
+                                        <t t-name="card" class="c21_image_card">
+                                            <div class="c21_card_image">
+                                                <field name="image_small" widget="image" options="{'size': [80, 80]}"/>
+                                                <span t-if="record.is_cover.raw_value" class="c21_cover_badge">Cover</span>
+                                            </div>
+                                            <div class="c21_card_label" t-if="record.name.value">
+                                                <field name="name"/>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
                             </field>
 
                             <!-- Contact Section -->
                             <separator string="Contact"/>
-                            <field name="contact_ids">
-                                <list editable="bottom">
-                                    <field name="sequence" widget="handle"/>
-                                    <field name="partner_id" string="Name / 姓名"/>
-                                    <field name="role" string="Title / 職稱"/>
-                                    <field name="phone" string="Phone / 電話"/>
-                                </list>
+                            <field name="contact_ids" class="c21_card_grid">
+                                <kanban class="c21_contact_cards">
+                                    <field name="id"/>
+                                    <field name="sequence"/>
+                                    <field name="partner_id"/>
+                                    <field name="role"/>
+                                    <field name="phone"/>
+                                    <field name="email"/>
+                                    <field name="is_primary"/>
+                                    <templates>
+                                        <t t-name="card" class="c21_contact_card">
+                                            <div class="c21_contact_name">
+                                                <i class="fa fa-user me-1"/>
+                                                <field name="partner_id"/>
+                                                <span t-if="record.is_primary.raw_value" class="c21_primary_badge">Primary</span>
+                                            </div>
+                                            <div class="c21_contact_role" t-if="record.role.value">
+                                                <field name="role"/>
+                                            </div>
+                                            <div class="c21_contact_phone" t-if="record.phone.value">
+                                                <i class="fa fa-phone me-1"/>
+                                                <field name="phone"/>
+                                            </div>
+                                        </t>
+                                    </templates>
+                                </kanban>
                             </field>
                         </div>
                     </div>
