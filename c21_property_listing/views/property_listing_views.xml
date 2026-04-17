@@ -17,6 +17,8 @@
                             <field name="contact_count" widget="statinfo" string="Contacts"/>
                         </button>
                     </div>
+                    <!-- Overview Section -->
+                    <separator string="Overview"/>
                     <group>
                         <group>
                             <field name="name" string="English Name / 英文名稱"/>
