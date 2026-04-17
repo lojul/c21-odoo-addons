@@ -1,13 +1,7 @@
 name: Auto Deploy to Railway
 
 on:
-  push:
-    branches: [ main ]
-    paths:
-      - 'c21_property_listing/**'
-      - 'c21_admin_dashboard/**'
-      - 'Dockerfile'
-      - 'railway.json'
+  workflow_dispatch:
 
 jobs:
   deploy:
