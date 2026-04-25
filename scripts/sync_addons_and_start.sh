@@ -23,5 +23,20 @@ for module in "${MODULES[@]}"; do
   echo "[startup-sync] Updated ${module} -> ${dst}"
 done
 
-echo "[startup-sync] Starting Odoo with performance config"
-exec /entrypoint.sh --config=/etc/odoo/odoo.conf "$@"
+echo "[startup-sync] Starting Odoo with performance settings"
+
+# Build performance arguments
+PERF_ARGS=""
+PERF_ARGS="${PERF_ARGS} --workers=${WORKERS:-0}"
+PERF_ARGS="${PERF_ARGS} --db_maxconn=${DB_MAXCONN:-64}"
+PERF_ARGS="${PERF_ARGS} --limit-time-cpu=${LIMIT_TIME_CPU:-600}"
+PERF_ARGS="${PERF_ARGS} --limit-time-real=${LIMIT_TIME_REAL:-1200}"
+
+if [[ "${PROXY_MODE:-False}" == "True" ]]; then
+  PERF_ARGS="${PERF_ARGS} --proxy-mode"
+fi
+
+echo "[startup-sync] Performance args: ${PERF_ARGS}"
+
+# Pass performance args to entrypoint
+exec /entrypoint.sh ${PERF_ARGS} "$@"
