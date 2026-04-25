@@ -23,20 +23,25 @@ for module in "${MODULES[@]}"; do
   echo "[startup-sync] Updated ${module} -> ${dst}"
 done
 
-echo "[startup-sync] Starting Odoo with performance settings"
+echo "[startup-sync] Starting Odoo directly (bypassing slow init)"
 
-# Build performance arguments
-PERF_ARGS=""
-PERF_ARGS="${PERF_ARGS} --workers=${WORKERS:-0}"
-PERF_ARGS="${PERF_ARGS} --db_maxconn=${DB_MAXCONN:-64}"
-PERF_ARGS="${PERF_ARGS} --limit-time-cpu=${LIMIT_TIME_CPU:-600}"
-PERF_ARGS="${PERF_ARGS} --limit-time-real=${LIMIT_TIME_REAL:-1200}"
+# Build addons path
+ADDONS_PATH="/var/lib/odoo/addons/19.0,/usr/lib/python3/dist-packages/odoo/addons"
 
-if [[ "${PROXY_MODE:-False}" == "True" ]]; then
-  PERF_ARGS="${PERF_ARGS} --proxy-mode"
-fi
-
-echo "[startup-sync] Performance args: ${PERF_ARGS}"
-
-# Pass performance args to entrypoint
-exec /entrypoint.sh ${PERF_ARGS} "$@"
+# Start Odoo directly - NO --init flag!
+exec /usr/bin/python3 /usr/bin/odoo \
+  --http-port=8080 \
+  --proxy-mode \
+  --db_host="${ODOO_DATABASE_HOST:-localhost}" \
+  --db_port="${ODOO_DATABASE_PORT:-5432}" \
+  --db_user="${ODOO_DATABASE_USER:-odoo}" \
+  --db_password="${ODOO_DATABASE_PASSWORD:-odoo}" \
+  --database="${ODOO_DATABASE_NAME:-odoo}" \
+  --db_maxconn="${DB_MAXCONN:-64}" \
+  --addons-path="${ADDONS_PATH}" \
+  --data-dir=/var/lib/odoo \
+  --limit-time-cpu="${LIMIT_TIME_CPU:-600}" \
+  --limit-time-real="${LIMIT_TIME_REAL:-1200}" \
+  --workers="${WORKERS:-0}" \
+  --without-demo=True \
+  "$@"
