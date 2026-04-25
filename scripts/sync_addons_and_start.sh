@@ -23,5 +23,5 @@ for module in "${MODULES[@]}"; do
   echo "[startup-sync] Updated ${module} -> ${dst}"
 done
 
-echo "[startup-sync] Starting Odoo"
-exec /entrypoint.sh "$@"
+echo "[startup-sync] Starting Odoo with performance config"
+exec /entrypoint.sh --config=/etc/odoo/odoo.conf "$@"

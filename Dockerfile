@@ -6,6 +6,9 @@ COPY ./c21_admin_dashboard /mnt/extra-addons/c21_admin_dashboard
 COPY --chown=odoo:odoo ./scripts/sync_addons_and_start.sh /usr/local/bin/sync_addons_and_start.sh
 COPY --chown=root:root ./scripts/bulk_image_import.py /usr/local/bin/bulk_image_import.py
 
+# Copy Odoo configuration for performance
+COPY --chown=odoo:odoo ./config/odoo.conf /etc/odoo/odoo.conf
+
 # Set permissions
 USER root
 RUN chown -R odoo:odoo /mnt/extra-addons \
