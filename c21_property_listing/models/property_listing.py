@@ -152,13 +152,35 @@ class C21PropertyListing(models.Model):
 
     @api.depends('image_ids')
     def _compute_image_count(self):
+        # Batch compute to avoid N+1 queries
+        if not self.ids:
+            for record in self:
+                record.image_count = 0
+            return
+        data = self.env['c21.property.image'].read_group(
+            [('property_id', 'in', self.ids)],
+            ['property_id'],
+            ['property_id']
+        )
+        mapped = {d['property_id'][0]: d['property_id_count'] for d in data}
         for record in self:
-            record.image_count = len(record.image_ids)
+            record.image_count = mapped.get(record.id, 0)
 
     @api.depends('contact_ids')
     def _compute_contact_count(self):
+        # Batch compute to avoid N+1 queries
+        if not self.ids:
+            for record in self:
+                record.contact_count = 0
+            return
+        data = self.env['c21.property.contact'].read_group(
+            [('property_id', 'in', self.ids)],
+            ['property_id'],
+            ['property_id']
+        )
+        mapped = {d['property_id'][0]: d['property_id_count'] for d in data}
         for record in self:
-            record.contact_count = len(record.contact_ids)
+            record.contact_count = mapped.get(record.id, 0)
 
     @api.depends('listing_type', 'hot_desk_price', 'dedicated_desk_price', 'office_price', 'asking_rent')
     def _compute_display_price(self):

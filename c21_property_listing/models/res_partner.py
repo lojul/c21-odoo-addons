@@ -25,8 +25,19 @@ class ResPartner(models.Model):
 
     @api.depends('property_ids')
     def _compute_property_count(self):
+        # Batch compute to avoid N+1 queries
+        if not self.ids:
+            for partner in self:
+                partner.property_count = 0
+            return
+        data = self.env['c21.property.listing'].read_group(
+            [('operator_id', 'in', self.ids)],
+            ['operator_id'],
+            ['operator_id']
+        )
+        mapped = {d['operator_id'][0]: d['operator_id_count'] for d in data}
         for partner in self:
-            partner.property_count = len(partner.property_ids)
+            partner.property_count = mapped.get(partner.id, 0)
 
     @api.depends('country_id.code')
     def _compute_c21_is_hk_address(self):

@@ -25,8 +25,8 @@ done
 
 echo "[startup-sync] Starting Odoo directly (bypassing slow init)"
 
-# Build addons path
-ADDONS_PATH="/var/lib/odoo/addons/19.0,/usr/lib/python3/dist-packages/odoo/addons"
+# Build addons path - include source path as fallback
+ADDONS_PATH="/var/lib/odoo/addons/19.0,/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons"
 
 # Start Odoo directly - NO --init flag!
 exec /usr/bin/python3 /usr/bin/odoo \
