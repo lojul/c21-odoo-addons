@@ -1,0 +1,334 @@
+{
+  "name": "Odoo to Website - Auto Publish Properties",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "schedule-trigger",
+      "name": "Every 5 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "mode": "raw",
+        "jsonOutput": "{\n  \"ODOO_URL\": \"https://188.166.189.244.nip.io\",\n  \"ODOO_DB\": \"odoo\",\n  \"ODOO_USER\": \"admin\",\n  \"ODOO_API_KEY\": \"YOUR_API_KEY_HERE\",\n  \"WEBSITE_URL\": \"https://coworkspace-main.vercel.app\"\n}",
+        "options": {}
+      },
+      "id": "config",
+      "name": "Config",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [220, 0],
+      "notesInFlow": true,
+      "notes": "EDIT THIS NODE to set your credentials"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.ODOO_URL }}/xmlrpc/2/common",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/xml",
+        "body": "=<?xml version=\"1.0\"?>\n<methodCall>\n  <methodName>authenticate</methodName>\n  <params>\n    <param><value><string>{{ $json.ODOO_DB }}</string></value></param>\n    <param><value><string>{{ $json.ODOO_USER }}</string></value></param>\n    <param><value><string>{{ $json.ODOO_API_KEY }}</string></value></param>\n    <param><value><struct></struct></value></param>\n  </params>\n</methodCall>",
+        "options": {}
+      },
+      "id": "odoo-auth",
+      "name": "Odoo Authenticate",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [440, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse XML-RPC response to get UID\nconst xmlResponse = $input.first().json.data;\nconst uidMatch = xmlResponse.match(/<int>(\\d+)<\\/int>/);\n\nif (!uidMatch) {\n  throw new Error('Authentication failed - no UID returned');\n}\n\nconst uid = parseInt(uidMatch[1]);\n\nif (uid === 0) {\n  throw new Error('Authentication failed - invalid credentials');\n}\n\n// Get config from earlier node\nconst config = $('Config').first().json;\n\nreturn [{ json: { uid, ...config } }];"
+      },
+      "id": "parse-auth",
+      "name": "Parse Auth Response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [660, 0]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json.ODOO_URL }}/xmlrpc/2/object",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/xml",
+        "body": "=<?xml version=\"1.0\"?>\n<methodCall>\n  <methodName>execute_kw</methodName>\n  <params>\n    <param><value><string>{{ $json.ODOO_DB }}</string></value></param>\n    <param><value><int>{{ $json.uid }}</int></value></param>\n    <param><value><string>{{ $json.ODOO_API_KEY }}</string></value></param>\n    <param><value><string>c21.property.listing</string></value></param>\n    <param><value><string>search_read</string></value></param>\n    <param><value><array><data>\n      <value><array><data>\n        <value><array><data>\n          <value><string>approval_status</string></value>\n          <value><string>=</string></value>\n          <value><string>ready</string></value>\n        </data></array></value>\n      </data></array></value>\n    </data></array></value></param>\n    <param><value><struct>\n      <member>\n        <name>fields</name>\n        <value><array><data>\n          <value><string>id</string></value>\n          <value><string>ref_code</string></value>\n          <value><string>name</string></value>\n          <value><string>name_cn</string></value>\n          <value><string>listing_type</string></value>\n          <value><string>district</string></value>\n          <value><string>building_name</string></value>\n          <value><string>address</string></value>\n          <value><string>floor</string></value>\n          <value><string>unit</string></value>\n          <value><string>state</string></value>\n          <value><string>property_type</string></value>\n          <value><string>building_grade</string></value>\n          <value><string>business_type</string></value>\n          <value><string>gross_area</string></value>\n          <value><string>net_area</string></value>\n          <value><string>asking_rent</string></value>\n          <value><string>rent_per_sqft</string></value>\n          <value><string>lease_terms</string></value>\n          <value><string>available_from</string></value>\n          <value><string>description</string></value>\n          <value><string>description_cn</string></value>\n          <value><string>operator_id</string></value>\n          <value><string>capacity</string></value>\n          <value><string>available_capacity</string></value>\n          <value><string>size</string></value>\n          <value><string>hot_desk_price</string></value>\n          <value><string>dedicated_desk_price</string></value>\n          <value><string>office_price</string></value>\n        </data></array></value>\n      </member>\n    </struct></value></param>\n  </params>\n</methodCall>",
+        "options": {}
+      },
+      "id": "odoo-search-ready",
+      "name": "Search Ready Properties",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [880, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse XML-RPC response to extract property records\nconst xmlResponse = $input.first().json.data;\n\n// Get config from earlier node\nconst config = $('Parse Auth Response').first().json;\n\n// Simple XML parsing for Odoo response\nconst records = [];\n\n// Match all <struct> blocks that contain property data\nconst structRegex = /<struct>([\\s\\S]*?)<\\/struct>/g;\nlet structMatch;\n\nwhile ((structMatch = structRegex.exec(xmlResponse)) !== null) {\n  const structContent = structMatch[1];\n  const record = {};\n  \n  // Extract each member\n  const memberRegex = /<member>\\s*<name>([^<]+)<\\/name>\\s*<value>(?:<([^>]+)>([^<]*)<\\/\\2>|<([^\\/>]+)\\/>)/g;\n  let memberMatch;\n  \n  while ((memberMatch = memberRegex.exec(structContent)) !== null) {\n    const name = memberMatch[1];\n    const type = memberMatch[2] || memberMatch[4];\n    let value = memberMatch[3] || '';\n    \n    // Convert based on type\n    if (type === 'int' || type === 'i4') {\n      value = parseInt(value) || 0;\n    } else if (type === 'double') {\n      value = parseFloat(value) || 0;\n    } else if (type === 'boolean') {\n      value = value === '1';\n    } else if (type === 'nil') {\n      value = null;\n    }\n    \n    record[name] = value;\n  }\n  \n  // Only include records with an id field (actual property records)\n  if (record.id && typeof record.id === 'number') {\n    records.push(record);\n  }\n}\n\nif (records.length === 0) {\n  // Return empty to stop workflow gracefully\n  return [];\n}\n\n// Add config to each record for downstream use\nreturn records.map(r => ({ \n  json: { \n    ...r, \n    _config: {\n      ODOO_URL: config.ODOO_URL,\n      ODOO_DB: config.ODOO_DB,\n      ODOO_API_KEY: config.ODOO_API_KEY,\n      WEBSITE_URL: config.WEBSITE_URL,\n      uid: config.uid\n    }\n  } \n}));"
+      },
+      "id": "parse-properties",
+      "name": "Parse Properties",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1100, 0]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "condition-coworking",
+              "leftValue": "={{ $json.listing_type }}",
+              "rightValue": "coworking",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "check-type",
+      "name": "Is Coworking?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [1320, 0]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform Odoo coworking property to website listing format\nconst odoo = $input.first().json;\nconst config = odoo._config;\n\n// Map district codes to Chinese names\nconst districtMap = {\n  'central': '中環',\n  'admiralty': '金鐘',\n  'wan_chai': '灣仔',\n  'causeway_bay': '銅鑼灣',\n  'north_point': '北角',\n  'quarry_bay': '鰂魚涌',\n  'taikoo': '太古',\n  'wong_chuk_hang': '黃竹坑',\n  'sheung_wan': '上環',\n  'tsim_sha_tsui': '尖沙咀',\n  'jordan': '佐敦',\n  'mong_kok': '旺角',\n  'kowloon_bay': '九龍灣',\n  'kwun_tong': '觀塘',\n  'san_po_kong': '新蒲崗',\n  'kwai_chung': '葵涌',\n  'tsuen_wan': '荃灣',\n  'sha_tin': '沙田',\n  'fo_tan': '火炭',\n  'tuen_mun': '屯門',\n  'yuen_long': '元朗',\n  'other': '其他'\n};\n\nconst listing = {\n  id: `odoo-${odoo.id}`,\n  refCode: odoo.ref_code || '',\n  name: odoo.name || '',\n  nameCn: odoo.name_cn || odoo.name || '',\n  district: districtMap[odoo.district] || odoo.district || '',\n  building: odoo.building_name || '',\n  address: odoo.address || '',\n  floor: odoo.floor || '',\n  operator: '',\n  capacity: odoo.capacity || 0,\n  availableCapacity: odoo.available_capacity || 0,\n  size: odoo.size || 0,\n  hotDeskPrice: odoo.hot_desk_price || 0,\n  dedicatedDeskPrice: odoo.dedicated_desk_price || 0,\n  officePrice: odoo.office_price || 0,\n  description: odoo.description || '',\n  descriptionCn: odoo.description_cn || '',\n  images: [],\n  amenities: [],\n  status: 'approved',\n  importedBy: 'odoo-n8n',\n  odooId: odoo.id,\n  _config: config\n};\n\nreturn [{ json: listing }];"
+      },
+      "id": "transform-coworking",
+      "name": "Transform Coworking",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, -100]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Transform Odoo leasing property to website format\nconst odoo = $input.first().json;\nconst config = odoo._config;\n\n// Map district codes to Chinese names\nconst districtMap = {\n  'central': '中環',\n  'admiralty': '金鐘',\n  'wan_chai': '灣仔',\n  'causeway_bay': '銅鑼灣',\n  'north_point': '北角',\n  'quarry_bay': '鰂魚涌',\n  'taikoo': '太古',\n  'wong_chuk_hang': '黃竹坑',\n  'sheung_wan': '上環',\n  'tsim_sha_tsui': '尖沙咀',\n  'jordan': '佐敦',\n  'mong_kok': '旺角',\n  'kowloon_bay': '九龍灣',\n  'kwun_tong': '觀塘',\n  'san_po_kong': '新蒲崗',\n  'kwai_chung': '葵涌',\n  'tsuen_wan': '荃灣',\n  'sha_tin': '沙田',\n  'fo_tan': '火炭',\n  'tuen_mun': '屯門',\n  'yuen_long': '元朗',\n  'other': '其他'\n};\n\n// Map property type\nconst propertyTypeMap = {\n  'office': 'office',\n  'retail': 'retail',\n  'industrial': 'industrial'\n};\n\n// Map building grade\nconst gradeMap = {\n  'grade_a': 'A',\n  'grade_b': 'B',\n  'grade_c': 'C'\n};\n\n// Build address from components\nconst addressParts = [\n  odoo.building_name,\n  odoo.address,\n  odoo.floor,\n  odoo.unit\n].filter(Boolean);\n\nconst leasing = {\n  id: `odoo-${odoo.id}`,\n  refCode: odoo.ref_code || '',\n  name: odoo.name || '',\n  nameCn: odoo.name_cn || odoo.name || '',\n  address: addressParts.join(', '),\n  district: districtMap[odoo.district] || odoo.district || '',\n  propertyType: propertyTypeMap[odoo.property_type] || 'office',\n  buildingGrade: gradeMap[odoo.building_grade] || undefined,\n  businessType: odoo.business_type || undefined,\n  grossArea: odoo.gross_area || 0,\n  netArea: odoo.net_area || 0,\n  pricePerSqft: odoo.rent_per_sqft || 0,\n  monthlyRent: odoo.asking_rent || 0,\n  agentName: '',\n  agentPhone: '',\n  agentEmail: '',\n  images: [],\n  amenities: [],\n  availableFrom: odoo.available_from || new Date().toISOString().split('T')[0],\n  leaseTerms: odoo.lease_terms || '',\n  description: odoo.description || '',\n  status: 'approved',\n  importedBy: 'odoo-n8n',\n  odooId: odoo.id,\n  _config: config\n};\n\nreturn [{ json: leasing }];"
+      },
+      "id": "transform-leasing",
+      "name": "Transform Leasing",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1540, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json._config.WEBSITE_URL }}/api/listings",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $json.id }}\",\n  \"refCode\": \"{{ $json.refCode }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"nameCn\": \"{{ $json.nameCn }}\",\n  \"district\": \"{{ $json.district }}\",\n  \"building\": \"{{ $json.building }}\",\n  \"address\": \"{{ $json.address }}\",\n  \"floor\": \"{{ $json.floor }}\",\n  \"operator\": \"{{ $json.operator }}\",\n  \"capacity\": {{ $json.capacity }},\n  \"availableCapacity\": {{ $json.availableCapacity }},\n  \"size\": {{ $json.size }},\n  \"hotDeskPrice\": {{ $json.hotDeskPrice }},\n  \"dedicatedDeskPrice\": {{ $json.dedicatedDeskPrice }},\n  \"officePrice\": {{ $json.officePrice }},\n  \"description\": {{ JSON.stringify($json.description) }},\n  \"descriptionCn\": {{ JSON.stringify($json.descriptionCn) }},\n  \"images\": [],\n  \"amenities\": [],\n  \"status\": \"approved\",\n  \"importedBy\": \"odoo-n8n\",\n  \"odooId\": {{ $json.odooId }}\n}",
+        "options": {}
+      },
+      "id": "post-listing",
+      "name": "POST to Listings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $json._config.WEBSITE_URL }}/api/leasings",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"id\": \"{{ $json.id }}\",\n  \"refCode\": \"{{ $json.refCode }}\",\n  \"name\": \"{{ $json.name }}\",\n  \"nameCn\": \"{{ $json.nameCn }}\",\n  \"address\": \"{{ $json.address }}\",\n  \"district\": \"{{ $json.district }}\",\n  \"propertyType\": \"{{ $json.propertyType }}\",\n  \"grossArea\": {{ $json.grossArea }},\n  \"netArea\": {{ $json.netArea }},\n  \"pricePerSqft\": {{ $json.pricePerSqft }},\n  \"monthlyRent\": {{ $json.monthlyRent }},\n  \"agentName\": \"\",\n  \"agentPhone\": \"\",\n  \"agentEmail\": \"\",\n  \"images\": [],\n  \"amenities\": [],\n  \"availableFrom\": \"{{ $json.availableFrom }}\",\n  \"leaseTerms\": \"{{ $json.leaseTerms }}\",\n  \"description\": {{ JSON.stringify($json.description) }},\n  \"status\": \"approved\",\n  \"importedBy\": \"odoo-n8n\",\n  \"odooId\": {{ $json.odooId }}\n}",
+        "options": {}
+      },
+      "id": "post-leasing",
+      "name": "POST to Leasings",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1760, 100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Transform Coworking').item.json._config.ODOO_URL }}/xmlrpc/2/object",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/xml",
+        "body": "=<?xml version=\"1.0\"?>\n<methodCall>\n  <methodName>execute_kw</methodName>\n  <params>\n    <param><value><string>{{ $('Transform Coworking').item.json._config.ODOO_DB }}</string></value></param>\n    <param><value><int>{{ $('Transform Coworking').item.json._config.uid }}</int></value></param>\n    <param><value><string>{{ $('Transform Coworking').item.json._config.ODOO_API_KEY }}</string></value></param>\n    <param><value><string>c21.property.listing</string></value></param>\n    <param><value><string>write</string></value></param>\n    <param><value><array><data>\n      <value><array><data>\n        <value><int>{{ $('Transform Coworking').item.json.odooId }}</int></value>\n      </data></array></value>\n      <value><struct>\n        <member>\n          <name>approval_status</name>\n          <value><string>published</string></value>\n        </member>\n      </struct></value>\n    </data></array></value></param>\n  </params>\n</methodCall>",
+        "options": {}
+      },
+      "id": "update-odoo-coworking",
+      "name": "Update Odoo (Coworking)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1980, -100]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Transform Leasing').item.json._config.ODOO_URL }}/xmlrpc/2/object",
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "text/xml",
+        "body": "=<?xml version=\"1.0\"?>\n<methodCall>\n  <methodName>execute_kw</methodName>\n  <params>\n    <param><value><string>{{ $('Transform Leasing').item.json._config.ODOO_DB }}</string></value></param>\n    <param><value><int>{{ $('Transform Leasing').item.json._config.uid }}</int></value></param>\n    <param><value><string>{{ $('Transform Leasing').item.json._config.ODOO_API_KEY }}</string></value></param>\n    <param><value><string>c21.property.listing</string></value></param>\n    <param><value><string>write</string></value></param>\n    <param><value><array><data>\n      <value><array><data>\n        <value><int>{{ $('Transform Leasing').item.json.odooId }}</int></value>\n      </data></array></value>\n      <value><struct>\n        <member>\n          <name>approval_status</name>\n          <value><string>published</string></value>\n        </member>\n      </struct></value>\n    </data></array></value></param>\n  </params>\n</methodCall>",
+        "options": {}
+      },
+      "id": "update-odoo-leasing",
+      "name": "Update Odoo (Leasing)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1980, 100]
+    }
+  ],
+  "connections": {
+    "Every 5 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config": {
+      "main": [
+        [
+          {
+            "node": "Odoo Authenticate",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Odoo Authenticate": {
+      "main": [
+        [
+          {
+            "node": "Parse Auth Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Auth Response": {
+      "main": [
+        [
+          {
+            "node": "Search Ready Properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search Ready Properties": {
+      "main": [
+        [
+          {
+            "node": "Parse Properties",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Parse Properties": {
+      "main": [
+        [
+          {
+            "node": "Is Coworking?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Coworking?": {
+      "main": [
+        [
+          {
+            "node": "Transform Coworking",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Transform Leasing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Coworking": {
+      "main": [
+        [
+          {
+            "node": "POST to Listings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Leasing": {
+      "main": [
+        [
+          {
+            "node": "POST to Leasings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST to Listings": {
+      "main": [
+        [
+          {
+            "node": "Update Odoo (Coworking)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "POST to Leasings": {
+      "main": [
+        [
+          {
+            "node": "Update Odoo (Leasing)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "tags": []
+}
