@@ -1,6 +1,6 @@
 {
     'name': 'C21 OAuth User Management',
-    'version': '19.0.1.6.0',
+    'version': '19.0.1.7.0',
     'category': 'Tools',
     'summary': 'SSO user management - OAuth fields, auto-confirm, no invitation emails',
     'description': """

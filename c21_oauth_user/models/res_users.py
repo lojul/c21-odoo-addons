@@ -47,9 +47,34 @@ class ResUsers(models.Model):
                 # Update the oauth_uid for this user
                 oauth_user.write({'oauth_uid': oauth_uid})
 
+        if not oauth_user and email:
+            # Auto-create new user for first-time SSO login
+            _logger.info(
+                "Auto-creating new user for SSO login: %s (provider: %s)",
+                email, provider
+            )
+            name = validation.get('name', email.split('@')[0])
+            oauth_user = self.with_context(
+                no_reset_password=True,
+                mail_create_nolog=True,
+                mail_notrack=True,
+                mail_create_nosubscribe=True,
+                tracking_disable=True,
+            ).create({
+                'name': name,
+                'login': email,
+                'email': email,
+                'oauth_provider_id': provider,
+                'oauth_uid': oauth_uid,
+                'oauth_access_token': params['access_token'],
+                'active': True,
+            })
+            _logger.info("Auto-created user %s (ID: %s)", email, oauth_user.id)
+            return oauth_user.login
+
         if not oauth_user:
-            # Fall back to parent behavior (will try to create user or raise AccessDenied)
-            return super()._auth_oauth_signin(provider, validation, params)
+            # No email in validation - cannot auto-create
+            raise AccessDenied("No user found and cannot auto-create without email")
 
         if len(oauth_user) > 1:
             raise AccessDenied("Multiple users found for OAuth credentials")
