@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add OAuth fields to user form -->
+    <record id="view_users_form_oauth" model="ir.ui.view">
+        <field name="name">res.users.form.oauth</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='login']" position="after">
+                <field name="oauth_provider_id"
+                       domain="[('enabled', '=', True)]"
+                       options="{'no_create': True, 'no_open': True}"
+                       placeholder="Select OAuth Provider for SSO"/>
+                <field name="oauth_uid" readonly="1"
+                       placeholder="Auto-filled on first SSO login"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Also add to simplified form -->
+    <record id="view_users_simple_form_oauth" model="ir.ui.view">
+        <field name="name">res.users.simplified.form.oauth</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_simple_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='login']" position="after">
+                <field name="oauth_provider_id"
+                       domain="[('enabled', '=', True)]"
+                       options="{'no_create': True, 'no_open': True}"
+                       placeholder="Select OAuth Provider for SSO"/>
+                <field name="oauth_uid" readonly="1"
+                       placeholder="Auto-filled on first SSO login"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
