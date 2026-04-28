@@ -109,14 +109,64 @@ class C21PropertyListing(models.Model):
         ('other', 'Other'),
     ], string='Business / 業務', help='For retail properties')
 
-    gross_area = fields.Float('Gross sqft / 建築面積', digits=(12, 2))
-    net_area = fields.Float('Net sqft / 實用面積', digits=(12, 2))
-    asking_rent = fields.Monetary('Rent / 租金', help='Monthly asking rent in HKD')
+    # Area fields
+    gross_area = fields.Float('Gross sqft / 建呎', digits=(12, 2))
+    net_area = fields.Float('Net sqft / 實呎', digits=(12, 2))
+    total_area = fields.Float(
+        'Total Area / 總面積', digits=(12, 2), compute='_compute_total_area', store=True)
+
+    # Rental fields
+    asking_rent = fields.Monetary('Rent / 租價', help='Monthly asking rent in HKD')
+    floor_rent = fields.Monetary('Floor Rent / 底租', help='Minimum acceptable rent')
     rent_per_sqft = fields.Float(
-        'Rent/sqft / 呎租', digits=(12, 2), compute='_compute_rent_per_sqft', store=True)
+        'Rent/sqft / 租呎價', digits=(12, 2), compute='_compute_rent_per_sqft', store=True)
+    floor_rent_per_sqft = fields.Float(
+        'Floor Rent/sqft / 底租呎價', digits=(12, 2), compute='_compute_floor_rent_per_sqft', store=True)
+
+    # Sale fields
+    selling_price = fields.Float('Sale Price / 售價(萬)', digits=(12, 2), help='Selling price in 萬 (10k HKD)')
+    floor_selling_price = fields.Float('Floor Sale / 底售(萬)', digits=(12, 2), help='Minimum selling price in 萬')
+    sale_price_per_sqft = fields.Float(
+        'Sale/sqft / 售呎價', digits=(12, 2), compute='_compute_sale_price_per_sqft', store=True)
+    floor_sale_per_sqft = fields.Float(
+        'Floor Sale/sqft / 底售呎價', digits=(12, 2), compute='_compute_floor_sale_per_sqft', store=True)
+    yield_rate = fields.Float(
+        'Yield / 回報率', digits=(5, 2), compute='_compute_yield_rate', store=True,
+        help='Annual yield rate in %')
+
+    # Property details
+    room_layout = fields.Selection([
+        ('studio', 'Studio / 開放式'),
+        ('1br', '1 Room / 1房'),
+        ('2br', '2 Rooms / 2房'),
+        ('3br', '3 Rooms / 3房'),
+        ('4br_plus', '4+ Rooms / 4房+'),
+    ], string='Layout / 間隔')
+
     lease_terms = fields.Char('Lease / 租約', help='e.g., 2 years minimum')
-    year_built = fields.Char('Year Built / 落成')
-    total_floors = fields.Integer('Floors / 樓層')
+    year_built = fields.Char('Year Built / 樓齡')
+    total_floors = fields.Integer('Floors / 總樓層')
+    parking_number = fields.Char('Parking No. / 車位號碼')
+    dd_lot = fields.Char('DD Lot / 地段編號', help='Land registry reference')
+
+    # Tenant info
+    tenant_name = fields.Char('Tenant / 租客')
+
+    # === Operations & Tracking ===
+    source = fields.Selection([
+        ('website', 'Website / 網站'),
+        ('referral', 'Referral / 轉介'),
+        ('direct', 'Direct / 直客'),
+        ('agent', 'Agent / 代理'),
+        ('advertisement', 'Advertisement / 廣告'),
+        ('other', 'Other / 其他'),
+    ], string='Source / 來源')
+
+    key_holder = fields.Char('Key Holder / 鎖匙')
+    internal_notes = fields.Text('Notes / 提示', help='Internal notes for staff')
+    listing_date = fields.Date('Listing Date / 開盤日期')
+    followup_date = fields.Date('Follow-up / 跟進日期')
+    user_id = fields.Many2one('res.users', string='Responsible / 負責同事', default=lambda self: self.env.user)
 
     # === Descriptions ===
     description = fields.Html('Desc (EN) / 描述')
@@ -142,6 +192,11 @@ class C21PropertyListing(models.Model):
         'Reference code must be unique!',
     )
 
+    @api.depends('gross_area', 'net_area')
+    def _compute_total_area(self):
+        for record in self:
+            record.total_area = (record.gross_area or 0) + (record.net_area or 0)
+
     @api.depends('asking_rent', 'net_area')
     def _compute_rent_per_sqft(self):
         for record in self:
@@ -149,6 +204,42 @@ class C21PropertyListing(models.Model):
                 record.rent_per_sqft = record.asking_rent / record.net_area
             else:
                 record.rent_per_sqft = 0
+
+    @api.depends('floor_rent', 'net_area')
+    def _compute_floor_rent_per_sqft(self):
+        for record in self:
+            if record.net_area and record.net_area > 0:
+                record.floor_rent_per_sqft = (record.floor_rent or 0) / record.net_area
+            else:
+                record.floor_rent_per_sqft = 0
+
+    @api.depends('selling_price', 'net_area')
+    def _compute_sale_price_per_sqft(self):
+        for record in self:
+            if record.net_area and record.net_area > 0 and record.selling_price:
+                # selling_price is in 萬 (10k), convert to HKD for per sqft
+                record.sale_price_per_sqft = (record.selling_price * 10000) / record.net_area
+            else:
+                record.sale_price_per_sqft = 0
+
+    @api.depends('floor_selling_price', 'net_area')
+    def _compute_floor_sale_per_sqft(self):
+        for record in self:
+            if record.net_area and record.net_area > 0 and record.floor_selling_price:
+                record.floor_sale_per_sqft = (record.floor_selling_price * 10000) / record.net_area
+            else:
+                record.floor_sale_per_sqft = 0
+
+    @api.depends('asking_rent', 'selling_price')
+    def _compute_yield_rate(self):
+        for record in self:
+            if record.selling_price and record.selling_price > 0 and record.asking_rent:
+                # Annual yield = (monthly rent * 12) / (selling price in HKD) * 100
+                annual_rent = record.asking_rent * 12
+                selling_price_hkd = record.selling_price * 10000
+                record.yield_rate = (annual_rent / selling_price_hkd) * 100
+            else:
+                record.yield_rate = 0
 
     @api.depends('image_ids')
     def _compute_image_count(self):

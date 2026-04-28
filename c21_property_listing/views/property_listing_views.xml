@@ -39,15 +39,20 @@
                             </group>
 
                             <!-- Location Section -->
-                            <separator string="Location"/>
+                            <separator string="Location / 位置"/>
                             <group>
                                 <group>
-                                    <field name="unit"/>
-                                    <field name="floor"/>
-                                    <field name="building_name"/>
-                                    <field name="address" string="Street / 街道" placeholder="Street address..."/>
                                     <field name="district"/>
+                                    <field name="address" string="Street / 街道" placeholder="Street address..."/>
+                                    <field name="building_name" string="Building / 物業名稱"/>
                                 </group>
+                                <group>
+                                    <field name="floor" string="Floor / 樓層"/>
+                                    <field name="unit" string="Unit / 室號"/>
+                                    <field name="dd_lot"/>
+                                </group>
+                            </group>
+                            <group>
                                 <group>
                                     <field name="latitude" invisible="1"/>
                                     <field name="longitude" invisible="1"/>
@@ -71,46 +76,98 @@
                             </group>
 
                             <!-- Leasing Details Section -->
-                            <separator string="Leasing Details" invisible="listing_type != 'leasing'"/>
+                            <separator string="Property Details / 物業資料" invisible="listing_type != 'leasing'"/>
                             <group invisible="listing_type != 'leasing'">
                                 <group>
                                     <field name="property_type"/>
                                     <field name="building_grade"/>
                                     <field name="business_type"
                                            invisible="property_type != 'retail'"/>
+                                    <field name="room_layout"/>
                                 </group>
                                 <group>
                                     <field name="year_built"/>
                                     <field name="total_floors"/>
+                                    <field name="parking_number"/>
+                                    <field name="tenant_name"/>
                                 </group>
                             </group>
-                            <group string="Area (sqft)" invisible="listing_type != 'leasing'">
+
+                            <!-- Area Section -->
+                            <separator string="Area / 面積" invisible="listing_type != 'leasing'"/>
+                            <group invisible="listing_type != 'leasing'">
                                 <group>
-                                    <field name="gross_area"/>
                                     <field name="net_area"/>
+                                    <field name="gross_area"/>
+                                    <field name="total_area"/>
                                 </group>
+                            </group>
+
+                            <!-- Rental Pricing Section -->
+                            <separator string="Rental / 租務" invisible="listing_type != 'leasing'"/>
+                            <group invisible="listing_type != 'leasing'">
                                 <group>
                                     <field name="asking_rent"/>
+                                    <field name="floor_rent"/>
+                                </group>
+                                <group>
                                     <field name="rent_per_sqft"/>
+                                    <field name="floor_rent_per_sqft"/>
                                 </group>
                             </group>
+
+                            <!-- Sale Pricing Section -->
+                            <separator string="Sale / 買賣" invisible="listing_type != 'leasing'"/>
                             <group invisible="listing_type != 'leasing'">
-                                <field name="lease_terms"/>
+                                <group>
+                                    <field name="selling_price"/>
+                                    <field name="floor_selling_price"/>
+                                </group>
+                                <group>
+                                    <field name="sale_price_per_sqft"/>
+                                    <field name="floor_sale_per_sqft"/>
+                                    <field name="yield_rate" widget="percentage"/>
+                                </group>
+                            </group>
+
+                            <!-- Lease Terms -->
+                            <group invisible="listing_type != 'leasing'">
+                                <group>
+                                    <field name="lease_terms"/>
+                                    <field name="available_from"/>
+                                </group>
+                            </group>
+
+                            <!-- Operations Section -->
+                            <separator string="Operations / 營運"/>
+                            <group>
+                                <group>
+                                    <field name="source"/>
+                                    <field name="key_holder"/>
+                                    <field name="user_id"/>
+                                </group>
+                                <group>
+                                    <field name="listing_date"/>
+                                    <field name="followup_date"/>
+                                </group>
                             </group>
 
                             <!-- Amenities Section -->
-                            <separator string="Amenities"/>
+                            <separator string="Amenities / 設施"/>
                             <field name="amenity_ids" widget="many2many_tags"/>
 
-                            <!-- Comment Section -->
-                            <separator string="Comment"/>
+                            <!-- Internal Notes Section -->
+                            <separator string="Internal Notes / 提示"/>
+                            <group>
+                                <field name="internal_notes" nolabel="1"
+                                       placeholder="Internal notes for staff..."/>
+                            </group>
+
+                            <!-- Description Section -->
+                            <separator string="Description / 描述"/>
                             <group>
                                 <field name="description" nolabel="1"
-                                       placeholder="Comment in English..."/>
-                            </group>
-                            <group>
-                                <field name="description_cn" nolabel="1"
-                                       placeholder="Comment in Chinese..."/>
+                                       placeholder="Property description..."/>
                             </group>
                         </div>
 
@@ -178,16 +235,26 @@
         <field name="model">c21.property.listing</field>
         <field name="arch" type="xml">
             <list string="Property Listings" multi_edit="1" editable="bottom">
+                <field name="ref_code" optional="show"/>
                 <field name="name"/>
                 <field name="listing_type" optional="show"/>
                 <field name="district"/>
-                <field name="operator_id" optional="show"/>
-                <field name="capacity" optional="hide"/>
-                <field name="ref_code" optional="hide"/>
+                <field name="floor" optional="hide"/>
+                <field name="unit" optional="hide"/>
+                <field name="net_area" optional="show" string="實呎"/>
+                <field name="gross_area" optional="hide" string="建呎"/>
+                <field name="asking_rent" optional="show" string="租價"/>
+                <field name="rent_per_sqft" optional="hide" string="租呎價"/>
+                <field name="selling_price" optional="hide" string="售價(萬)"/>
+                <field name="sale_price_per_sqft" optional="hide" string="售呎價"/>
+                <field name="yield_rate" optional="hide" string="回報率"/>
+                <field name="room_layout" optional="hide" string="間隔"/>
+                <field name="operator_id" optional="hide"/>
                 <field name="property_type" optional="hide"/>
                 <field name="building_grade" optional="hide"/>
-                <field name="net_area" optional="hide"/>
-                <field name="display_price" optional="hide"/>
+                <field name="source" optional="hide"/>
+                <field name="user_id" optional="hide" string="負責"/>
+                <field name="followup_date" optional="hide"/>
                 <field name="state"/>
                 <field name="approval_status"/>
                 <button name="action_open_form" type="object" icon="fa-pencil" title="Edit"/>
@@ -251,6 +318,9 @@
                 <field name="building_name"/>
                 <field name="district"/>
                 <field name="operator_id"/>
+                <field name="user_id" string="Responsible"/>
+                <field name="tenant_name"/>
+                <field name="dd_lot"/>
                 <separator/>
                 <!-- Type Filters -->
                 <filter name="filter_coworking" string="Co-working"
@@ -288,6 +358,14 @@
                 <filter name="filter_grade_b" string="Grade B"
                         domain="[('building_grade', '=', 'grade_b')]"/>
                 <separator/>
+                <!-- Follow-up Filters -->
+                <filter name="filter_followup_today" string="Follow-up Today"
+                        domain="[('followup_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_followup_overdue" string="Follow-up Overdue"
+                        domain="[('followup_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter name="filter_my_properties" string="My Properties"
+                        domain="[('user_id', '=', uid)]"/>
+                <separator/>
                 <!-- Group By -->
                 <group>
                     <filter name="group_district" string="District" context="{'group_by': 'district'}"/>
@@ -297,6 +375,9 @@
                     <filter name="group_approval" string="Publish Status" context="{'group_by': 'approval_status'}"/>
                     <filter name="group_operator" string="Operator" context="{'group_by': 'operator_id'}"/>
                     <filter name="group_grade" string="Building Grade" context="{'group_by': 'building_grade'}"/>
+                    <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
+                    <filter name="group_user" string="Responsible" context="{'group_by': 'user_id'}"/>
+                    <filter name="group_layout" string="Layout" context="{'group_by': 'room_layout'}"/>
                 </group>
             </search>
         </field>
