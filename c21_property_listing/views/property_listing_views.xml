@@ -80,10 +80,10 @@
                             <separator string="Property Details / 物業資料" invisible="listing_type != 'leasing'"/>
                             <group invisible="listing_type != 'leasing'">
                                 <group>
-                                    <field name="property_type"/>
+                                    <field name="property_type_id"/>
                                     <field name="building_grade"/>
                                     <field name="business_type"
-                                           invisible="property_type != 'retail'"/>
+                                           invisible="property_type_id.code != 'retail'"/>
                                     <field name="room_layout"/>
                                 </group>
                                 <group>
@@ -250,7 +250,7 @@
                 <field name="yield_rate" optional="hide" string="回報率"/>
                 <field name="room_layout" optional="hide" string="間隔"/>
                 <field name="operator_id" optional="hide"/>
-                <field name="property_type" optional="hide"/>
+                <field name="property_type_id" optional="hide"/>
                 <field name="building_grade" optional="hide"/>
                 <field name="source_id" optional="hide"/>
                 <field name="user_id" optional="hide" string="負責"/>
@@ -346,11 +346,11 @@
                 <separator/>
                 <!-- Property Type Filters -->
                 <filter name="filter_office" string="Office"
-                        domain="[('property_type', '=', 'office')]"/>
+                        domain="[('property_type_id.code', '=', 'office')]"/>
                 <filter name="filter_retail" string="Retail"
-                        domain="[('property_type', '=', 'retail')]"/>
+                        domain="[('property_type_id.code', '=', 'retail')]"/>
                 <filter name="filter_industrial" string="Industrial"
-                        domain="[('property_type', '=', 'industrial')]"/>
+                        domain="[('property_type_id.code', '=', 'industrial')]"/>
                 <separator/>
                 <!-- Grade Filters -->
                 <filter name="filter_grade_a" string="Grade A"
@@ -370,7 +370,7 @@
                 <group>
                     <filter name="group_district" string="District" context="{'group_by': 'district'}"/>
                     <filter name="group_listing_type" string="Listing Type" context="{'group_by': 'listing_type'}"/>
-                    <filter name="group_property_type" string="Property Type" context="{'group_by': 'property_type'}"/>
+                    <filter name="group_property_type_id" string="Property Type" context="{'group_by': 'property_type_id'}"/>
                     <filter name="group_state" string="Status" context="{'group_by': 'state'}"/>
                     <filter name="group_approval" string="Publish Status" context="{'group_by': 'approval_status'}"/>
                     <filter name="group_operator" string="Operator" context="{'group_by': 'operator_id'}"/>

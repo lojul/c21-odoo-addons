@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Property Type Form View -->
+    <record id="c21_property_type_view_form" model="ir.ui.view">
+        <field name="name">c21.property.type.form</field>
+        <field name="model">c21.property.type</field>
+        <field name="arch" type="xml">
+            <form string="Property Type">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="name_cn"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Property Type Tree View -->
+    <record id="c21_property_type_view_tree" model="ir.ui.view">
+        <field name="name">c21.property.type.tree</field>
+        <field name="model">c21.property.type</field>
+        <field name="arch" type="xml">
+            <list string="Property Types" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="name_cn"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Property Type Action -->
+    <record id="c21_property_type_action" model="ir.actions.act_window">
+        <field name="name">Property Types</field>
+        <field name="res_model">c21.property.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a property type
+            </p>
+            <p>
+                Property types categorize listings (e.g., Office, Retail, Industrial).
+            </p>
+        </field>
+    </record>
+</odoo>

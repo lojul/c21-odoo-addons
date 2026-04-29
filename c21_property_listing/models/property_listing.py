@@ -86,11 +86,9 @@ class C21PropertyListing(models.Model):
     office_price = fields.Monetary('Office / 辦公室', help='Monthly starting price for private office in HKD')
 
     # === Leasing Specific Fields ===
-    property_type = fields.Selection([
-        ('office', 'Office'),
-        ('retail', 'Retail'),
-        ('industrial', 'Industrial'),
-    ], string='Prop Type / 用途')
+    property_type_id = fields.Many2one(
+        'c21.property.type', string='Prop Type / 用途',
+        ondelete='restrict', index=True)
 
     building_grade = fields.Selection([
         ('grade_a', 'Grade A'),

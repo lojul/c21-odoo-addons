@@ -9,3 +9,5 @@ access_c21_property_contact_user,c21.property.contact.user,model_c21_property_co
 access_c21_property_contact_manager,c21.property.contact.manager,model_c21_property_contact,group_c21_property_manager,1,1,1,1
 access_c21_property_source_user,c21.property.source.user,model_c21_property_source,group_c21_property_user,1,0,0,0
 access_c21_property_source_admin,c21.property.source.admin,model_c21_property_source,group_c21_property_admin,1,1,1,1
+access_c21_property_type_user,c21.property.type.user,model_c21_property_type,group_c21_property_user,1,0,0,0
+access_c21_property_type_admin,c21.property.type.admin,model_c21_property_type,group_c21_property_admin,1,1,1,1

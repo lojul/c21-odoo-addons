@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="property_type_office" model="c21.property.type">
+            <field name="name">Office</field>
+            <field name="name_cn">寫字樓</field>
+            <field name="code">office</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="property_type_retail" model="c21.property.type">
+            <field name="name">Retail</field>
+            <field name="name_cn">商舖</field>
+            <field name="code">retail</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="property_type_industrial" model="c21.property.type">
+            <field name="name">Industrial</field>
+            <field name="name_cn">工廈</field>
+            <field name="code">industrial</field>
+            <field name="sequence">30</field>
+        </record>
+    </data>
+</odoo>
