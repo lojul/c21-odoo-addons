@@ -17,11 +17,43 @@
     color: #999 !important;
 }
 
-/* ONLY hide the chatter element itself */
-body.c21-chatter-hidden .o-mail-Form-chatter {
-    display: none !important;
-}
+/* ===== HIDE CHATTER AND EXPAND FORM ===== */
 
+/* Hide the chatter */
+body.c21-chatter-hidden .o-mail-Form-chatter,
 body.c21-chatter-hidden .o-mail-Chatter {
     display: none !important;
+    width: 0 !important;
+    flex: 0 0 0 !important;
+}
+
+/* The form view is typically a flex container - make sheet take full width */
+body.c21-chatter-hidden .o_form_view {
+    display: flex !important;
+}
+
+body.c21-chatter-hidden .o_form_view > .o_form_sheet_bg {
+    flex: 1 1 100% !important;
+    max-width: 100% !important;
+}
+
+/* Expand the form sheet itself */
+body.c21-chatter-hidden .o_form_sheet {
+    max-width: 100% !important;
+}
+
+/* Alternative: if form view uses grid layout */
+body.c21-chatter-hidden .o_form_view.o_form_editable,
+body.c21-chatter-hidden .o_form_view.o_form_readonly {
+    grid-template-columns: 1fr !important;
+}
+
+/* Target the direct container that holds both sheet and chatter */
+body.c21-chatter-hidden .o_content > .o_form_view {
+    flex-wrap: nowrap !important;
+}
+
+body.c21-chatter-hidden .o_form_sheet_bg {
+    width: 100% !important;
+    flex-grow: 1 !important;
 }
