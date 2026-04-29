@@ -28,7 +28,6 @@
                                 <group>
                                     <field name="name" string="English Name / 英文名稱"/>
                                     <field name="name_cn" string="Chinese Name / 中文名稱"/>
-                                    <field name="ref_code"/>
                                 </group>
                                 <group>
                                     <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
@@ -50,7 +49,6 @@
                                 <group>
                                     <field name="floor" string="Floor / 樓層"/>
                                     <field name="unit" string="Unit / 室號"/>
-                                    <field name="dd_lot"/>
                                 </group>
                             </group>
                             <group>
@@ -168,6 +166,15 @@
                             <group>
                                 <field name="description" nolabel="1"
                                        placeholder="Property description..."/>
+                            </group>
+
+                            <!-- Other Info Section -->
+                            <separator string="Other Info / 其他資料"/>
+                            <group>
+                                <group>
+                                    <field name="ref_code"/>
+                                    <field name="dd_lot"/>
+                                </group>
                             </group>
                         </div>
 
