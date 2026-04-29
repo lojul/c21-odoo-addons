@@ -1,44 +1,70 @@
-/* Chatter Toggle Button in Control Panel */
+/* Chatter Toggle Button - Icon only in top right */
 .c21_chatter_toggle_btn {
-    white-space: nowrap;
+    padding: 4px 8px !important;
+    margin-right: 8px;
+    color: #714B67 !important;
+    background: transparent !important;
+    border: none !important;
 }
 
-.c21_chatter_toggle_btn i {
-    font-size: 14px;
+.c21_chatter_toggle_btn:hover {
+    color: #5a3c52 !important;
+    background: rgba(113, 75, 103, 0.1) !important;
+    border-radius: 4px;
 }
 
-/* When chatter is hidden - expand form to full width */
-.o_form_view.c21-no-chatter .o_form_sheet_bg {
-    display: block !important;
-    grid-template-columns: 1fr !important;
+.c21_chatter_toggle_btn.text-muted {
+    color: #999 !important;
 }
 
-.o_form_view.c21-no-chatter .o-mail-Form-chatter,
-.o_form_view.c21-no-chatter .o-mail-Chatter {
+/* ===== HIDE CHATTER COMPLETELY ===== */
+
+/* Hide the entire chatter section */
+body.c21-chatter-hidden .o-mail-Form-chatter,
+body.c21-chatter-hidden .o-mail-Chatter,
+body.c21-chatter-hidden .o_form_view > .o-mail-Form-chatter,
+body.c21-chatter-hidden .o_form_view > .o-mail-Chatter {
     display: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    overflow: hidden !important;
 }
 
-.o_form_sheet_bg.c21-chatter-hidden {
+/* Make form view single column */
+body.c21-chatter-hidden .o_form_view {
     display: block !important;
+}
+
+/* Expand form sheet background to full width */
+body.c21-chatter-hidden .o_form_sheet_bg {
+    display: block !important;
+    width: 100% !important;
+    max-width: 100% !important;
     grid-template-columns: 1fr !important;
 }
 
-.o_form_sheet_bg.c21-chatter-hidden .o_form_sheet {
+/* Expand the form sheet itself */
+body.c21-chatter-hidden .o_form_sheet {
     max-width: 100% !important;
     width: 100% !important;
+    margin: 0 auto !important;
 }
 
-/* Override Odoo's default two-column layout when chatter hidden */
-.c21-no-chatter .o_form_sheet_bg {
-    grid-template-columns: 1fr !important;
+/* Override any flex/grid layout that creates two columns */
+body.c21-chatter-hidden .o_form_view .o_form_sheet_bg {
+    flex: 1 1 100% !important;
 }
 
-.c21-no-chatter .o_form_renderer {
+body.c21-chatter-hidden .o_content {
     display: block !important;
 }
 
-/* Make sure the form content area expands */
-.c21-chatter-hidden + .o-mail-Form-chatter,
-.c21-chatter-hidden + .o-mail-Chatter {
-    display: none !important;
+/* Ensure no space is reserved for chatter */
+body.c21-chatter-hidden .o_form_view > * {
+    flex-shrink: 1;
+}
+
+body.c21-chatter-hidden .o_action_manager .o_form_view {
+    grid-template-columns: 1fr !important;
 }

@@ -1,6 +1,5 @@
 /** @odoo-module **/
 
-// Add toggle button to control panel
 function initChatterToggle() {
     const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
     if (!chatter) return;
@@ -8,72 +7,57 @@ function initChatterToggle() {
     // Don't add button if it already exists
     if (document.querySelector('.c21_chatter_toggle_btn')) return;
 
-    // Find the control panel buttons area
-    const controlPanel = document.querySelector('.o_control_panel_main_buttons, .o_control_panel_actions');
-    if (!controlPanel) return;
+    // Find the top right area - near the pager or control panel right side
+    const targetArea = document.querySelector('.o_control_panel_main .o_cp_pager') ||
+                       document.querySelector('.o_control_panel_breadcrumbs') ||
+                       document.querySelector('.o_control_panel');
+    if (!targetArea) return;
 
-    // Create the toggle button for control panel
+    // Create icon-only toggle button
     const btn = document.createElement('button');
-    btn.className = 'c21_chatter_toggle_btn btn btn-secondary ms-2';
-    btn.innerHTML = '<i class="fa fa-comments me-1"></i><span class="d-none d-md-inline">Activity</span>';
+    btn.className = 'c21_chatter_toggle_btn btn btn-link';
+    btn.innerHTML = '<i class="fa fa-comments fa-lg"></i>';
     btn.title = 'Toggle Activity Panel / 切換活動面板';
 
     // Check saved state
     const isHidden = localStorage.getItem('c21_chatter_hidden') === 'true';
     if (isHidden) {
-        hideChatter(chatter, btn);
+        applyHiddenState(btn);
     }
 
     btn.addEventListener('click', () => {
-        const currentlyHidden = chatter.style.display === 'none';
-        if (currentlyHidden) {
-            showChatter(chatter, btn);
+        const isCurrentlyHidden = document.body.classList.contains('c21-chatter-hidden');
+        if (isCurrentlyHidden) {
+            applyVisibleState(btn);
             localStorage.setItem('c21_chatter_hidden', 'false');
         } else {
-            hideChatter(chatter, btn);
+            applyHiddenState(btn);
             localStorage.setItem('c21_chatter_hidden', 'true');
         }
     });
 
-    controlPanel.appendChild(btn);
-}
-
-function hideChatter(chatter, btn) {
-    // Hide the chatter completely
-    chatter.style.display = 'none';
-    btn.classList.remove('btn-secondary');
-    btn.classList.add('btn-outline-secondary');
-
-    // Expand form to full width - target the parent container
-    const formSheetBg = document.querySelector('.o_form_sheet_bg');
-    if (formSheetBg) {
-        formSheetBg.classList.add('c21-chatter-hidden');
-    }
-
-    // Also hide the chatter container parent if exists
-    const formView = document.querySelector('.o_form_view');
-    if (formView) {
-        formView.classList.add('c21-no-chatter');
+    // Insert button - try to place it on the right side
+    const pager = document.querySelector('.o_cp_pager');
+    if (pager) {
+        pager.parentNode.insertBefore(btn, pager);
+    } else {
+        targetArea.appendChild(btn);
     }
 }
 
-function showChatter(chatter, btn) {
-    chatter.style.display = '';
-    btn.classList.remove('btn-outline-secondary');
-    btn.classList.add('btn-secondary');
-
-    const formSheetBg = document.querySelector('.o_form_sheet_bg');
-    if (formSheetBg) {
-        formSheetBg.classList.remove('c21-chatter-hidden');
-    }
-
-    const formView = document.querySelector('.o_form_view');
-    if (formView) {
-        formView.classList.remove('c21-no-chatter');
-    }
+function applyHiddenState(btn) {
+    document.body.classList.add('c21-chatter-hidden');
+    btn.classList.add('text-muted');
+    btn.innerHTML = '<i class="fa fa-comments-o fa-lg"></i>';
 }
 
-// Run on page changes
+function applyVisibleState(btn) {
+    document.body.classList.remove('c21-chatter-hidden');
+    btn.classList.remove('text-muted');
+    btn.innerHTML = '<i class="fa fa-comments fa-lg"></i>';
+}
+
+// Observe for page changes
 const observer = new MutationObserver(() => {
     setTimeout(initChatterToggle, 300);
 });
@@ -82,5 +66,4 @@ if (document.body) {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Initial call with delay
 setTimeout(initChatterToggle, 1000);
