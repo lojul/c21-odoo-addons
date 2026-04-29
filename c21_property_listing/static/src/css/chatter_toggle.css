@@ -1,4 +1,4 @@
-/* Chatter Toggle Button - Icon only in top right */
+/* Chatter Toggle Button - Icon only */
 .c21_chatter_toggle_btn {
     padding: 4px 8px !important;
     margin-right: 8px;
@@ -17,54 +17,11 @@
     color: #999 !important;
 }
 
-/* ===== HIDE CHATTER COMPLETELY ===== */
-
-/* Hide the entire chatter section */
-body.c21-chatter-hidden .o-mail-Form-chatter,
-body.c21-chatter-hidden .o-mail-Chatter,
-body.c21-chatter-hidden .o_form_view > .o-mail-Form-chatter,
-body.c21-chatter-hidden .o_form_view > .o-mail-Chatter {
+/* ONLY hide the chatter element itself */
+body.c21-chatter-hidden .o-mail-Form-chatter {
     display: none !important;
-    width: 0 !important;
-    min-width: 0 !important;
-    max-width: 0 !important;
-    overflow: hidden !important;
 }
 
-/* Make form view single column */
-body.c21-chatter-hidden .o_form_view {
-    display: block !important;
-}
-
-/* Expand form sheet background to full width */
-body.c21-chatter-hidden .o_form_sheet_bg {
-    display: block !important;
-    width: 100% !important;
-    max-width: 100% !important;
-    grid-template-columns: 1fr !important;
-}
-
-/* Expand the form sheet itself */
-body.c21-chatter-hidden .o_form_sheet {
-    max-width: 100% !important;
-    width: 100% !important;
-    margin: 0 auto !important;
-}
-
-/* Override any flex/grid layout that creates two columns */
-body.c21-chatter-hidden .o_form_view .o_form_sheet_bg {
-    flex: 1 1 100% !important;
-}
-
-body.c21-chatter-hidden .o_content {
-    display: block !important;
-}
-
-/* Ensure no space is reserved for chatter */
-body.c21-chatter-hidden .o_form_view > * {
-    flex-shrink: 1;
-}
-
-body.c21-chatter-hidden .o_action_manager .o_form_view {
-    grid-template-columns: 1fr !important;
+body.c21-chatter-hidden .o-mail-Chatter {
+    display: none !important;
 }
