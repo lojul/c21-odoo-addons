@@ -195,7 +195,8 @@ class C21PropertyListing(models.Model):
     @api.depends('gross_area', 'net_area')
     def _compute_total_area(self):
         for record in self:
-            record.total_area = (record.gross_area or 0) + (record.net_area or 0)
+            # Total area is the larger of gross or net (typically gross)
+            record.total_area = max(record.gross_area or 0, record.net_area or 0)
 
     @api.depends('asking_rent', 'net_area')
     def _compute_rent_per_sqft(self):

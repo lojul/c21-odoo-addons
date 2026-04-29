@@ -93,9 +93,11 @@
                             <separator string="Area / 面積" invisible="listing_type != 'leasing'"/>
                             <group invisible="listing_type != 'leasing'">
                                 <group>
-                                    <field name="net_area"/>
                                     <field name="gross_area"/>
                                     <field name="total_area"/>
+                                </group>
+                                <group>
+                                    <field name="net_area"/>
                                 </group>
                             </group>
 
