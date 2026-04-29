@@ -49,13 +49,6 @@
               action="c21_property_listing_action_published"
               sequence="50"/>
 
-    <!-- Operators Menu -->
-    <menuitem id="c21_property_menu_operators"
-              name="Operators"
-              parent="c21_property_menu_root"
-              action="c21_property_operator_action"
-              sequence="20"/>
-
     <!-- Configuration Menu -->
     <menuitem id="c21_property_menu_config"
               name="Configuration"
@@ -74,4 +67,10 @@
               parent="c21_property_menu_config"
               action="c21_property_amenity_action"
               sequence="10"/>
+
+    <menuitem id="c21_property_menu_operators"
+              name="Coworkspace Operators"
+              parent="c21_property_menu_config"
+              action="c21_property_operator_action"
+              sequence="20"/>
 </odoo>
