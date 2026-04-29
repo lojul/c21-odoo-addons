@@ -6,8 +6,23 @@ function initChatterToggle() {
 
     if (document.querySelector('.c21_chatter_toggle_btn')) return;
 
-    const pagerArea = document.querySelector('.o_cp_pager');
-    if (!pagerArea) return;
+    // Try multiple possible insertion points
+    let insertTarget = document.querySelector('.o_cp_pager');
+    let insertParent = insertTarget?.parentNode;
+
+    // Fallback: try control panel buttons area
+    if (!insertTarget) {
+        insertParent = document.querySelector('.o_control_panel_actions, .o_cp_buttons');
+        insertTarget = insertParent?.firstChild;
+    }
+
+    // Fallback: try breadcrumb area
+    if (!insertParent) {
+        insertParent = document.querySelector('.o_control_panel_breadcrumbs');
+        insertTarget = null; // append at end
+    }
+
+    if (!insertParent) return;
 
     const btn = document.createElement('button');
     btn.className = 'c21_chatter_toggle_btn btn btn-link';
@@ -33,7 +48,11 @@ function initChatterToggle() {
         }
     });
 
-    pagerArea.parentNode.insertBefore(btn, pagerArea);
+    if (insertTarget) {
+        insertParent.insertBefore(btn, insertTarget);
+    } else {
+        insertParent.appendChild(btn);
+    }
 }
 
 function applyHiddenState(chatter, btn) {
@@ -86,15 +105,20 @@ function reapplyState() {
     }
 }
 
+let debounceTimer = null;
 const observer = new MutationObserver(() => {
-    setTimeout(() => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
         initChatterToggle();
         reapplyState();
-    }, 300);
+    }, 200);
 });
 
 if (document.body) {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
+// Multiple init attempts for reliability
+setTimeout(initChatterToggle, 500);
 setTimeout(initChatterToggle, 1000);
+setTimeout(initChatterToggle, 2000);
