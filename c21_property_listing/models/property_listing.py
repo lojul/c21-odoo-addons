@@ -112,8 +112,7 @@ class C21PropertyListing(models.Model):
     # Area fields
     gross_area = fields.Float('Gross sqft / 建呎', digits=(12, 2))
     net_area = fields.Float('Net sqft / 實呎', digits=(12, 2))
-    total_area = fields.Float(
-        'Total Area / 總面積', digits=(12, 2), compute='_compute_total_area', store=True)
+    total_area = fields.Float('Total Area / 總面積', digits=(12, 2))
 
     # Rental fields
     asking_rent = fields.Monetary('Rent / 租價', help='Monthly asking rent in HKD')
@@ -192,11 +191,11 @@ class C21PropertyListing(models.Model):
         """Show all approval status columns in Kanban even when empty."""
         return [key for key, val in self._fields['approval_status'].selection]
 
-    @api.depends('gross_area', 'net_area')
-    def _compute_total_area(self):
-        for record in self:
-            # Total area is the larger of gross or net (typically gross)
-            record.total_area = max(record.gross_area or 0, record.net_area or 0)
+    @api.onchange('gross_area')
+    def _onchange_gross_area(self):
+        """Auto-fill total_area from gross_area"""
+        if self.gross_area and not self.total_area:
+            self.total_area = self.gross_area
 
     @api.depends('asking_rent', 'net_area')
     def _compute_rent_per_sqft(self):
