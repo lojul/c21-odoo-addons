@@ -4,62 +4,93 @@ function initChatterToggle() {
     const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
     if (!chatter) return;
 
-    // Don't add button if it already exists
     if (document.querySelector('.c21_chatter_toggle_btn')) return;
 
-    // Find the top right area - near the pager or control panel right side
-    const targetArea = document.querySelector('.o_control_panel_main .o_cp_pager') ||
-                       document.querySelector('.o_control_panel_breadcrumbs') ||
-                       document.querySelector('.o_control_panel');
-    if (!targetArea) return;
+    const pagerArea = document.querySelector('.o_cp_pager');
+    if (!pagerArea) return;
 
-    // Create icon-only toggle button
     const btn = document.createElement('button');
     btn.className = 'c21_chatter_toggle_btn btn btn-link';
     btn.innerHTML = '<i class="fa fa-comments fa-lg"></i>';
     btn.title = 'Toggle Activity Panel / 切換活動面板';
 
-    // Check saved state
     const isHidden = localStorage.getItem('c21_chatter_hidden') === 'true';
     if (isHidden) {
-        applyHiddenState(btn);
+        applyHiddenState(chatter, btn);
     }
 
     btn.addEventListener('click', () => {
-        const isCurrentlyHidden = document.body.classList.contains('c21-chatter-hidden');
+        const currentChatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
+        if (!currentChatter) return;
+
+        const isCurrentlyHidden = currentChatter.style.display === 'none';
         if (isCurrentlyHidden) {
-            applyVisibleState(btn);
+            applyVisibleState(currentChatter, btn);
             localStorage.setItem('c21_chatter_hidden', 'false');
         } else {
-            applyHiddenState(btn);
+            applyHiddenState(currentChatter, btn);
             localStorage.setItem('c21_chatter_hidden', 'true');
         }
     });
 
-    // Insert button - try to place it on the right side
-    const pager = document.querySelector('.o_cp_pager');
-    if (pager) {
-        pager.parentNode.insertBefore(btn, pager);
-    } else {
-        targetArea.appendChild(btn);
-    }
+    pagerArea.parentNode.insertBefore(btn, pagerArea);
 }
 
-function applyHiddenState(btn) {
-    document.body.classList.add('c21-chatter-hidden');
+function applyHiddenState(chatter, btn) {
+    // Hide chatter completely - set width to 0 and hide
+    chatter.style.cssText = 'display: none !important; width: 0 !important; min-width: 0 !important; flex: 0 0 0 !important; overflow: hidden !important;';
+
+    // Get the parent of chatter (should be .o_form_view)
+    const formView = chatter.parentElement;
+    if (formView && formView.classList.contains('o_form_view')) {
+        // Override the flex/grid to single column
+        formView.style.cssText = 'display: block !important;';
+    }
+
+    // Make form sheet background full width
+    const formSheetBg = document.querySelector('.o_form_sheet_bg');
+    if (formSheetBg) {
+        formSheetBg.style.cssText = 'width: 100% !important; max-width: 100% !important; flex: 1 1 100% !important;';
+    }
+
+    // Update button
     btn.classList.add('text-muted');
     btn.innerHTML = '<i class="fa fa-comments-o fa-lg"></i>';
 }
 
-function applyVisibleState(btn) {
-    document.body.classList.remove('c21-chatter-hidden');
+function applyVisibleState(chatter, btn) {
+    // Show chatter
+    chatter.style.cssText = '';
+
+    // Reset form view
+    const formView = chatter.parentElement;
+    if (formView && formView.classList.contains('o_form_view')) {
+        formView.style.cssText = '';
+    }
+
+    // Reset form sheet background
+    const formSheetBg = document.querySelector('.o_form_sheet_bg');
+    if (formSheetBg) {
+        formSheetBg.style.cssText = '';
+    }
+
     btn.classList.remove('text-muted');
     btn.innerHTML = '<i class="fa fa-comments fa-lg"></i>';
 }
 
-// Observe for page changes
+function reapplyState() {
+    const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
+    const btn = document.querySelector('.c21_chatter_toggle_btn');
+    if (chatter && btn && localStorage.getItem('c21_chatter_hidden') === 'true') {
+        applyHiddenState(chatter, btn);
+    }
+}
+
 const observer = new MutationObserver(() => {
-    setTimeout(initChatterToggle, 300);
+    setTimeout(() => {
+        initChatterToggle();
+        reapplyState();
+    }, 300);
 });
 
 if (document.body) {
