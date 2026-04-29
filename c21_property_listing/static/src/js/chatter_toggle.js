@@ -1,62 +1,86 @@
 /** @odoo-module **/
 
-import { Component, useState, onMounted, onPatched } from "@odoo/owl";
-import { registry } from "@web/core/registry";
-
-// Simple DOM-based toggle that runs after page load
+// Add toggle button to control panel
 function initChatterToggle() {
-    // Check if we're on a form view with chatter
     const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
     if (!chatter) return;
 
     // Don't add button if it already exists
     if (document.querySelector('.c21_chatter_toggle_btn')) return;
 
-    // Create the toggle button
+    // Find the control panel buttons area
+    const controlPanel = document.querySelector('.o_control_panel_main_buttons, .o_control_panel_actions');
+    if (!controlPanel) return;
+
+    // Create the toggle button for control panel
     const btn = document.createElement('button');
-    btn.className = 'c21_chatter_toggle_btn';
-    btn.innerHTML = '<i class="fa fa-comments"></i>';
+    btn.className = 'c21_chatter_toggle_btn btn btn-secondary ms-2';
+    btn.innerHTML = '<i class="fa fa-comments me-1"></i><span class="d-none d-md-inline">Activity</span>';
     btn.title = 'Toggle Activity Panel / 切換活動面板';
 
     // Check saved state
     const isHidden = localStorage.getItem('c21_chatter_hidden') === 'true';
     if (isHidden) {
-        chatter.style.display = 'none';
-        btn.classList.add('is-hidden');
-        document.querySelector('.o_form_sheet_bg')?.classList.add('c21-chatter-hidden');
+        hideChatter(chatter, btn);
     }
 
     btn.addEventListener('click', () => {
         const currentlyHidden = chatter.style.display === 'none';
         if (currentlyHidden) {
-            chatter.style.display = '';
-            btn.classList.remove('is-hidden');
-            document.querySelector('.o_form_sheet_bg')?.classList.remove('c21-chatter-hidden');
+            showChatter(chatter, btn);
             localStorage.setItem('c21_chatter_hidden', 'false');
         } else {
-            chatter.style.display = 'none';
-            btn.classList.add('is-hidden');
-            document.querySelector('.o_form_sheet_bg')?.classList.add('c21-chatter-hidden');
+            hideChatter(chatter, btn);
             localStorage.setItem('c21_chatter_hidden', 'true');
         }
     });
 
-    document.body.appendChild(btn);
+    controlPanel.appendChild(btn);
 }
 
-// Run on page load and navigation
-document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initChatterToggle, 1000);
-});
+function hideChatter(chatter, btn) {
+    // Hide the chatter completely
+    chatter.style.display = 'none';
+    btn.classList.remove('btn-secondary');
+    btn.classList.add('btn-outline-secondary');
 
-// Also observe DOM changes for SPA navigation
+    // Expand form to full width - target the parent container
+    const formSheetBg = document.querySelector('.o_form_sheet_bg');
+    if (formSheetBg) {
+        formSheetBg.classList.add('c21-chatter-hidden');
+    }
+
+    // Also hide the chatter container parent if exists
+    const formView = document.querySelector('.o_form_view');
+    if (formView) {
+        formView.classList.add('c21-no-chatter');
+    }
+}
+
+function showChatter(chatter, btn) {
+    chatter.style.display = '';
+    btn.classList.remove('btn-outline-secondary');
+    btn.classList.add('btn-secondary');
+
+    const formSheetBg = document.querySelector('.o_form_sheet_bg');
+    if (formSheetBg) {
+        formSheetBg.classList.remove('c21-chatter-hidden');
+    }
+
+    const formView = document.querySelector('.o_form_view');
+    if (formView) {
+        formView.classList.remove('c21-no-chatter');
+    }
+}
+
+// Run on page changes
 const observer = new MutationObserver(() => {
-    setTimeout(initChatterToggle, 500);
+    setTimeout(initChatterToggle, 300);
 });
 
 if (document.body) {
     observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Initial call
-setTimeout(initChatterToggle, 1500);
+// Initial call with delay
+setTimeout(initChatterToggle, 1000);

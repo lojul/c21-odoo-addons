@@ -1,43 +1,44 @@
-/* Chatter Toggle Button */
+/* Chatter Toggle Button in Control Panel */
 .c21_chatter_toggle_btn {
-    position: fixed !important;
-    right: 25px !important;
-    bottom: 25px !important;
-    z-index: 9999 !important;
-    width: 52px !important;
-    height: 52px !important;
-    border-radius: 50% !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.3) !important;
-    background-color: #714B67 !important;
-    border: none !important;
-    color: white !important;
-    cursor: pointer !important;
-    transition: all 0.2s ease !important;
-}
-
-.c21_chatter_toggle_btn:hover {
-    background-color: #5a3c52 !important;
-    transform: scale(1.05);
+    white-space: nowrap;
 }
 
 .c21_chatter_toggle_btn i {
-    font-size: 22px !important;
+    font-size: 14px;
 }
 
-/* When chatter is hidden */
-.c21_chatter_toggle_btn.is-hidden {
-    background-color: #6c757d !important;
-    opacity: 0.85;
+/* When chatter is hidden - expand form to full width */
+.o_form_view.c21-no-chatter .o_form_sheet_bg {
+    display: block !important;
+    grid-template-columns: 1fr !important;
 }
 
-/* Expand form when chatter hidden */
+.o_form_view.c21-no-chatter .o-mail-Form-chatter,
+.o_form_view.c21-no-chatter .o-mail-Chatter {
+    display: none !important;
+}
+
 .o_form_sheet_bg.c21-chatter-hidden {
     display: block !important;
+    grid-template-columns: 1fr !important;
 }
 
 .o_form_sheet_bg.c21-chatter-hidden .o_form_sheet {
     max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* Override Odoo's default two-column layout when chatter hidden */
+.c21-no-chatter .o_form_sheet_bg {
+    grid-template-columns: 1fr !important;
+}
+
+.c21-no-chatter .o_form_renderer {
+    display: block !important;
+}
+
+/* Make sure the form content area expands */
+.c21-chatter-hidden + .o-mail-Form-chatter,
+.c21-chatter-hidden + .o-mail-Chatter {
+    display: none !important;
 }
