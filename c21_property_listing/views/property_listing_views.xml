@@ -87,7 +87,6 @@
                                 <group>
                                     <field name="year_built"/>
                                     <field name="total_floors"/>
-                                    <field name="parking_number"/>
                                     <field name="tenant_name"/>
                                 </group>
                             </group>
@@ -168,6 +167,7 @@
                                 <group>
                                     <field name="ref_code"/>
                                     <field name="dd_lot"/>
+                                    <field name="parking_number"/>
                                 </group>
                             </group>
                         </div>
