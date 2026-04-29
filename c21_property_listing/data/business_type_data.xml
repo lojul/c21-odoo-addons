@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Business Types / 業務類型 -->
+        <record id="business_type_any" model="c21.business.type">
+            <field name="name">Any</field>
+            <field name="name_cn">不限</field>
+            <field name="code">any</field>
+            <field name="sequence">1</field>
+        </record>
+        <record id="business_type_dining" model="c21.business.type">
+            <field name="name">Dining</field>
+            <field name="name_cn">餐飲</field>
+            <field name="code">dining</field>
+            <field name="sequence">10</field>
+        </record>
+        <record id="business_type_cafe" model="c21.business.type">
+            <field name="name">Restaurant/Cafe</field>
+            <field name="name_cn">茶餐廳/咖啡店</field>
+            <field name="code">cafe</field>
+            <field name="sequence">20</field>
+        </record>
+        <record id="business_type_beauty" model="c21.business.type">
+            <field name="name">Beauty/Hair Salon</field>
+            <field name="name_cn">美容/美髮</field>
+            <field name="code">beauty</field>
+            <field name="sequence">30</field>
+        </record>
+        <record id="business_type_retail" model="c21.business.type">
+            <field name="name">Retail Shop</field>
+            <field name="name_cn">零售店舖</field>
+            <field name="code">retail_shop</field>
+            <field name="sequence">40</field>
+        </record>
+        <record id="business_type_convenience" model="c21.business.type">
+            <field name="name">Convenience/Supermarket</field>
+            <field name="name_cn">便利店/超市</field>
+            <field name="code">convenience</field>
+            <field name="sequence">50</field>
+        </record>
+        <record id="business_type_medical" model="c21.business.type">
+            <field name="name">Clinic/Medical</field>
+            <field name="name_cn">診所/醫療</field>
+            <field name="code">medical</field>
+            <field name="sequence">60</field>
+        </record>
+        <record id="business_type_education" model="c21.business.type">
+            <field name="name">Education/Tutorial</field>
+            <field name="name_cn">教育/補習</field>
+            <field name="code">education</field>
+            <field name="sequence">70</field>
+        </record>
+        <record id="business_type_other" model="c21.business.type">
+            <field name="name">Other</field>
+            <field name="name_cn">其他</field>
+            <field name="code">other</field>
+            <field name="sequence">100</field>
+        </record>
+    </data>
+</odoo>

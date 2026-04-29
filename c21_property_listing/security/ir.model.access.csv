@@ -11,3 +11,5 @@ access_c21_property_source_user,c21.property.source.user,model_c21_property_sour
 access_c21_property_source_admin,c21.property.source.admin,model_c21_property_source,group_c21_property_admin,1,1,1,1
 access_c21_property_type_user,c21.property.type.user,model_c21_property_type,group_c21_property_user,1,0,0,0
 access_c21_property_type_admin,c21.property.type.admin,model_c21_property_type,group_c21_property_admin,1,1,1,1
+access_c21_business_type_user,c21.business.type.user,model_c21_business_type,group_c21_property_user,1,0,0,0
+access_c21_business_type_admin,c21.business.type.admin,model_c21_business_type,group_c21_property_admin,1,1,1,1

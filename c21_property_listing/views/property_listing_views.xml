@@ -80,14 +80,13 @@
                                 <group>
                                     <field name="property_type_id"/>
                                     <field name="building_grade"/>
-                                    <field name="business_type"
+                                    <field name="business_type_id"
                                            invisible="property_type_id.code != 'retail'"/>
                                     <field name="room_layout"/>
                                 </group>
                                 <group>
                                     <field name="year_built"/>
                                     <field name="total_floors"/>
-                                    <field name="tenant_name"/>
                                 </group>
                             </group>
 
@@ -108,6 +107,7 @@
                                     <field name="asking_rent"/>
                                     <field name="floor_rent"/>
                                     <field name="lease_terms"/>
+                                    <field name="tenant_name"/>
                                 </group>
                                 <group>
                                     <field name="rent_per_sqft"/>

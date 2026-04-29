@@ -94,25 +94,19 @@ class C21PropertyListing(models.Model):
 
     # === Leasing Specific Fields ===
     property_type_id = fields.Many2one(
-        'c21.property.type', string='Prop Type / 用途',
+        'c21.property.type', string='Prop Type / 物業類型',
         ondelete='restrict', index=True)
 
     building_grade = fields.Selection([
         ('grade_a', 'Grade A'),
         ('grade_b', 'Grade B'),
         ('grade_c', 'Grade C'),
-    ], string='Grade / 級別')
+    ], string='Grade / 寫字樓級別')
 
-    business_type = fields.Selection([
-        ('dining', 'Dining'),
-        ('cafe', 'Cafe'),
-        ('beauty', 'Beauty'),
-        ('retail_shop', 'Retail Shop'),
-        ('convenience', 'Convenience Store'),
-        ('medical', 'Medical'),
-        ('education', 'Education'),
-        ('other', 'Other'),
-    ], string='Business / 業務', help='For retail properties')
+    business_type_id = fields.Many2one(
+        'c21.business.type', string='Business / 業務類型',
+        ondelete='restrict', index=True,
+        help='For retail properties')
 
     # Area fields
     gross_area = fields.Float('Gross sqft / 建呎', digits=(12, 2))

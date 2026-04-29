@@ -85,4 +85,10 @@
               parent="c21_property_menu_config"
               action="c21_property_type_action"
               sequence="40"/>
+
+    <menuitem id="c21_property_menu_business_types"
+              name="Business Types / 業務類型"
+              parent="c21_property_menu_config"
+              action="c21_business_type_action"
+              sequence="50"/>
 </odoo>

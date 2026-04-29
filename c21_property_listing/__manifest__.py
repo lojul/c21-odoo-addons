@@ -50,6 +50,7 @@ This module is standalone with no dependencies on CRM or other custom modules.
         'data/property_amenity_data.xml',
         'data/property_source_data.xml',
         'data/property_type_data.xml',
+        'data/business_type_data.xml',
         'data/country_whitelist_data.xml',
         'data/server_actions.xml',
         # Views
@@ -58,6 +59,7 @@ This module is standalone with no dependencies on CRM or other custom modules.
         'views/property_operator_views.xml',
         'views/property_source_views.xml',
         'views/property_type_views.xml',
+        'views/business_type_views.xml',
         'views/res_country_views.xml',
         'views/property_amenity_views.xml',
         'views/menu.xml',
