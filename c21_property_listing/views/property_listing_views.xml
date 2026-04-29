@@ -80,8 +80,7 @@
                                 <group>
                                     <field name="property_type_id"/>
                                     <field name="building_grade"/>
-                                    <field name="business_type_id"
-                                           invisible="property_type_id.code != 'retail'"/>
+                                    <field name="business_type_id"/>
                                     <field name="room_layout"/>
                                 </group>
                                 <group>
