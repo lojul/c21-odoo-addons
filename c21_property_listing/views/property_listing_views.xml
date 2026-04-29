@@ -269,7 +269,7 @@
         <field name="name">c21.property.listing.kanban</field>
         <field name="model">c21.property.listing</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="state" class="o_kanban_mobile">
+            <kanban default_group_by="approval_status" class="o_kanban_mobile">
                 <field name="name"/>
                 <field name="ref_code"/>
                 <field name="listing_type"/>
