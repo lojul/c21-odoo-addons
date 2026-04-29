@@ -131,7 +131,7 @@
 
     <!-- Operator Action -->
     <record id="c21_property_operator_action" model="ir.actions.act_window">
-        <field name="name">Coworkspace Operators</field>
+        <field name="name">Operators (Coworking Space)</field>
         <field name="res_model">res.partner</field>
         <field name="view_mode">list,kanban,form</field>
         <field name="domain">[('is_property_operator', '=', True), ('is_company', '=', True)]</field>

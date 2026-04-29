@@ -69,7 +69,7 @@
               sequence="10"/>
 
     <menuitem id="c21_property_menu_operators"
-              name="Coworkspace Operators"
+              name="Operators (Coworking Space)"
               parent="c21_property_menu_config"
               action="c21_property_operator_action"
               sequence="20"/>
