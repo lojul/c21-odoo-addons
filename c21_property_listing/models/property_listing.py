@@ -77,7 +77,8 @@ class C21PropertyListing(models.Model):
         ('draft', 'Draft'),
         ('ready', 'Ready to Publish'),
         ('published', 'Published'),
-    ], string='Publish / 發佈', default='draft', index=True, tracking=True)
+    ], string='Publish / 發佈', default='draft', index=True, tracking=True,
+       group_expand='_group_expand_approval_status')
 
     available_from = fields.Date('Available / 可租日')
 
@@ -185,6 +186,11 @@ class C21PropertyListing(models.Model):
         'UNIQUE(ref_code)',
         'Reference code must be unique!',
     )
+
+    @api.model
+    def _group_expand_approval_status(self, states, domain):
+        """Show all approval status columns in Kanban even when empty."""
+        return [key for key, val in self._fields['approval_status'].selection]
 
     @api.depends('gross_area', 'net_area')
     def _compute_total_area(self):
