@@ -153,14 +153,9 @@ class C21PropertyListing(models.Model):
     tenant_name = fields.Char('Tenant / 租客')
 
     # === Operations & Tracking ===
-    source = fields.Selection([
-        ('website', 'Website / 網站'),
-        ('referral', 'Referral / 轉介'),
-        ('direct', 'Direct / 直客'),
-        ('agent', 'Agent / 代理'),
-        ('advertisement', 'Advertisement / 廣告'),
-        ('other', 'Other / 其他'),
-    ], string='Source / 來源')
+    source_id = fields.Many2one(
+        'c21.property.source', string='Source / 來源',
+        ondelete='restrict', index=True)
 
     key_holder = fields.Char('Key Holder / 鎖匙')
     internal_notes = fields.Text('Notes / 提示', help='Internal notes for staff')

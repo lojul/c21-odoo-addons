@@ -1,4 +1,5 @@
 from . import property_amenity
+from . import property_source
 from . import property_listing
 from . import property_image
 from . import property_contact

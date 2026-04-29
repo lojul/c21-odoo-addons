@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Source Form View -->
+    <record id="c21_property_source_view_form" model="ir.ui.view">
+        <field name="name">c21.property.source.form</field>
+        <field name="model">c21.property.source</field>
+        <field name="arch" type="xml">
+            <form string="Property Source">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="name_cn"/>
+                            <field name="code"/>
+                        </group>
+                        <group>
+                            <field name="sequence"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Source Tree View -->
+    <record id="c21_property_source_view_tree" model="ir.ui.view">
+        <field name="name">c21.property.source.tree</field>
+        <field name="model">c21.property.source</field>
+        <field name="arch" type="xml">
+            <list string="Property Sources" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="name_cn"/>
+                <field name="code"/>
+                <field name="active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Source Action -->
+    <record id="c21_property_source_action" model="ir.actions.act_window">
+        <field name="name">Sources</field>
+        <field name="res_model">c21.property.source</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a property source
+            </p>
+            <p>
+                Sources track where property listings come from (e.g., Website, Referral, Agent).
+            </p>
+        </field>
+    </record>
+</odoo>

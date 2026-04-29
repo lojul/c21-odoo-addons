@@ -34,6 +34,7 @@
                                     <field name="listing_type" widget="radio" options="{'horizontal': true}"/>
                                     <field name="approval_status" string="Publish / 發佈"/>
                                     <field name="state"/>
+                                    <field name="source_id"/>
                                     <field name="currency_id" invisible="1"/>
                                 </group>
                             </group>
@@ -142,7 +143,6 @@
                             <separator string="Operations / 營運"/>
                             <group>
                                 <group>
-                                    <field name="source"/>
                                     <field name="key_holder"/>
                                     <field name="user_id"/>
                                 </group>
@@ -252,7 +252,7 @@
                 <field name="operator_id" optional="hide"/>
                 <field name="property_type" optional="hide"/>
                 <field name="building_grade" optional="hide"/>
-                <field name="source" optional="hide"/>
+                <field name="source_id" optional="hide"/>
                 <field name="user_id" optional="hide" string="負責"/>
                 <field name="followup_date" optional="hide"/>
                 <field name="state"/>
@@ -375,7 +375,7 @@
                     <filter name="group_approval" string="Publish Status" context="{'group_by': 'approval_status'}"/>
                     <filter name="group_operator" string="Operator" context="{'group_by': 'operator_id'}"/>
                     <filter name="group_grade" string="Building Grade" context="{'group_by': 'building_grade'}"/>
-                    <filter name="group_source" string="Source" context="{'group_by': 'source'}"/>
+                    <filter name="group_source" string="Source" context="{'group_by': 'source_id'}"/>
                     <filter name="group_user" string="Responsible" context="{'group_by': 'user_id'}"/>
                     <filter name="group_layout" string="Layout" context="{'group_by': 'room_layout'}"/>
                 </group>
