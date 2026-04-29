@@ -35,6 +35,7 @@ DISTRICT_SELECTION = [
 class C21PropertyListing(models.Model):
     _name = 'c21.property.listing'
     _description = 'Property Listing'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _order = 'name'
 
     # === Identification ===
@@ -64,13 +65,13 @@ class C21PropertyListing(models.Model):
         ('under_negotiation', 'Under Negotiation'),
         ('leased', 'Leased'),
         ('off_market', 'Off Market'),
-    ], string='Status / 狀態', default='available', index=True)
+    ], string='Status / 狀態', default='available', index=True, tracking=True)
 
     approval_status = fields.Selection([
         ('draft', 'Draft'),
         ('ready', 'Ready to Publish'),
         ('published', 'Published'),
-    ], string='Publish / 發佈', default='draft', index=True)
+    ], string='Publish / 發佈', default='draft', index=True, tracking=True)
 
     available_from = fields.Date('Available / 可租日')
 
@@ -159,7 +160,7 @@ class C21PropertyListing(models.Model):
     internal_notes = fields.Text('Notes / 提示', help='Internal notes for staff')
     listing_date = fields.Date('Listing Date / 開盤日期')
     followup_date = fields.Date('Follow-up / 跟進日期')
-    user_id = fields.Many2one('res.users', string='Responsible / 負責同事', default=lambda self: self.env.user)
+    user_id = fields.Many2one('res.users', string='Responsible / 負責同事', default=lambda self: self.env.user, tracking=True)
 
     # === Descriptions ===
     description = fields.Html('Desc (EN) / 描述')

@@ -38,7 +38,7 @@ This module is standalone with no dependencies on CRM or other custom modules.
     'author': 'C21',
     'website': '',
     'license': 'LGPL-3',
-    'depends': ['base'],
+    'depends': ['base', 'mail'],
     'external_dependencies': {
         'python': ['requests'],
     },

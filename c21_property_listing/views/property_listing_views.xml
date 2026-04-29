@@ -108,10 +108,12 @@
                                 <group>
                                     <field name="asking_rent"/>
                                     <field name="floor_rent"/>
+                                    <field name="lease_terms"/>
                                 </group>
                                 <group>
                                     <field name="rent_per_sqft"/>
                                     <field name="floor_rent_per_sqft"/>
+                                    <field name="available_from"/>
                                 </group>
                             </group>
 
@@ -126,14 +128,6 @@
                                     <field name="sale_price_per_sqft"/>
                                     <field name="floor_sale_per_sqft"/>
                                     <field name="yield_rate" widget="percentage"/>
-                                </group>
-                            </group>
-
-                            <!-- Lease Terms -->
-                            <group invisible="listing_type != 'leasing'">
-                                <group>
-                                    <field name="lease_terms"/>
-                                    <field name="available_from"/>
                                 </group>
                             </group>
 
@@ -232,6 +226,7 @@
                         </div>
                     </div>
                 </sheet>
+                <chatter/>
             </form>
         </field>
     </record>
