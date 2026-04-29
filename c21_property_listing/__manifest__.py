@@ -65,6 +65,8 @@ This module is standalone with no dependencies on CRM or other custom modules.
     'assets': {
         'web.assets_backend': [
             'c21_property_listing/static/src/css/operator_list.css',
+            'c21_property_listing/static/src/css/chatter_toggle.css',
+            'c21_property_listing/static/src/js/chatter_toggle.js',
         ],
     },
     'demo': [],
