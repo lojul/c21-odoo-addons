@@ -13,6 +13,7 @@ DISTRICT_SELECTION = [
     ('taikoo', 'Taikoo (太古)'),
     ('wong_chuk_hang', 'Wong Chuk Hang (黃竹坑)'),
     ('sheung_wan', 'Sheung Wan (上環)'),
+    ('sai_ying_pun', 'Sai Ying Pun (西營盤)'),
     # Kowloon
     ('tsim_sha_tsui', 'Tsim Sha Tsui (尖沙咀)'),
     ('jordan', 'Jordan (佐敦)'),
@@ -20,6 +21,9 @@ DISTRICT_SELECTION = [
     ('kowloon_bay', 'Kowloon Bay (九龍灣)'),
     ('kwun_tong', 'Kwun Tong (觀塘)'),
     ('san_po_kong', 'San Po Kong (新蒲崗)'),
+    ('cheung_sha_wan', 'Cheung Sha Wan (長沙灣)'),
+    ('sham_shui_po', 'Sham Shui Po (深水埗)'),
+    ('whampoa', 'Whampoa (黃埔)'),
     # New Territories
     ('kwai_chung', 'Kwai Chung (葵涌)'),
     ('tsuen_wan', 'Tsuen Wan (荃灣)'),
@@ -27,6 +31,8 @@ DISTRICT_SELECTION = [
     ('fo_tan', 'Fo Tan (火炭)'),
     ('tuen_mun', 'Tuen Mun (屯門)'),
     ('yuen_long', 'Yuen Long (元朗)'),
+    ('po_lam', 'Po Lam (寶琳)'),
+    ('tai_po', 'Tai Po (大埔)'),
     # Other
     ('other', 'Other (其他)'),
 ]
