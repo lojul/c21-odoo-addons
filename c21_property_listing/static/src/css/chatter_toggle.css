@@ -1,60 +1,43 @@
-/* Chatter Toggle Button - Floating button */
-.o_chatter_toggle_btn {
-    position: fixed;
-    right: 25px;
-    bottom: 25px;
-    z-index: 1050;
-    width: 52px;
-    height: 52px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 12px rgba(0,0,0,0.25);
-    background-color: #714B67;
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: all 0.2s ease;
+/* Chatter Toggle Button */
+.c21_chatter_toggle_btn {
+    position: fixed !important;
+    right: 25px !important;
+    bottom: 25px !important;
+    z-index: 9999 !important;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3) !important;
+    background-color: #714B67 !important;
+    border: none !important;
+    color: white !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
 }
 
-.o_chatter_toggle_btn:hover {
-    background-color: #5a3c52;
+.c21_chatter_toggle_btn:hover {
+    background-color: #5a3c52 !important;
     transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
 
-.o_chatter_toggle_btn:active {
-    transform: scale(0.98);
+.c21_chatter_toggle_btn i {
+    font-size: 22px !important;
 }
 
-.o_chatter_toggle_btn i {
-    font-size: 22px;
+/* When chatter is hidden */
+.c21_chatter_toggle_btn.is-hidden {
+    background-color: #6c757d !important;
+    opacity: 0.85;
 }
 
-/* When chatter is hidden, change button style */
-.o_chatter_toggle_btn.chatter-is-hidden {
-    background-color: #6c757d;
-    opacity: 0.8;
-}
-
-.o_chatter_toggle_btn.chatter-is-hidden:hover {
-    background-color: #5a6268;
-    opacity: 1;
-}
-
-/* When chatter is hidden, expand the form to full width */
-.o_form_sheet_bg.chatter-hidden {
+/* Expand form when chatter hidden */
+.o_form_sheet_bg.c21-chatter-hidden {
     display: block !important;
 }
 
-.o_form_sheet_bg.chatter-hidden .o_form_sheet {
+.o_form_sheet_bg.c21-chatter-hidden .o_form_sheet {
     max-width: 100% !important;
-    margin: 0 auto;
-}
-
-/* Hide button on list/kanban views (only show on form) */
-.o_list_view .o_chatter_toggle_btn,
-.o_kanban_view .o_chatter_toggle_btn {
-    display: none !important;
 }

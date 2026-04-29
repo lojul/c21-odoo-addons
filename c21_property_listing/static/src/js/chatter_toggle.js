@@ -1,94 +1,62 @@
 /** @odoo-module **/
 
+import { Component, useState, onMounted, onPatched } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 
-// Add toggle button when DOM is ready
-document.addEventListener('click', function(e) {
-    // Delegate - check after any click if we need to add button
-    setTimeout(addToggleButton, 500);
-});
-
-// Also run on initial load
-setTimeout(addToggleButton, 1000);
-
-function addToggleButton() {
+// Simple DOM-based toggle that runs after page load
+function initChatterToggle() {
+    // Check if we're on a form view with chatter
     const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
     if (!chatter) return;
 
-    // Check if button already exists
-    if (document.querySelector('.o_chatter_toggle_btn')) return;
+    // Don't add button if it already exists
+    if (document.querySelector('.c21_chatter_toggle_btn')) return;
 
-    // Create floating toggle button
+    // Create the toggle button
     const btn = document.createElement('button');
-    btn.className = 'o_chatter_toggle_btn btn';
+    btn.className = 'c21_chatter_toggle_btn';
     btn.innerHTML = '<i class="fa fa-comments"></i>';
     btn.title = 'Toggle Activity Panel / 切換活動面板';
 
-    // Get saved preference
-    const isHidden = localStorage.getItem('chatterHidden') === 'true';
+    // Check saved state
+    const isHidden = localStorage.getItem('c21_chatter_hidden') === 'true';
     if (isHidden) {
-        hideChatter(chatter);
+        chatter.style.display = 'none';
+        btn.classList.add('is-hidden');
+        document.querySelector('.o_form_sheet_bg')?.classList.add('c21-chatter-hidden');
     }
 
-    btn.addEventListener('click', function() {
-        toggleChatter(chatter);
+    btn.addEventListener('click', () => {
+        const currentlyHidden = chatter.style.display === 'none';
+        if (currentlyHidden) {
+            chatter.style.display = '';
+            btn.classList.remove('is-hidden');
+            document.querySelector('.o_form_sheet_bg')?.classList.remove('c21-chatter-hidden');
+            localStorage.setItem('c21_chatter_hidden', 'false');
+        } else {
+            chatter.style.display = 'none';
+            btn.classList.add('is-hidden');
+            document.querySelector('.o_form_sheet_bg')?.classList.add('c21-chatter-hidden');
+            localStorage.setItem('c21_chatter_hidden', 'true');
+        }
     });
 
     document.body.appendChild(btn);
 }
 
-function toggleChatter(chatter) {
-    const isCurrentlyHidden = localStorage.getItem('chatterHidden') === 'true';
-
-    if (isCurrentlyHidden) {
-        showChatter(chatter);
-        localStorage.setItem('chatterHidden', 'false');
-    } else {
-        hideChatter(chatter);
-        localStorage.setItem('chatterHidden', 'true');
-    }
-}
-
-function hideChatter(chatter) {
-    if (chatter) {
-        chatter.style.display = 'none';
-    }
-    // Also adjust the form container
-    const formSheetBg = document.querySelector('.o_form_sheet_bg');
-    if (formSheetBg) {
-        formSheetBg.classList.add('chatter-hidden');
-    }
-    // Update button appearance
-    const btn = document.querySelector('.o_chatter_toggle_btn');
-    if (btn) {
-        btn.classList.add('chatter-is-hidden');
-    }
-}
-
-function showChatter(chatter) {
-    if (chatter) {
-        chatter.style.display = '';
-    }
-    const formSheetBg = document.querySelector('.o_form_sheet_bg');
-    if (formSheetBg) {
-        formSheetBg.classList.remove('chatter-hidden');
-    }
-    const btn = document.querySelector('.o_chatter_toggle_btn');
-    if (btn) {
-        btn.classList.remove('chatter-is-hidden');
-    }
-}
-
-// Re-apply state when navigating between records
-const observer = new MutationObserver(function(mutations) {
-    const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
-    if (chatter && localStorage.getItem('chatterHidden') === 'true') {
-        hideChatter(chatter);
-    }
-    addToggleButton();
+// Run on page load and navigation
+document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(initChatterToggle, 1000);
 });
 
-// Start observing once DOM is ready
+// Also observe DOM changes for SPA navigation
+const observer = new MutationObserver(() => {
+    setTimeout(initChatterToggle, 500);
+});
+
 if (document.body) {
     observer.observe(document.body, { childList: true, subtree: true });
 }
+
+// Initial call
+setTimeout(initChatterToggle, 1500);
