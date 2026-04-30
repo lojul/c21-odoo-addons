@@ -2,13 +2,14 @@
   "comment": "ADD THIS NODE to Property PDF Processor workflow",
   "instructions": [
     "1. Open your n8n workflow 'Property PDF Processor v0.7'",
-    "2. Add a new 'Webhook' node",
-    "3. Copy the settings below into the node",
-    "4. Connect Webhook node output → Config (API Keys) node input",
+    "2. Add a new 'Webhook' node (see settings below)",
+    "3. Add a 'Code' node after the webhook to handle the file (see code below)",
+    "4. Connect: Webhook → Handle Odoo Upload → Prepare Upload (existing node)",
     "5. Save and activate the workflow",
-    "6. Copy the Production webhook URL to Odoo System Parameter: c21.n8n_pdf_import_webhook"
+    "6. Copy the Production webhook URL to Odoo: Settings → Technical → System Parameters",
+    "   Key: c21.n8n_pdf_import_webhook"
   ],
-  "node": {
+  "webhook_node": {
     "parameters": {
       "httpMethod": "POST",
       "path": "pdf-import-trigger",
@@ -18,17 +19,19 @@
     },
     "type": "n8n-nodes-base.webhook",
     "typeVersion": 2,
-    "position": [
-      9664,
-      900
-    ],
-    "id": "webhook-odoo-trigger",
-    "name": "Odoo Import Trigger",
-    "webhookId": "pdf-import-trigger"
+    "position": [9664, 880],
+    "name": "Odoo Import Trigger"
+  },
+  "code_node_after_webhook": {
+    "name": "Handle Odoo Upload",
+    "type": "n8n-nodes-base.code",
+    "typeVersion": 2,
+    "position": [9872, 880],
+    "parameters": {
+      "jsCode": "// Handle file upload from Odoo\nconst input = $input.item.json;\nconst config = $('Config (API Keys)').item.json;\n\n// Check if this is a file upload or folder scan\nif (input.action === 'upload_file' && input.file_data) {\n  // Decode base64 file\n  const fileBuffer = Buffer.from(input.file_data, 'base64');\n  \n  // Create binary data for next nodes\n  const binaryData = await this.helpers.prepareBinaryData(\n    fileBuffer,\n    input.file_name || 'upload.pdf',\n    'application/pdf'\n  );\n  \n  return {\n    json: {\n      name: input.file_name,\n      id: `odoo-upload-${Date.now()}`,\n      odoo_log_id: input.odoo_log_id,\n      triggered_by: input.triggered_by,\n      _config: config\n    },\n    binary: { data: binaryData }\n  };\n} else {\n  // Folder scan - return empty to skip (let OneDrive trigger handle it)\n  return { json: { skip: true, message: 'Folder scan requested - use OneDrive trigger' } };\n}"
+    }
   },
   "connection": {
-    "from": "Odoo Import Trigger",
-    "to": "Config (API Keys)",
-    "comment": "Connect this node's output to 'Config (API Keys)' input alongside existing OneDrive Trigger"
+    "note": "Connect Webhook → Handle Odoo Upload → Prepare Upload (skip Filter PDFs for direct uploads)"
   }
 }

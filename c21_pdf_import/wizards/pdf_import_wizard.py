@@ -1,4 +1,5 @@
 import requests
+import base64
 import logging
 from odoo import models, fields, api
 from odoo.exceptions import UserError
@@ -11,8 +12,13 @@ class PdfImportWizard(models.TransientModel):
     _description = 'PDF Import Wizard'
 
     action_type = fields.Selection([
+        ('upload_file', 'Upload PDF File'),
         ('process_folder', 'Process OneDrive Folder'),
-    ], string='Action', default='process_folder', required=True)
+    ], string='Action', default='upload_file', required=True)
+
+    # File upload
+    pdf_file = fields.Binary(string='PDF File', attachment=False)
+    pdf_filename = fields.Char(string='Filename')
 
     notes = fields.Text(string='Notes', help='Optional notes for this import')
 
@@ -23,6 +29,12 @@ class PdfImportWizard(models.TransientModel):
             'c21.n8n_pdf_import_webhook', ''
         )
     )
+
+    @api.onchange('action_type')
+    def _onchange_action_type(self):
+        if self.action_type == 'process_folder':
+            self.pdf_file = False
+            self.pdf_filename = False
 
     def action_trigger_import(self):
         """Trigger the n8n PDF import workflow"""
@@ -41,28 +53,44 @@ class PdfImportWizard(models.TransientModel):
                 'Value: https://your-n8n-instance/webhook/xxx'
             )
 
+        # Validate file upload if selected
+        if self.action_type == 'upload_file':
+            if not self.pdf_file:
+                raise UserError('Please select a PDF file to upload.')
+            if not self.pdf_filename or not self.pdf_filename.lower().endswith('.pdf'):
+                raise UserError('Please upload a PDF file (.pdf)')
+
         # Create log entry
+        log_name = self.pdf_filename if self.pdf_file else f'Folder Import - {fields.Datetime.now()}'
         log = self.env['c21.pdf.import.log'].create({
-            'name': f'Manual Import - {fields.Datetime.now()}',
+            'name': log_name,
             'status': 'pending',
             'triggered_by': self.env.user.id,
             'notes': self.notes,
         })
 
         try:
-            # Call n8n webhook
+            # Prepare payload
+            payload = {
+                'action': self.action_type,
+                'triggered_by': self.env.user.name,
+                'odoo_log_id': log.id,
+            }
+
+            # Add file data if uploading
+            if self.action_type == 'upload_file' and self.pdf_file:
+                payload['file_name'] = self.pdf_filename
+                payload['file_data'] = self.pdf_file.decode('utf-8')  # Already base64
+                payload['file_size'] = len(base64.b64decode(self.pdf_file))
+
             _logger.info(f'Triggering n8n PDF import webhook: {webhook_url}')
+            _logger.info(f'Action: {self.action_type}, File: {self.pdf_filename or "N/A"}')
 
             response = requests.post(
                 webhook_url,
-                json={
-                    'action': self.action_type,
-                    'triggered_by': self.env.user.name,
-                    'odoo_log_id': log.id,
-                    'callback_url': self._get_callback_url(),
-                },
+                json=payload,
                 headers={'Content-Type': 'application/json'},
-                timeout=30
+                timeout=60  # Longer timeout for file upload
             )
 
             if response.status_code == 200:
@@ -71,7 +99,7 @@ class PdfImportWizard(models.TransientModel):
                     'status': 'processing',
                     'n8n_execution_id': result.get('executionId', ''),
                 })
-                message = 'Import triggered successfully! Check Import History for status.'
+                message = f'Import triggered successfully! File: {self.pdf_filename or "Folder scan"}'
             else:
                 log.write({
                     'status': 'failed',
