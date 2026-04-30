@@ -137,19 +137,6 @@
                                 </group>
                             </group>
 
-                            <!-- Operations Section -->
-                            <separator string="Operations / 營運"/>
-                            <group>
-                                <group>
-                                    <field name="key_holder"/>
-                                    <field name="user_id"/>
-                                </group>
-                                <group>
-                                    <field name="listing_date"/>
-                                    <field name="followup_date"/>
-                                </group>
-                            </group>
-
                             <!-- Amenities Section -->
                             <separator string="Amenities / 設施"/>
                             <field name="amenity_ids" widget="many2many_tags"/>
@@ -163,6 +150,19 @@
                             <group>
                                 <field name="internal_notes" nolabel="1"
                                        placeholder="Internal notes for staff..."/>
+                            </group>
+
+                            <!-- Operations Section -->
+                            <separator string="Operations / 營運"/>
+                            <group>
+                                <group>
+                                    <field name="key_holder"/>
+                                    <field name="user_id"/>
+                                </group>
+                                <group>
+                                    <field name="listing_date"/>
+                                    <field name="followup_date"/>
+                                </group>
                             </group>
 
                             <!-- Other Info Section -->
