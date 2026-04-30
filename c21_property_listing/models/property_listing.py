@@ -104,10 +104,10 @@ class C21PropertyListing(models.Model):
         ('grade_c', 'Grade C'),
     ], string='Grade / 寫字樓級別')
 
-    business_type_id = fields.Many2one(
-        'c21.business.type', string='Business / 業務類型',
-        ondelete='restrict', index=True,
-        help='For retail properties')
+    business_type_ids = fields.Many2many(
+        'c21.business.type', 'c21_property_listing_business_type_rel',
+        'property_id', 'business_type_id', string='Business / 業務類型',
+        help='Suitable business types for this property')
 
     # Area fields
     gross_area = fields.Float('Gross sqft / 建呎', digits=(12, 2))

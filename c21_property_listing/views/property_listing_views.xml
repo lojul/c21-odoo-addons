@@ -80,7 +80,6 @@
                                 <group>
                                     <field name="property_type_id"/>
                                     <field name="building_grade"/>
-                                    <field name="business_type_id"/>
                                     <field name="room_layout"/>
                                 </group>
                                 <group>
@@ -147,6 +146,10 @@
                             <!-- Amenities Section -->
                             <separator string="Amenities / 設施"/>
                             <field name="amenity_ids" widget="many2many_tags"/>
+
+                            <!-- Business Types Section -->
+                            <separator string="Business Types / 業務類型" invisible="listing_type != 'leasing'"/>
+                            <field name="business_type_ids" widget="many2many_tags" invisible="listing_type != 'leasing'"/>
 
                             <!-- Internal Notes Section -->
                             <separator string="Internal Notes / 提示"/>
