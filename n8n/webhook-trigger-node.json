@@ -1,0 +1,34 @@
+{
+  "comment": "ADD THIS NODE to Property PDF Processor workflow",
+  "instructions": [
+    "1. Open your n8n workflow 'Property PDF Processor v0.7'",
+    "2. Add a new 'Webhook' node",
+    "3. Copy the settings below into the node",
+    "4. Connect Webhook node output → Config (API Keys) node input",
+    "5. Save and activate the workflow",
+    "6. Copy the Production webhook URL to Odoo System Parameter: c21.n8n_pdf_import_webhook"
+  ],
+  "node": {
+    "parameters": {
+      "httpMethod": "POST",
+      "path": "pdf-import-trigger",
+      "responseMode": "onReceived",
+      "responseData": "allEntries",
+      "options": {}
+    },
+    "type": "n8n-nodes-base.webhook",
+    "typeVersion": 2,
+    "position": [
+      9664,
+      900
+    ],
+    "id": "webhook-odoo-trigger",
+    "name": "Odoo Import Trigger",
+    "webhookId": "pdf-import-trigger"
+  },
+  "connection": {
+    "from": "Odoo Import Trigger",
+    "to": "Config (API Keys)",
+    "comment": "Connect this node's output to 'Config (API Keys)' input alongside existing OneDrive Trigger"
+  }
+}

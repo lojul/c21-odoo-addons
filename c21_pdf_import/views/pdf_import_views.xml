@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Import Log List View -->
+    <record id="c21_pdf_import_log_view_list" model="ir.ui.view">
+        <field name="name">c21.pdf.import.log.list</field>
+        <field name="model">c21.pdf.import.log</field>
+        <field name="arch" type="xml">
+            <list string="Import History" create="0">
+                <field name="create_date" string="Date"/>
+                <field name="name"/>
+                <field name="status" widget="badge" decoration-info="status == 'pending'"
+                       decoration-warning="status == 'processing'"
+                       decoration-success="status == 'completed'"
+                       decoration-danger="status == 'failed'"/>
+                <field name="triggered_by"/>
+                <field name="property_id"/>
+                <field name="chunks_indexed"/>
+                <field name="images_uploaded"/>
+                <button name="action_view_property" type="object" string="View Property"
+                        icon="fa-external-link" invisible="not property_id"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Import Log Form View -->
+    <record id="c21_pdf_import_log_view_form" model="ir.ui.view">
+        <field name="name">c21.pdf.import.log.form</field>
+        <field name="model">c21.pdf.import.log</field>
+        <field name="arch" type="xml">
+            <form string="Import Log" create="0">
+                <header>
+                    <button name="action_view_property" type="object" string="View Property"
+                            class="btn-primary" invisible="not property_id"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="pending,processing,completed"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="triggered_by"/>
+                            <field name="trigger_date"/>
+                            <field name="complete_date"/>
+                        </group>
+                        <group>
+                            <field name="property_id"/>
+                            <field name="n8n_execution_id"/>
+                            <field name="chunks_indexed"/>
+                            <field name="images_uploaded"/>
+                        </group>
+                    </group>
+                    <group string="Error" invisible="not error_message">
+                        <field name="error_message" nolabel="1"/>
+                    </group>
+                    <group string="Notes" invisible="not notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Import Log Action -->
+    <record id="c21_pdf_import_log_action" model="ir.actions.act_window">
+        <field name="name">Import History</field>
+        <field name="res_model">c21.pdf.import.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No imports yet
+            </p>
+            <p>
+                Click "Trigger Import" to process PDFs from OneDrive.
+            </p>
+        </field>
+    </record>
+
+    <!-- Import Wizard Form -->
+    <record id="c21_pdf_import_wizard_view_form" model="ir.ui.view">
+        <field name="name">c21.pdf.import.wizard.form</field>
+        <field name="model">c21.pdf.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import PDFs">
+                <group>
+                    <group>
+                        <field name="action_type" widget="radio"/>
+                    </group>
+                </group>
+                <group string="Configuration">
+                    <field name="webhook_url" placeholder="https://your-n8n.app.n8n.cloud/webhook/xxx"/>
+                </group>
+                <group>
+                    <field name="notes" placeholder="Optional notes for this import..."/>
+                </group>
+                <footer>
+                    <button name="action_trigger_import" type="object"
+                            string="Trigger Import" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Import Wizard Action -->
+    <record id="c21_pdf_import_wizard_action" model="ir.actions.act_window">
+        <field name="name">Import PDFs</field>
+        <field name="res_model">c21.pdf.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
