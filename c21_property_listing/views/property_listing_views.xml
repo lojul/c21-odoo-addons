@@ -38,6 +38,13 @@
                                 </group>
                             </group>
 
+                            <!-- Description Section -->
+                            <separator string="Description / 描述"/>
+                            <group>
+                                <field name="description" nolabel="1"
+                                       placeholder="Property description..."/>
+                            </group>
+
                             <!-- Location Section -->
                             <separator string="Location / 位置"/>
                             <group>
@@ -156,13 +163,6 @@
                             <group>
                                 <field name="internal_notes" nolabel="1"
                                        placeholder="Internal notes for staff..."/>
-                            </group>
-
-                            <!-- Description Section -->
-                            <separator string="Description / 描述"/>
-                            <group>
-                                <field name="description" nolabel="1"
-                                       placeholder="Property description..."/>
                             </group>
 
                             <!-- Other Info Section -->
