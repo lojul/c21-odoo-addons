@@ -6,9 +6,9 @@
               parent="c21_property_listing.c21_property_menu_root"
               sequence="50"/>
 
-    <!-- Trigger Import -->
+    <!-- Upload PDF -->
     <menuitem id="c21_pdf_import_trigger_menu"
-              name="Trigger Import"
+              name="Upload PDF"
               parent="c21_pdf_import_menu"
               action="c21_pdf_import_wizard_action"
               sequence="10"/>

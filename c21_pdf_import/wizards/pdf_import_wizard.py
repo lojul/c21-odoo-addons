@@ -11,13 +11,8 @@ class PdfImportWizard(models.TransientModel):
     _name = 'c21.pdf.import.wizard'
     _description = 'PDF Import Wizard'
 
-    action_type = fields.Selection([
-        ('upload_file', 'Upload PDF File'),
-        ('process_folder', 'Process OneDrive Folder'),
-    ], string='Action', default='upload_file', required=True)
-
     # File upload
-    pdf_file = fields.Binary(string='PDF File', attachment=False)
+    pdf_file = fields.Binary(string='PDF File', attachment=False, required=True)
     pdf_filename = fields.Char(string='Filename')
 
     notes = fields.Text(string='Notes', help='Optional notes for this import')
@@ -26,22 +21,17 @@ class PdfImportWizard(models.TransientModel):
     webhook_url = fields.Char(
         string='n8n Webhook URL',
         default=lambda self: self.env['ir.config_parameter'].sudo().get_param(
-            'c21.n8n_pdf_import_webhook', ''
-        )
+            'c21.n8n_onedrive_upload_webhook', ''
+        ),
+        help='Webhook URL for uploading PDF to OneDrive'
     )
 
-    @api.onchange('action_type')
-    def _onchange_action_type(self):
-        if self.action_type == 'process_folder':
-            self.pdf_file = False
-            self.pdf_filename = False
-
     def action_trigger_import(self):
-        """Trigger the n8n PDF import workflow"""
+        """Upload PDF to OneDrive via n8n webhook, which triggers the processing workflow"""
         self.ensure_one()
 
         webhook_url = self.webhook_url or self.env['ir.config_parameter'].sudo().get_param(
-            'c21.n8n_pdf_import_webhook', ''
+            'c21.n8n_onedrive_upload_webhook', ''
         )
 
         if not webhook_url:
@@ -49,100 +39,96 @@ class PdfImportWizard(models.TransientModel):
                 'n8n Webhook URL not configured.\n\n'
                 'Please set it in:\n'
                 'Settings → Technical → System Parameters\n'
-                'Key: c21.n8n_pdf_import_webhook\n'
-                'Value: https://your-n8n-instance/webhook/xxx'
+                'Key: c21.n8n_onedrive_upload_webhook\n'
+                'Value: https://your-n8n-instance/webhook/odoo-upload-to-onedrive'
             )
 
-        # Validate file upload if selected
-        if self.action_type == 'upload_file':
-            if not self.pdf_file:
-                raise UserError('Please select a PDF file to upload.')
-            if not self.pdf_filename or not self.pdf_filename.lower().endswith('.pdf'):
-                raise UserError('Please upload a PDF file (.pdf)')
+        # Save webhook URL for next time
+        if self.webhook_url:
+            self.env['ir.config_parameter'].sudo().set_param(
+                'c21.n8n_onedrive_upload_webhook', self.webhook_url
+            )
+
+        # Validate file
+        if not self.pdf_file:
+            raise UserError('Please select a PDF file to upload.')
+        if not self.pdf_filename or not self.pdf_filename.lower().endswith('.pdf'):
+            raise UserError('Please upload a PDF file (.pdf)')
 
         # Create log entry
-        log_name = self.pdf_filename if self.pdf_file else f'Folder Import - {fields.Datetime.now()}'
         log = self.env['c21.pdf.import.log'].create({
-            'name': log_name,
+            'name': self.pdf_filename,
             'status': 'pending',
             'triggered_by': self.env.user.id,
             'notes': self.notes,
         })
 
+        # Append log ID to filename so n8n workflow can callback
+        # e.g., "招租 - YYR.pdf" -> "招租 - YYR_ODOO123.pdf"
+        base_name = self.pdf_filename.rsplit('.', 1)[0]
+        upload_filename = f"{base_name}_ODOO{log.id}.pdf"
+
         try:
-            # Prepare payload
+            # Prepare payload - send file to OneDrive upload webhook
             payload = {
-                'action': self.action_type,
-                'triggered_by': self.env.user.name,
+                'file_name': upload_filename,
+                'file_data': self.pdf_file.decode('utf-8'),  # Already base64
                 'odoo_log_id': log.id,
+                'triggered_by': self.env.user.name,
             }
 
-            # Add file data if uploading
-            if self.action_type == 'upload_file' and self.pdf_file:
-                payload['file_name'] = self.pdf_filename
-                payload['file_data'] = self.pdf_file.decode('utf-8')  # Already base64
-                payload['file_size'] = len(base64.b64decode(self.pdf_file))
-
-            _logger.info(f'Triggering n8n PDF import webhook: {webhook_url}')
-            _logger.info(f'Action: {self.action_type}, File: {self.pdf_filename or "N/A"}')
+            file_size = len(base64.b64decode(self.pdf_file))
+            _logger.info(f'Uploading PDF to OneDrive: {self.pdf_filename} ({file_size} bytes)')
 
             response = requests.post(
                 webhook_url,
                 json=payload,
                 headers={'Content-Type': 'application/json'},
-                timeout=60  # Longer timeout for file upload
+                timeout=120  # Longer timeout for file upload
             )
 
             if response.status_code == 200:
                 result = response.json() if response.text else {}
-                log.write({
-                    'status': 'processing',
-                    'n8n_execution_id': result.get('executionId', ''),
-                })
-                message = f'Import triggered successfully! File: {self.pdf_filename or "Folder scan"}'
+                if result.get('success'):
+                    log.write({
+                        'status': 'processing',
+                        'notes': (self.notes or '') + f'\nUploaded to OneDrive. Processing will start automatically.',
+                    })
+                    message = f'PDF uploaded to OneDrive successfully! Processing will start automatically.'
+                else:
+                    error_msg = result.get('error', 'Unknown error')
+                    log.write({
+                        'status': 'failed',
+                        'error_message': error_msg,
+                    })
+                    message = f'Upload failed: {error_msg}'
             else:
                 log.write({
                     'status': 'failed',
                     'error_message': f'HTTP {response.status_code}: {response.text[:500]}',
                 })
-                message = f'Import failed: HTTP {response.status_code}'
+                message = f'Upload failed: HTTP {response.status_code}'
 
         except requests.exceptions.Timeout:
             log.write({
                 'status': 'processing',
-                'notes': (self.notes or '') + '\n[Webhook timeout - workflow may still be running]',
+                'notes': (self.notes or '') + '\n[Upload may still be in progress]',
             })
-            message = 'Import triggered (webhook timed out, but workflow may still be running)'
+            message = 'Upload in progress (request timed out but may still complete)'
 
         except Exception as e:
-            _logger.exception('PDF Import webhook error')
+            _logger.exception('PDF Upload error')
             log.write({
                 'status': 'failed',
                 'error_message': str(e),
             })
-            raise UserError(f'Failed to trigger import: {e}')
+            raise UserError(f'Failed to upload PDF: {e}')
 
-        # Show result
+        # Show result and redirect to import history
         return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'PDF Import',
-                'message': message,
-                'type': 'success' if 'successfully' in message else 'warning',
-                'sticky': False,
-                'next': {
-                    'type': 'ir.actions.act_window',
-                    'res_model': 'c21.pdf.import.log',
-                    'view_mode': 'list,form',
-                    'target': 'current',
-                },
-            },
+            'type': 'ir.actions.act_window',
+            'name': 'Import History',
+            'res_model': 'c21.pdf.import.log',
+            'view_mode': 'list,form',
+            'target': 'current',
         }
-
-    def _get_callback_url(self):
-        """Get callback URL for n8n to update import status"""
-        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url', '')
-        return f'{base_url}/api/pdf-import/callback' if base_url else ''
-
-

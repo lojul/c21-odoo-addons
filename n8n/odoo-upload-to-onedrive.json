@@ -1,0 +1,130 @@
+{
+  "name": "Odoo Upload to OneDrive",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "odoo-upload-to-onedrive",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-node",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300],
+      "webhookId": "odoo-upload-onedrive"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "upload",
+        "driveId": {
+          "__rl": true,
+          "value": "={{ $json.drive_id || '' }}",
+          "mode": "id"
+        },
+        "folderId": {
+          "__rl": true,
+          "value": "={{ $json.folder_id || '' }}",
+          "mode": "id"
+        },
+        "fileName": "={{ $json.file_name }}",
+        "binaryPropertyName": "data"
+      },
+      "id": "onedrive-upload",
+      "name": "Upload to OneDrive",
+      "type": "n8n-nodes-base.microsoftOneDrive",
+      "typeVersion": 1,
+      "position": [450, 300],
+      "credentials": {
+        "microsoftOneDriveOAuth2Api": {
+          "id": "YOUR_ONEDRIVE_CREDENTIAL_ID",
+          "name": "Microsoft OneDrive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "code-prepare",
+      "name": "Prepare File",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [350, 300],
+      "parameters": {
+        "jsCode": "// Decode base64 file from Odoo\nconst input = $input.item.json;\n\nif (!input.file_data || !input.file_name) {\n  throw new Error('Missing file_data or file_name');\n}\n\n// Decode base64 to binary\nconst fileBuffer = Buffer.from(input.file_data, 'base64');\n\n// Create binary data\nconst binaryData = await this.helpers.prepareBinaryData(\n  fileBuffer,\n  input.file_name,\n  'application/pdf'\n);\n\nreturn {\n  json: {\n    file_name: input.file_name,\n    odoo_log_id: input.odoo_log_id,\n    triggered_by: input.triggered_by,\n    // Pass through OneDrive folder settings\n    drive_id: input.drive_id || '',\n    folder_id: input.folder_id || ''\n  },\n  binary: {\n    data: binaryData\n  }\n};"
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, file_name: $json.file_name, message: 'File uploaded to OneDrive' } }}"
+      },
+      "id": "respond-success",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: false, error: $json.error?.message || 'Upload failed' } }}",
+        "options": {
+          "responseCode": 500
+        }
+      },
+      "id": "respond-error",
+      "name": "Respond Error",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [650, 450]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare File": {
+      "main": [
+        [
+          {
+            "node": "Upload to OneDrive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to OneDrive": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "meta": {
+    "instanceId": ""
+  },
+  "pinData": {},
+  "tags": []
+}

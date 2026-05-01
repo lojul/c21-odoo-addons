@@ -80,23 +80,20 @@
         <field name="name">c21.pdf.import.wizard.form</field>
         <field name="model">c21.pdf.import.wizard</field>
         <field name="arch" type="xml">
-            <form string="Import PDFs">
-                <group>
-                    <field name="action_type" widget="radio"/>
-                </group>
-                <group string="Upload PDF" invisible="action_type != 'upload_file'">
-                    <field name="pdf_file" filename="pdf_filename" required="action_type == 'upload_file'"/>
+            <form string="Import PDF">
+                <group string="Upload PDF">
+                    <field name="pdf_file" widget="binary" filename="pdf_filename"/>
                     <field name="pdf_filename" invisible="1"/>
                 </group>
                 <group string="Notes">
                     <field name="notes" nolabel="1" placeholder="Optional notes for this import..."/>
                 </group>
                 <group string="Configuration" groups="base.group_system">
-                    <field name="webhook_url" placeholder="https://your-n8n.app.n8n.cloud/webhook/xxx"/>
+                    <field name="webhook_url" placeholder="https://your-n8n.app.n8n.cloud/webhook/odoo-upload-to-onedrive"/>
                 </group>
                 <footer>
                     <button name="action_trigger_import" type="object"
-                            string="Import" class="btn-primary"/>
+                            string="Upload &amp; Process" class="btn-primary"/>
                     <button string="Cancel" class="btn-secondary" special="cancel"/>
                 </footer>
             </form>
@@ -105,7 +102,7 @@
 
     <!-- Import Wizard Action -->
     <record id="c21_pdf_import_wizard_action" model="ir.actions.act_window">
-        <field name="name">Import PDFs</field>
+        <field name="name">Upload PDF</field>
         <field name="res_model">c21.pdf.import.wizard</field>
         <field name="view_mode">form</field>
         <field name="target">new</field>
