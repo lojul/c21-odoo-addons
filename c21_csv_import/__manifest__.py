@@ -22,7 +22,7 @@ Designed for importing property listings from SPP system.
     'author': 'C21',
     'website': '',
     'license': 'LGPL-3',
-    'depends': ['c21_property_listing'],
+    'depends': ['c21_property_listing', 'c21_pdf_import'],
     'data': [
         # Security
         'security/ir.model.access.csv',

@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- Import Menu (under C21 Properties) -->
-    <menuitem id="menu_c21_import"
-              name="Import"
-              parent="c21_property_listing.c21_property_menu_root"
-              sequence="80"/>
-
+    <!-- Import CSV - uses shared Import menu from c21_pdf_import -->
     <menuitem id="menu_csv_import_wizard"
               name="Import CSV"
-              parent="menu_c21_import"
+              parent="c21_pdf_import.c21_import_menu"
               action="action_csv_import_wizard"
               sequence="10"/>
 
+    <!-- Import History (CSV) -->
     <menuitem id="menu_csv_import_log"
-              name="Import History"
-              parent="menu_c21_import"
+              name="Import History (CSV)"
+              parent="c21_pdf_import.c21_import_menu"
               action="action_csv_import_log"
-              sequence="20"/>
+              sequence="30"/>
 
 </odoo>

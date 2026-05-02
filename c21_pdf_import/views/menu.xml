@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Import Menu (under Property Management) -->
-    <menuitem id="c21_pdf_import_menu"
+    <!-- Import Menu (under Property Management) - shared by PDF and CSV import -->
+    <menuitem id="c21_import_menu"
               name="Import"
               parent="c21_property_listing.c21_property_menu_root"
               sequence="50"/>
 
-    <!-- Upload PDF -->
+    <!-- Import PDF -->
     <menuitem id="c21_pdf_import_trigger_menu"
-              name="Upload PDF"
-              parent="c21_pdf_import_menu"
+              name="Import PDF"
+              parent="c21_import_menu"
               action="c21_pdf_import_wizard_action"
-              sequence="10"/>
-
-    <!-- Import History -->
-    <menuitem id="c21_pdf_import_history_menu"
-              name="Import History"
-              parent="c21_pdf_import_menu"
-              action="c21_pdf_import_log_action"
               sequence="20"/>
+
+    <!-- Import History (PDF) -->
+    <menuitem id="c21_pdf_import_history_menu"
+              name="Import History (PDF)"
+              parent="c21_import_menu"
+              action="c21_pdf_import_log_action"
+              sequence="40"/>
 </odoo>
