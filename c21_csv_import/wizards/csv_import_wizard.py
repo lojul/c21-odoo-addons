@@ -272,8 +272,11 @@ class CsvImportWizard(models.TransientModel):
                 rows = data.get('rows', [])
                 headers = data.get('headers', [])
                 errors = data.get('errors', [])
+                valid_count = data.get('valid_count', 0)
+                duplicate_count = data.get('duplicate_count', 0)
 
-                html = ['<table class="table table-sm table-bordered csv-preview-table">']
+                html = ['<div style="overflow-x: auto;">']
+                html.append('<table class="table table-sm csv-preview-table">')
 
                 # Header row
                 html.append('<thead><tr>')
@@ -283,19 +286,41 @@ class CsvImportWizard(models.TransientModel):
 
                 # Data rows
                 html.append('<tbody>')
-                for i, row in enumerate(rows[:10]):  # First 10 rows
+                for i, row in enumerate(rows[:15]):  # First 15 rows
                     row_errors = [e for e in errors if e.get('row') == i]
                     row_class = 'table-danger' if row_errors else ''
                     html.append(f'<tr class="{row_class}">')
-                    for cell in row:
-                        html.append(f'<td>{cell if cell else ""}</td>')
+
+                    for j, cell in enumerate(row):
+                        # Status column (last) gets colored badge
+                        if j == len(row) - 1:
+                            if cell == 'OK':
+                                badge = '<span style="color: #28a745; font-weight: bold;">✓ OK</span>'
+                            elif cell == 'Duplicate':
+                                badge = '<span style="color: #ffc107; font-weight: bold;">⚠ Duplicate</span>'
+                            else:
+                                badge = f'<span style="color: #dc3545; font-weight: bold;">✗ {cell}</span>'
+                            html.append(f'<td>{badge}</td>')
+                        else:
+                            html.append(f'<td>{cell if cell else "-"}</td>')
+
                     html.append('</tr>')
                 html.append('</tbody>')
-
                 html.append('</table>')
+                html.append('</div>')
 
-                if len(rows) > 10:
-                    html.append(f'<p class="text-muted">... and {len(rows) - 10} more rows</p>')
+                if len(rows) > 15:
+                    html.append(f'<p class="text-muted mt-2">... and {len(rows) - 15} more rows</p>')
+
+                # Summary
+                html.append(f'<div class="mt-3"><strong>Summary:</strong> ')
+                html.append(f'<span class="text-success">{valid_count} valid</span>')
+                if duplicate_count > 0:
+                    html.append(f' | <span class="text-warning">{duplicate_count} duplicates</span>')
+                error_rows = len(set(e["row"] for e in errors)) - duplicate_count
+                if error_rows > 0:
+                    html.append(f' | <span class="text-danger">{error_rows} errors</span>')
+                html.append('</div>')
 
                 record.preview_html = ''.join(html)
             except (json.JSONDecodeError, KeyError):
@@ -513,6 +538,31 @@ class CsvImportWizard(models.TransientModel):
 
         return vals
 
+    def _check_duplicate(self, vals):
+        """Check if a property already exists with same ref_code or building+floor+unit."""
+        PropertyListing = self.env['c21.property.listing']
+
+        # Check by ref_code
+        if vals.get('ref_code'):
+            existing = PropertyListing.search([('ref_code', '=', vals['ref_code'])], limit=1)
+            if existing:
+                return f"Duplicate ref_code: {vals['ref_code']}"
+
+        # Check by building + floor + unit (if all provided)
+        building = vals.get('building_name')
+        floor = vals.get('floor')
+        unit = vals.get('unit')
+        if building and floor and unit:
+            existing = PropertyListing.search([
+                ('building_name', '=', building),
+                ('floor', '=', floor),
+                ('unit', '=', unit),
+            ], limit=1)
+            if existing:
+                return f"Duplicate: {building} {floor} {unit}"
+
+        return None
+
     def action_preview(self):
         """Generate preview of the import."""
         self.ensure_one()
@@ -524,45 +574,86 @@ class CsvImportWizard(models.TransientModel):
         else:
             data_rows = rows
 
-        # Get mapped field names for headers
+        # Key columns to show in preview (limit to avoid wide table)
+        preview_fields = ['name', 'name_cn', 'building_name', 'district', 'floor', 'unit', 'ref_code']
+        preview_mapping = {}
         headers = []
+
         for line in self.mapping_ids.sorted('sequence'):
-            if line.odoo_field != 'skip':
-                headers.append(line.csv_column)
+            if line.odoo_field in preview_fields:
+                preview_mapping[line.sequence] = line.odoo_field
+                # Shorter header names
+                short_names = {
+                    'name': 'Name (EN)',
+                    'name_cn': 'Name (CN)',
+                    'building_name': 'Building',
+                    'district': 'District',
+                    'floor': 'Floor',
+                    'unit': 'Unit',
+                    'ref_code': 'Ref Code',
+                }
+                headers.append(short_names.get(line.odoo_field, line.csv_column))
+
+        # Add status column
+        headers.append('Status')
 
         preview_rows = []
         errors = []
         valid_count = 0
+        duplicate_count = 0
 
         for i, row in enumerate(data_rows):
             transformed, row_errors = self._transform_row(row, mapping)
+            status = 'OK'
 
-            # Validate required fields
-            if not transformed.get('name') and not transformed.get('name_cn'):
-                row_errors.append({'row': i, 'msg': 'Missing name'})
+            # Validate: need at least name, name_cn, OR building_name
+            has_identifier = (
+                transformed.get('name') or
+                transformed.get('name_cn') or
+                transformed.get('building_name')
+            )
+            if not has_identifier:
+                row_errors.append({'row': i, 'msg': 'Missing name/building'})
+                status = 'Missing name'
 
+            # Validate district
             if not transformed.get('district'):
                 row_errors.append({'row': i, 'msg': 'Missing district'})
+                if status == 'OK':
+                    status = 'Missing district'
+
+            # Check for duplicates
+            if not row_errors:
+                dup_msg = self._check_duplicate(transformed)
+                if dup_msg:
+                    row_errors.append({'row': i, 'msg': dup_msg})
+                    status = 'Duplicate'
+                    duplicate_count += 1
 
             if row_errors:
                 errors.extend(row_errors)
             else:
                 valid_count += 1
 
-            # Build preview row (only mapped columns)
+            # Build preview row (only key columns)
             preview_row = []
-            for line in self.mapping_ids.sorted('sequence'):
-                if line.odoo_field != 'skip':
-                    col_idx = line.sequence
-                    val = row[col_idx] if col_idx < len(row) else ''
-                    preview_row.append(val)
+            for col_idx in sorted(preview_mapping.keys()):
+                val = row[col_idx] if col_idx < len(row) else ''
+                # Truncate long values
+                if len(val) > 20:
+                    val = val[:18] + '..'
+                preview_row.append(val)
 
+            # Add status
+            preview_row.append(status)
             preview_rows.append(preview_row)
 
         self.preview_data = json.dumps({
             'headers': headers,
             'rows': preview_rows,
             'errors': errors,
+            'valid_count': valid_count,
+            'duplicate_count': duplicate_count,
         })
 
         self.error_count = len(set(e['row'] for e in errors))
@@ -590,12 +681,20 @@ class CsvImportWizard(models.TransientModel):
 
         PropertyListing = self.env['c21.property.listing']
         created_ids = []
+        skipped_count = 0
         error_details = []
 
         for i, row in enumerate(data_rows):
             try:
                 vals, _ = self._transform_row(row, mapping)
                 vals = self._resolve_relations(vals)
+
+                # Check for duplicates - skip if exists
+                dup_msg = self._check_duplicate(vals)
+                if dup_msg:
+                    skipped_count += 1
+                    error_details.append(f"Row {i+1}: Skipped - {dup_msg}")
+                    continue
 
                 # Set defaults
                 if 'listing_type' not in vals:
@@ -607,11 +706,20 @@ class CsvImportWizard(models.TransientModel):
                         'c21.property.listing.ref_code'
                     ) or f'CSV-{i+1}'
 
-                # Set name from name_cn if not provided
-                if not vals.get('name') and vals.get('name_cn'):
-                    vals['name'] = vals['name_cn']
-                elif not vals.get('name'):
-                    vals['name'] = vals.get('ref_code', f'Property {i+1}')
+                # Set name: prefer name_cn, then building_name, then ref_code
+                if not vals.get('name'):
+                    if vals.get('name_cn'):
+                        vals['name'] = vals['name_cn']
+                    elif vals.get('building_name'):
+                        # Combine building + floor + unit for name
+                        parts = [vals['building_name']]
+                        if vals.get('floor'):
+                            parts.append(vals['floor'])
+                        if vals.get('unit'):
+                            parts.append(vals['unit'])
+                        vals['name'] = ' '.join(parts)
+                    else:
+                        vals['name'] = vals.get('ref_code', f'Property {i+1}')
 
                 # Set district default
                 if not vals.get('district'):
