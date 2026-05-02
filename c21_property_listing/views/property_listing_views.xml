@@ -259,11 +259,11 @@
                 <field name="property_type_id" optional="hide"/>
                 <field name="building_grade" optional="hide"/>
                 <field name="source_id" optional="hide"/>
-                <field name="create_date" optional="show" string="Created / 建立日期"/>
                 <field name="user_id" optional="hide" string="負責"/>
                 <field name="followup_date" optional="hide"/>
                 <field name="state"/>
                 <field name="approval_status"/>
+                <field name="create_date" widget="date" optional="show" string="Created / 建立"/>
                 <button name="action_open_form" type="object" icon="fa-pencil" title="Edit"/>
             </list>
         </field>
