@@ -39,3 +39,13 @@ class CsvImportLog(models.Model):
             'view_mode': 'list,form',
             'domain': [('id', 'in', self.property_ids.ids)],
         }
+
+    def action_back_to_list(self):
+        """Go back to Import History list."""
+        return {
+            'type': 'ir.actions.act_window',
+            'name': 'Import History (CSV)',
+            'res_model': 'c21.csv.import.log',
+            'view_mode': 'list,form',
+            'target': 'current',
+        }
