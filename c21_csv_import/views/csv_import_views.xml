@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- CSV Import Wizard Form View -->
+    <record id="view_csv_import_wizard_form" model="ir.ui.view">
+        <field name="name">c21.csv.import.wizard.form</field>
+        <field name="model">c21.csv.import.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Import CSV">
+                <header>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="upload,mapping,preview,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <span invisible="state != 'upload'">Upload CSV File</span>
+                            <span invisible="state != 'mapping'">Map Columns</span>
+                            <span invisible="state != 'preview'">Preview Import</span>
+                            <span invisible="state != 'done'">Import Complete</span>
+                        </h1>
+                    </div>
+
+                    <!-- Step 1: Upload -->
+                    <group invisible="state != 'upload'">
+                        <group>
+                            <field name="csv_file" widget="binary" filename="csv_filename"/>
+                            <field name="csv_filename" invisible="1"/>
+                            <field name="delimiter"/>
+                            <field name="skip_header"/>
+                        </group>
+                        <group>
+                            <div class="alert alert-info" role="alert">
+                                <strong>Supported formats:</strong>
+                                <ul class="mb-0">
+                                    <li>UTF-8 or GBK encoded CSV files</li>
+                                    <li>Comma, semicolon, or tab delimited</li>
+                                    <li>Chinese district names will be auto-converted</li>
+                                    <li>Price formats: $69,000 / $16.4萬 / @109.33</li>
+                                    <li>Date format: DD/MM/YYYY</li>
+                                </ul>
+                            </div>
+                        </group>
+                    </group>
+
+                    <!-- Step 2: Mapping -->
+                    <group invisible="state != 'mapping'" string="Column Mapping">
+                        <div class="alert alert-info mb-3" role="alert">
+                            Map each CSV column to an Odoo field. Columns marked "Skip" will be ignored.
+                        </div>
+                        <field name="mapping_ids" nolabel="1">
+                            <list editable="bottom">
+                                <field name="sequence" readonly="1" string="#"/>
+                                <field name="csv_column" readonly="1" string="CSV Column"/>
+                                <field name="sample_data" readonly="1" string="Sample"/>
+                                <field name="odoo_field" string="Map To"/>
+                            </list>
+                        </field>
+                    </group>
+
+                    <!-- Step 3: Preview -->
+                    <group invisible="state != 'preview'">
+                        <group>
+                            <div class="alert alert-info" role="alert">
+                                <strong><field name="total_rows" readonly="1" class="oe_inline"/> rows</strong> found.
+                                <span class="text-danger" invisible="error_count == 0">
+                                    <strong><field name="error_count" readonly="1" class="oe_inline"/></strong> validation errors (highlighted in red).
+                                </span>
+                                <span class="text-success" invisible="error_count != 0">
+                                    All rows valid!
+                                </span>
+                            </div>
+                        </group>
+                        <group>
+                            <field name="preview_html" nolabel="1" class="o_field_html"/>
+                        </group>
+                    </group>
+
+                    <!-- Step 4: Done -->
+                    <group invisible="state != 'done'">
+                        <group>
+                            <div class="alert alert-success" role="alert" invisible="error_count > 0">
+                                <i class="fa fa-check-circle"/> Successfully imported <strong><field name="success_count" readonly="1" class="oe_inline"/></strong> properties!
+                            </div>
+                            <div class="alert alert-warning" role="alert" invisible="error_count == 0">
+                                <i class="fa fa-exclamation-triangle"/> Imported <strong><field name="success_count" readonly="1" class="oe_inline"/></strong> properties with <strong><field name="error_count" readonly="1" class="oe_inline"/></strong> errors.
+                            </div>
+                        </group>
+                        <group invisible="not error_details">
+                            <field name="error_details" readonly="1" string="Error Details"/>
+                        </group>
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="action_parse" type="object" string="Parse CSV"
+                            class="btn-primary" invisible="state != 'upload'"/>
+                    <button name="action_preview" type="object" string="Preview"
+                            class="btn-primary" invisible="state != 'mapping'"/>
+                    <button name="action_import" type="object" string="Import"
+                            class="btn-primary" invisible="state != 'preview'"/>
+                    <button name="action_view_properties" type="object" string="View Properties"
+                            class="btn-primary" invisible="state != 'done' or success_count == 0"/>
+                    <button name="action_view_log" type="object" string="View Log"
+                            class="btn-secondary" invisible="state != 'done'"/>
+                    <button string="Close" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- CSV Import Wizard Action -->
+    <record id="action_csv_import_wizard" model="ir.actions.act_window">
+        <field name="name">Import CSV</field>
+        <field name="res_model">c21.csv.import.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Import Log List View -->
+    <record id="view_csv_import_log_list" model="ir.ui.view">
+        <field name="name">c21.csv.import.log.list</field>
+        <field name="model">c21.csv.import.log</field>
+        <field name="arch" type="xml">
+            <list string="Import History">
+                <field name="name"/>
+                <field name="import_date"/>
+                <field name="triggered_by"/>
+                <field name="total_rows"/>
+                <field name="success_count"/>
+                <field name="error_count"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'completed'"
+                       decoration-warning="status == 'partial'"
+                       decoration-danger="status == 'failed'"
+                       decoration-muted="status == 'pending'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Import Log Form View -->
+    <record id="view_csv_import_log_form" model="ir.ui.view">
+        <field name="name">c21.csv.import.log.form</field>
+        <field name="model">c21.csv.import.log</field>
+        <field name="arch" type="xml">
+            <form string="Import Log">
+                <header>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="import_date"/>
+                            <field name="triggered_by"/>
+                        </group>
+                        <group>
+                            <field name="total_rows"/>
+                            <field name="success_count"/>
+                            <field name="error_count"/>
+                        </group>
+                    </group>
+                    <group string="Created Properties" invisible="not property_ids">
+                        <field name="property_ids" nolabel="1">
+                            <list>
+                                <field name="ref_code"/>
+                                <field name="name"/>
+                                <field name="name_cn"/>
+                                <field name="district"/>
+                                <field name="building_name"/>
+                            </list>
+                        </field>
+                    </group>
+                    <group string="Errors" invisible="not error_details">
+                        <field name="error_details" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Import Log Action -->
+    <record id="action_csv_import_log" model="ir.actions.act_window">
+        <field name="name">Import History</field>
+        <field name="res_model">c21.csv.import.log</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

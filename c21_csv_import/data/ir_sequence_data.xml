@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Sequence for auto-generating ref codes -->
+        <record id="seq_property_ref_code" model="ir.sequence">
+            <field name="name">Property Ref Code</field>
+            <field name="code">c21.property.listing.ref_code</field>
+            <field name="prefix">SPP-</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+        </record>
+
+    </data>
+</odoo>

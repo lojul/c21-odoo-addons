@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_csv_import_wizard_user,c21.csv.import.wizard.user,model_c21_csv_import_wizard,c21_property_listing.group_c21_property_user,1,1,1,1
+access_csv_import_line_user,c21.csv.import.line.user,model_c21_csv_import_line,c21_property_listing.group_c21_property_user,1,1,1,1
+access_csv_import_log_user,c21.csv.import.log.user,model_c21_csv_import_log,c21_property_listing.group_c21_property_user,1,1,1,0
+access_csv_import_log_manager,c21.csv.import.log.manager,model_c21_csv_import_log,c21_property_listing.group_c21_property_manager,1,1,1,1

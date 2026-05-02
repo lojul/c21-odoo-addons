@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Import Menu (under C21 Properties) -->
+    <menuitem id="menu_c21_import"
+              name="Import"
+              parent="c21_property_listing.c21_property_menu_root"
+              sequence="80"/>
+
+    <menuitem id="menu_csv_import_wizard"
+              name="Import CSV"
+              parent="menu_c21_import"
+              action="action_csv_import_wizard"
+              sequence="10"/>
+
+    <menuitem id="menu_csv_import_log"
+              name="Import History"
+              parent="menu_c21_import"
+              action="action_csv_import_log"
+              sequence="20"/>
+
+</odoo>
