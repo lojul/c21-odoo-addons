@@ -263,7 +263,7 @@
                 <field name="followup_date" optional="hide"/>
                 <field name="state"/>
                 <field name="approval_status"/>
-                <field name="create_date" widget="date" optional="show" string="Created / 建立"/>
+                <field name="created_date" optional="show"/>
                 <button name="action_open_form" type="object" icon="fa-pencil" title="Edit"/>
             </list>
         </field>

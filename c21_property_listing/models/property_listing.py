@@ -180,6 +180,7 @@ class C21PropertyListing(models.Model):
     image_count = fields.Integer('Images', compute='_compute_image_count')
     contact_count = fields.Integer('Contacts', compute='_compute_contact_count')
     display_price = fields.Char('Price / 價格', compute='_compute_display_price')
+    created_date = fields.Date('Created / 建立', compute='_compute_created_date', store=True)
 
     _ref_code_unique = models.Constraint(
         'UNIQUE(ref_code)',
@@ -272,6 +273,14 @@ class C21PropertyListing(models.Model):
         mapped = {d['property_id'][0]: d['property_id_count'] for d in data}
         for record in self:
             record.contact_count = mapped.get(record.id, 0)
+
+    @api.depends('create_date')
+    def _compute_created_date(self):
+        for record in self:
+            if record.create_date:
+                record.created_date = record.create_date.date()
+            else:
+                record.created_date = False
 
     @api.depends('listing_type', 'hot_desk_price', 'dedicated_desk_price', 'office_price', 'asking_rent')
     def _compute_display_price(self):
