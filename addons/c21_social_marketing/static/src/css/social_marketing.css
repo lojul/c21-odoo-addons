@@ -1,0 +1,74 @@
+/* C21 Social Marketing Styles */
+
+/* Post kanban image preview */
+.o_kanban_view .o_kanban_image {
+    width: 100%;
+    max-height: 200px;
+    overflow: hidden;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.o_kanban_view .o_kanban_image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* State badges */
+.o_field_badge[data-value="draft"] {
+    background-color: #6c757d;
+}
+
+.o_field_badge[data-value="pending"] {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.o_field_badge[data-value="approved"] {
+    background-color: #17a2b8;
+}
+
+.o_field_badge[data-value="scheduled"] {
+    background-color: #28a745;
+}
+
+.o_field_badge[data-value="posted"] {
+    background-color: #28a745;
+}
+
+.o_field_badge[data-value="failed"] {
+    background-color: #dc3545;
+}
+
+/* Platform icons */
+.platform-instagram::before {
+    content: "\f16d";
+    font-family: FontAwesome;
+    margin-right: 4px;
+}
+
+.platform-facebook::before {
+    content: "\f09a";
+    font-family: FontAwesome;
+    margin-right: 4px;
+}
+
+.platform-threads::before {
+    content: "\f1fa";
+    font-family: FontAwesome;
+    margin-right: 4px;
+}
+
+/* Image preview in form */
+.o_field_image img {
+    max-width: 300px;
+    max-height: 400px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Caption text areas */
+.o_field_text textarea {
+    min-height: 100px;
+}

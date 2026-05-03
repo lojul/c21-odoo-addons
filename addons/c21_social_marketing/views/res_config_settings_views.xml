@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Settings Form View -->
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.c21.social</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority">50</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Social Marketing" string="Social Marketing" name="c21_social_marketing" logo="/c21_social_marketing/static/description/icon.png">
+                    <block title="API 設定" name="api_settings">
+                        <setting string="OpenRouter API Key" help="用於 AI 生成帖文內容 (DeepSeek)">
+                            <field name="social_openrouter_api_key" password="True"/>
+                        </setting>
+                        <setting string="Buffer API Token" help="用於發佈帖文到社交媒體">
+                            <field name="social_buffer_api_token" password="True"/>
+                        </setting>
+                        <setting string="imgbb API Key" help="用於圖片託管">
+                            <field name="social_imgbb_api_key" password="True"/>
+                        </setting>
+                    </block>
+                    <block title="AI 設定" name="ai_settings">
+                        <setting string="AI 模型" help="OpenRouter 模型 ID">
+                            <field name="social_ai_model" placeholder="deepseek/deepseek-chat"/>
+                        </setting>
+                    </block>
+                    <block title="自動化設定" name="automation_settings">
+                        <setting string="自動審批" help="生成的帖文自動通過審批">
+                            <field name="social_auto_approve"/>
+                        </setting>
+                        <setting string="自動發送" help="審批後自動發送到 Buffer">
+                            <field name="social_auto_send"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Settings Action -->
+    <record id="action_social_marketing_config" model="ir.actions.act_window">
+        <field name="name">Social Marketing 設定</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'c21_social_marketing', 'bin_size': False}</field>
+    </record>
+
+</odoo>

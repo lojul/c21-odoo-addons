@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_social_post_user,c21.social.post.user,model_c21_social_post,base.group_user,1,1,1,0
+access_social_post_manager,c21.social.post.manager,model_c21_social_post,base.group_system,1,1,1,1
+access_social_channel_user,c21.social.channel.user,model_c21_social_channel,base.group_user,1,0,0,0
+access_social_channel_manager,c21.social.channel.manager,model_c21_social_channel,base.group_system,1,1,1,1
+access_social_feed_user,c21.social.feed.user,model_c21_social_feed,base.group_user,1,0,0,0
+access_social_feed_manager,c21.social.feed.manager,model_c21_social_feed,base.group_system,1,1,1,1
+access_social_news_user,c21.social.news.user,model_c21_social_news,base.group_user,1,0,0,0
+access_social_news_manager,c21.social.news.manager,model_c21_social_news,base.group_system,1,1,1,1

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Post Form View -->
+    <record id="view_social_post_form" model="ir.ui.view">
+        <field name="name">c21.social.post.form</field>
+        <field name="model">c21.social.post</field>
+        <field name="arch" type="xml">
+            <form string="社交媒體帖文">
+                <header>
+                    <button name="action_generate_captions" type="object" string="AI 生成內容"
+                            class="btn-secondary" invisible="state != 'draft'"/>
+                    <button name="action_submit_for_approval" type="object" string="提交審批"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="審批通過"
+                            class="btn-success" invisible="state != 'pending'"/>
+                    <button name="action_reject" type="object" string="退回"
+                            class="btn-secondary" invisible="state != 'pending'"/>
+                    <button name="action_send_to_buffer" type="object" string="發送至 Buffer"
+                            class="btn-primary" invisible="state not in ('approved',)"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,scheduled,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    </div>
+                    <group>
+                        <group string="內容">
+                            <field name="headline_zh" placeholder="20字內繁體中文標題"/>
+                            <field name="data_point" placeholder="關鍵數據點"/>
+                            <field name="district"/>
+                            <field name="source"/>
+                            <field name="background_color" widget="radio"/>
+                        </group>
+                        <group string="圖片預覽">
+                            <field name="image" widget="image" options="{'size': [300, 375]}"/>
+                            <button name="action_generate_image" type="object"
+                                    string="重新生成圖片" class="btn-outline-secondary"
+                                    icon="fa-refresh" invisible="not headline_zh"/>
+                            <field name="image_url" readonly="1" string="圖片連結"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Instagram" name="instagram">
+                            <field name="ig_caption" placeholder="Instagram 說明文（100字內）"/>
+                        </page>
+                        <page string="Facebook" name="facebook">
+                            <field name="fb_caption" placeholder="Facebook 說明文（200字內）"/>
+                        </page>
+                        <page string="Threads" name="threads">
+                            <field name="threads_caption" placeholder="Threads 說明文"/>
+                        </page>
+                        <page string="發佈設定" name="settings">
+                            <group>
+                                <field name="channel_ids" widget="many2many_checkboxes"/>
+                                <field name="scheduled_time"/>
+                                <field name="posted_time" readonly="1"/>
+                                <field name="is_auto_generated" readonly="1"/>
+                            </group>
+                        </page>
+                        <page string="相關新聞" name="news">
+                            <field name="news_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="source"/>
+                                    <field name="fetch_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="技術資訊" name="technical" groups="base.group_system">
+                            <group>
+                                <field name="buffer_response" readonly="1"/>
+                                <field name="error_message" readonly="1" invisible="not error_message"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- Post List View -->
+    <record id="view_social_post_list" model="ir.ui.view">
+        <field name="name">c21.social.post.list</field>
+        <field name="model">c21.social.post</field>
+        <field name="arch" type="xml">
+            <list string="社交媒體帖文" default_order="create_date desc">
+                <field name="create_date" string="建立時間"/>
+                <field name="headline_zh"/>
+                <field name="district"/>
+                <field name="source"/>
+                <field name="background_color"/>
+                <field name="channel_ids" widget="many2many_tags"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'"
+                       decoration-warning="state == 'pending'"
+                       decoration-success="state in ('approved', 'scheduled', 'posted')"
+                       decoration-danger="state == 'failed'"/>
+                <field name="is_auto_generated" string="自動"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Post Kanban View -->
+    <record id="view_social_post_kanban" model="ir.ui.view">
+        <field name="name">c21.social.post.kanban</field>
+        <field name="model">c21.social.post</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="state"/>
+                <field name="image"/>
+                <field name="headline_zh"/>
+                <field name="channel_ids"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_image" t-if="record.image.raw_value">
+                            <field name="image" widget="image" options="{'preview_image': 'image'}"/>
+                        </div>
+                        <div class="oe_kanban_details">
+                            <strong class="o_kanban_record_title">
+                                <field name="headline_zh"/>
+                            </strong>
+                            <div class="o_kanban_record_subtitle">
+                                <field name="district"/> | <field name="source"/>
+                            </div>
+                            <div class="mt-2">
+                                <field name="channel_ids" widget="many2many_tags"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Post Search View -->
+    <record id="view_social_post_search" model="ir.ui.view">
+        <field name="name">c21.social.post.search</field>
+        <field name="model">c21.social.post</field>
+        <field name="arch" type="xml">
+            <search string="搜尋帖文">
+                <field name="headline_zh"/>
+                <field name="district"/>
+                <field name="source"/>
+                <filter string="草稿" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="待審批" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="已審批" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="已發佈" name="posted" domain="[('state', '=', 'posted')]"/>
+                <filter string="失敗" name="failed" domain="[('state', '=', 'failed')]"/>
+                <separator/>
+                <filter string="自動生成" name="auto" domain="[('is_auto_generated', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Post Action -->
+    <record id="action_social_post" model="ir.actions.act_window">
+        <field name="name">帖文</field>
+        <field name="res_model">c21.social.post</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                建立您的第一個社交媒體帖文
+            </p>
+            <p>
+                系統會自動抓取新聞並生成帖文內容。
+            </p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Feed Form View -->
+    <record id="view_social_feed_form" model="ir.ui.view">
+        <field name="name">c21.social.feed.form</field>
+        <field name="model">c21.social.feed</field>
+        <field name="arch" type="xml">
+            <form string="RSS 來源">
+                <header>
+                    <button name="action_fetch_now" type="object" string="立即抓取" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="基本資訊">
+                            <field name="name"/>
+                            <field name="url" widget="url"/>
+                            <field name="language"/>
+                            <field name="priority"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="統計">
+                            <field name="last_fetch" readonly="1"/>
+                            <field name="news_count" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Feed List View -->
+    <record id="view_social_feed_list" model="ir.ui.view">
+        <field name="name">c21.social.feed.list</field>
+        <field name="model">c21.social.feed</field>
+        <field name="arch" type="xml">
+            <list string="RSS 來源">
+                <field name="priority"/>
+                <field name="name"/>
+                <field name="last_fetch"/>
+                <field name="news_count"/>
+                <field name="active"/>
+                <button name="action_fetch_now" type="object" string="抓取" icon="fa-download" class="btn-link"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Feed Action -->
+    <record id="action_social_feed" model="ir.actions.act_window">
+        <field name="name">RSS 來源</field>
+        <field name="res_model">c21.social.feed</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- News Form View -->
+    <record id="view_social_news_form" model="ir.ui.view">
+        <field name="name">c21.social.news.form</field>
+        <field name="model">c21.social.news</field>
+        <field name="arch" type="xml">
+            <form string="新聞">
+                <header>
+                    <button name="action_create_post" type="object" string="生成帖文" class="btn-primary" invisible="used"/>
+                    <field name="used" widget="boolean_toggle" readonly="1"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="新聞資訊">
+                            <field name="source" readonly="1"/>
+                            <field name="feed_id" readonly="1"/>
+                            <field name="fetch_date" readonly="1"/>
+                            <field name="publish_date" readonly="1"/>
+                            <field name="url" widget="url" readonly="1"/>
+                        </group>
+                        <group string="相關性">
+                            <field name="is_property_news" readonly="1"/>
+                            <field name="relevance_score" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="描述">
+                        <field name="description" nolabel="1" readonly="1"/>
+                    </group>
+                    <group string="相關帖文" invisible="not post_ids">
+                        <field name="post_ids" nolabel="1" readonly="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- News List View -->
+    <record id="view_social_news_list" model="ir.ui.view">
+        <field name="name">c21.social.news.list</field>
+        <field name="model">c21.social.news</field>
+        <field name="arch" type="xml">
+            <list string="新聞" default_order="fetch_date desc">
+                <field name="fetch_date"/>
+                <field name="name"/>
+                <field name="source"/>
+                <field name="is_property_news"/>
+                <field name="relevance_score"/>
+                <field name="used"/>
+                <field name="url" widget="url"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- News Search View -->
+    <record id="view_social_news_search" model="ir.ui.view">
+        <field name="name">c21.social.news.search</field>
+        <field name="model">c21.social.news</field>
+        <field name="arch" type="xml">
+            <search string="搜尋新聞">
+                <field name="name"/>
+                <field name="source"/>
+                <filter string="地產新聞" name="property" domain="[('is_property_news', '=', True)]"/>
+                <filter string="未使用" name="unused" domain="[('used', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- News Action -->
+    <record id="action_social_news" model="ir.actions.act_window">
+        <field name="name">新聞</field>
+        <field name="res_model">c21.social.news</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_property': 1}</field>
+    </record>
+
+</odoo>
