@@ -59,6 +59,11 @@ class AiChatSession(models.Model):
         string='Summary',
         help='Auto-generated summary of the conversation')
 
+    # Memory/Context for follow-up queries
+    last_search_context = fields.Text(
+        string='Last Search Context',
+        help='JSON data about the last search for follow-up queries')
+
     # Statistics
     total_tokens = fields.Integer(
         string='Total Tokens',
@@ -159,3 +164,26 @@ class AiChatSession(models.Model):
         }
         if stat_type in field_map:
             self.write({field_map[stat_type]: self[field_map[stat_type]] + 1})
+
+    def set_search_context(self, context_type, results, query):
+        """Store last search context for follow-up queries"""
+        import json
+        self.ensure_one()
+        context = {
+            'type': context_type,
+            'query': query,
+            'results': results[:5] if results else [],  # Store top 5 results
+            'count': len(results) if results else 0,
+        }
+        self.write({'last_search_context': json.dumps(context, ensure_ascii=False)})
+
+    def get_search_context(self):
+        """Get last search context"""
+        import json
+        self.ensure_one()
+        if self.last_search_context:
+            try:
+                return json.loads(self.last_search_context)
+            except json.JSONDecodeError:
+                return None
+        return None

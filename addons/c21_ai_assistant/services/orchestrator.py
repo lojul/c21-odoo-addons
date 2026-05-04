@@ -211,6 +211,9 @@ class Orchestrator:
         if search_result.get('results'):
             formatted = search_result.get('formatted', '')
 
+            # Store context for follow-up queries
+            session.set_search_context('property', search_result['results'], query)
+
             return {
                 'response': formatted,
                 'intent': 'property_search',
@@ -221,9 +224,19 @@ class Orchestrator:
                 'response_time': time.time() - start_time,
             }
 
-        # No results - return simple message (don't use LLM to avoid hallucination)
+        # No results - return helpful message with search tips
+        tips = """未找到符合條件的物業。
+
+**搜尋提示：**
+• 按地區搜尋：「中環寫字樓」「銅鑼灣商舖」
+• 按租金範圍：「20k-50k」「租金5萬以下」
+• 按面積搜尋：「1000呎以上」「2000sqft」
+• 按類型搜尋：「寫字樓」「商舖」「工廈」「coworking」
+
+請嘗試其他搜尋條件。"""
+
         return {
-            'response': '未找到符合條件的物業。請嘗試調整搜尋條件。',
+            'response': tips,
             'intent': 'property_search',
             'search_results': [],
             'sources': [],
@@ -262,7 +275,34 @@ class Orchestrator:
         # Extract the actual search term (remove "find", "search", etc.)
         search_term = self._extract_search_term(query)
 
-        # For follow-up requests, try to get name from context
+        # For follow-up requests, try to get info from stored context first
+        if is_followup:
+            # Check stored search context
+            stored_context = session.get_search_context()
+            if stored_context and stored_context.get('results'):
+                results = stored_context['results']
+                if len(results) == 1:
+                    # Single result - use it directly
+                    record = results[0]
+                    record_id = record.get('id')
+                    record_name = record.get('name', '')
+                    link = f"/web#id={record_id}&model=res.partner&view_type=form"
+                    response = f"**[{record_name}]({link})** 的資料:\n"
+                    if record.get('email'):
+                        response += f"電郵: {record['email']}\n"
+                    if record.get('phone'):
+                        response += f"電話: [{record['phone']}]({link})"
+                    return {
+                        'response': response,
+                        'intent': 'crm_search',
+                        'search_results': results,
+                        'sources': [],
+                        'model': None,
+                        'tokens': 0,
+                        'response_time': time.time() - start_time,
+                    }
+
+        # Try to extract name from conversation history
         if is_followup and conversation_history:
             # Look for a name in previous assistant responses
             for msg in reversed(conversation_history):
@@ -354,6 +394,9 @@ class Orchestrator:
                     'response_time': time.time() - start_time,
                 }
 
+            # Store context for follow-up queries
+            session.set_search_context('crm', search_result['results'], query)
+
             # Return formatted results directly (don't let LLM paraphrase)
             return {
                 'response': formatted,
@@ -365,8 +408,19 @@ class Orchestrator:
                 'response_time': time.time() - start_time,
             }
 
+        # No results - return helpful message with search tips
+        tips = """未找到符合條件的聯絡人/客戶。
+
+**搜尋提示：**
+• 按姓名搜尋：「Stephen Wong」「陳大文」
+• 按公司搜尋：「ABC Company」
+• 按電郵搜尋：「john@example.com」
+• 搜尋潛在客戶：「lead ABC」「prospect 陳生」
+
+請嘗試其他搜尋條件。"""
+
         return {
-            'response': '未找到符合條件的 CRM 記錄。',
+            'response': tips,
             'intent': 'crm_search',
             'search_results': [],
             'sources': [],
