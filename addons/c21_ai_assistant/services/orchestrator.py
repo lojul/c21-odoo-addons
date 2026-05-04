@@ -288,14 +288,28 @@ class Orchestrator:
                 'response_time': time.time() - start_time,
             }
 
-        # No results - return helpful message with search tips
-        tips = """未找到符合條件的物業。
+        # No results - check if it's an unavailable district
+        unavailable_districts = ['ma on shan', '馬鞍山', 'tai po', '大埔', 'yuen long', '元朗',
+                                  'tseung kwan o', '將軍澳', 'diamond hill', '鑽石山']
+        search_lower = search_term.lower() if search_term else ''
+
+        is_unavailable_district = any(d in search_lower for d in unavailable_districts)
+
+        if is_unavailable_district:
+            tips = f"""抱歉，目前沒有「{search_term}」的物業。
+
+**目前有物業的地區：**
+中環、上環、灣仔、銅鑼灣、北角、尖沙咀、旺角、觀塘、九龍灣、荃灣、沙田、葵涌等。
+
+請選擇其他地區搜尋。"""
+        else:
+            tips = """未找到符合條件的物業。
 
 **搜尋提示：**
-• 按地區搜尋：「中環寫字樓」「銅鑼灣商舖」
+• 按地區搜尋：「中環」「銅鑼灣」「觀塘」
 • 按租金範圍：「20k-50k」「租金5萬以下」
 • 按面積搜尋：「1000呎以上」「2000sqft」
-• 按類型搜尋：「寫字樓」「商舖」「工廈」「coworking」
+• 按類型搜尋：「寫字樓」「商舖」「工廈」
 
 請嘗試其他搜尋條件。"""
 

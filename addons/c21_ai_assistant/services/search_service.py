@@ -9,6 +9,36 @@ _logger = logging.getLogger(__name__)
 class SearchService:
     """Service for searching Odoo models"""
 
+    # District name mapping (common names → database code)
+    DISTRICT_MAP = {
+        # English names
+        'central': 'central', '中環': 'central',
+        'admiralty': 'admiralty', '金鐘': 'admiralty',
+        'wan chai': 'wan_chai', 'wanchai': 'wan_chai', '灣仔': 'wan_chai',
+        'causeway bay': 'causeway_bay', '銅鑼灣': 'causeway_bay',
+        'north point': 'north_point', '北角': 'north_point',
+        'quarry bay': 'quarry_bay', '鰂魚涌': 'quarry_bay',
+        'tsim sha tsui': 'tsim_sha_tsui', 'tst': 'tsim_sha_tsui', '尖沙咀': 'tsim_sha_tsui',
+        'mong kok': 'mong_kok', '旺角': 'mong_kok',
+        'kwun tong': 'kwun_tong', '觀塘': 'kwun_tong',
+        'tsuen wan': 'tsuen_wan', '荃灣': 'tsuen_wan',
+        'sha tin': 'sha_tin', 'shatin': 'sha_tin', '沙田': 'sha_tin',
+        'sheung wan': 'sheung_wan', '上環': 'sheung_wan',
+        'sai ying pun': 'sai_ying_pun', '西營盤': 'sai_ying_pun',
+        'jordan': 'jordan', '佐敦': 'jordan',
+        'kowloon bay': 'kowloon_bay', '九龍灣': 'kowloon_bay',
+        'kwai chung': 'kwai_chung', '葵涌': 'kwai_chung',
+        'cheung sha wan': 'cheung_sha_wan', '長沙灣': 'cheung_sha_wan',
+        'san po kong': 'san_po_kong', '新蒲崗': 'san_po_kong',
+        'sham shui po': 'sham_shui_po', '深水埗': 'sham_shui_po',
+        'tuen mun': 'tuen_mun', '屯門': 'tuen_mun',
+        'po lam': 'po_lam', '寶琳': 'po_lam',
+        # Not in database but common searches
+        'ma on shan': None, '馬鞍山': None,  # Not available
+        'tai po': None, '大埔': None,  # Not available
+        'yuen long': None, '元朗': None,  # Not available
+    }
+
     def __init__(self, env):
         self.env = env
         self._load_config()
@@ -85,9 +115,19 @@ class SearchService:
             _logger.error(f"[AI Assistant] Property search error: {str(e)}")
             return {'error': str(e), 'results': [], 'count': 0}
 
+    def _normalize_district(self, district_input):
+        """Convert district name to database code"""
+        if not district_input:
+            return None
+        district_lower = district_input.lower().strip()
+        return self.DISTRICT_MAP.get(district_lower, district_input)
+
     def _build_property_domain(self, query, filters=None):
         """Build search domain for properties"""
         domain = []
+
+        # Check if query is a district name and convert to code
+        query_district_code = self._normalize_district(query) if query else None
 
         # Text search across multiple fields including district
         if query:
@@ -97,11 +137,16 @@ class SearchService:
             domain.append('|')
             domain.append('|')
             domain.append('|')
+            domain.append('|')
             domain.append(('name', 'ilike', query))
             domain.append(('name_cn', 'ilike', query))
             domain.append(('building_name', 'ilike', query))
             domain.append(('address', 'ilike', query))
-            domain.append(('district', 'ilike', query))
+            # Search by district code if we have a mapping
+            if query_district_code and query_district_code != query:
+                domain.append(('district', '=', query_district_code))
+            else:
+                domain.append(('district', 'ilike', query))
             domain.append(('ref_code', 'ilike', query))
 
         # Apply filters
