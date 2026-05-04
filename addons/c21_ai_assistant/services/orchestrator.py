@@ -131,19 +131,12 @@ class Orchestrator:
         if intent == 'document_search' and self.rag_enabled:
             return self._handle_document_search(query, session, start_time)
 
-        if self.general_qa_enabled:
+        # For general queries, check if it's relevant to the business
+        if self.general_qa_enabled and self._is_relevant_query(query):
             return self._handle_general_query(query, session, conversation_history, start_time)
 
-        # Fallback if no handler available
-        return {
-            'response': "抱歉，目前無法處理您的請求。請嘗試其他問題。",
-            'intent': intent,
-            'search_results': [],
-            'sources': [],
-            'model': None,
-            'tokens': 0,
-            'response_time': time.time() - start_time,
-        }
+        # Reject irrelevant questions
+        return self._handle_irrelevant_query(query, start_time)
 
     def _handle_greeting(self, query, start_time):
         """Handle greeting messages"""
@@ -390,6 +383,81 @@ class Orchestrator:
             'search_results': [],
             'sources': rag_result.get('sources', []),
             'model': 'RAG',
+            'tokens': 0,
+            'response_time': time.time() - start_time,
+        }
+
+    def _is_relevant_query(self, query):
+        """
+        Check if a query is relevant to C21 business operations.
+        Returns True only for queries about properties, CRM, real estate, or company operations.
+        """
+        query_lower = query.lower()
+
+        # Relevant keywords for a real estate company
+        relevant_patterns = [
+            # Property related
+            r'物業|property|properties|listing|building|office|retail|shop|industrial|warehouse',
+            r'cowork|共享|flexible|workspace',
+            r'租|rent|lease|tenant|landlord',
+            r'面積|sqft|呎|平方|area|size',
+            r'地址|address|location|district|區',
+            r'價|price|cost|budget',
+            # CRM related
+            r'客戶|customer|client|contact|lead|prospect',
+            r'銷售|sales|deal|pipeline',
+            r'業務|business|company',
+            # Documents
+            r'文件|document|contract|agreement|particular',
+            # Company/work related
+            r'c21|century\s*21|世紀',
+            r'同事|colleague|staff|team|employee',
+            r'會議|meeting|schedule|appointment',
+            # General business queries
+            r'佣金|commission',
+            r'成交|transaction|deal',
+        ]
+
+        for pattern in relevant_patterns:
+            if re.search(pattern, query_lower, re.IGNORECASE):
+                return True
+
+        # Reject obvious off-topic queries
+        irrelevant_patterns = [
+            r'python|javascript|java|coding|programming|code',
+            r'recipe|cook|food|restaurant',
+            r'movie|film|music|song|game',
+            r'weather|天氣',
+            r'joke|笑話',
+            r'translate|翻譯',
+            r'math|calculate|計算',
+            r'homework|功課',
+            r'write.*essay|write.*story|write.*poem',
+        ]
+
+        for pattern in irrelevant_patterns:
+            if re.search(pattern, query_lower, re.IGNORECASE):
+                return False
+
+        # Default: reject if no relevant keywords found
+        return False
+
+    def _handle_irrelevant_query(self, query, start_time):
+        """Handle queries that are not relevant to C21 business"""
+        response = """抱歉，我只能回答與 C21 業務相關的問題，包括：
+
+• **物業搜尋** - 寫字樓、商舖、工廈、共享空間
+• **客戶查詢** - CRM 客戶、潛在客戶、聯絡人
+• **物業文件** - 物業資料、合約文件
+
+請問有什麼與物業或客戶相關的問題我可以幫到你？"""
+
+        return {
+            'response': response,
+            'intent': 'rejected',
+            'search_results': [],
+            'sources': [],
+            'model': None,
             'tokens': 0,
             'response_time': time.time() - start_time,
         }
