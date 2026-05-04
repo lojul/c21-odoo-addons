@@ -230,13 +230,17 @@ class SearchService:
         }
 
     def _format_lead_results(self, results):
-        """Format lead results for display"""
+        """Format lead results for display with clickable links"""
         if not results:
             return "未找到符合條件的潛在客戶。"
 
         lines = [f"找到 {len(results)} 個潛在客戶:\n"]
         for i, lead in enumerate(results[:5], 1):
-            line = f"{i}. **{lead.get('name', '未命名')}**"
+            record_id = lead.get('id')
+            name = lead.get('name', '未命名')
+            # Make name a clickable link to the lead form
+            link = f"/web#id={record_id}&model=crm.lead&view_type=form"
+            line = f"{i}. **[{name}]({link})**"
             if lead.get('partner_name'):
                 line += f" - {lead['partner_name']}"
             if lead.get('stage'):
@@ -293,19 +297,23 @@ class SearchService:
         }
 
     def _format_partner_results(self, results):
-        """Format partner results for display"""
+        """Format partner results for display with clickable links"""
         if not results:
             return "未找到符合條件的聯絡人。"
 
         lines = [f"找到 {len(results)} 個聯絡人:\n"]
         for i, partner in enumerate(results[:5], 1):
-            line = f"{i}. **{partner.get('name', '未命名')}**"
+            record_id = partner.get('id')
+            name = partner.get('name', '未命名')
+            # Make name a clickable link to the contact form
+            link = f"/web#id={record_id}&model=res.partner&view_type=form"
+            line = f"{i}. **[{name}]({link})**"
             if partner.get('company'):
                 line += f" ({partner['company']})"
             if partner.get('email'):
                 line += f"\n   電郵: {partner['email']}"
             if partner.get('phone'):
-                line += f"\n   電話: {partner['phone']}"
+                line += f"\n   電話: [{partner['phone']}]({link})"
             lines.append(line)
 
         if len(results) > 5:

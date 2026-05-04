@@ -239,16 +239,40 @@ class Orchestrator:
         search_term = query
         if is_followup and conversation_history:
             # Look for a name in previous assistant responses
-            # Format from _format_partner_results: "1. **Stephen Wong** (Company)"
             for msg in reversed(conversation_history):
                 if msg.get('role') == 'assistant':
                     content = msg.get('content', '')
-                    # Match names in bold markdown: **Name**
+                    # Try multiple patterns to extract names
+                    # Pattern 1: Bold markdown **Name**
                     name_match = re.search(r'\*\*([^*]+)\*\*', content)
                     if name_match:
                         search_term = name_match.group(1).strip()
                         if self.debug_mode:
-                            _logger.info(f"[AI Assistant] Extracted name from context: {search_term}")
+                            _logger.info(f"[AI Assistant] Extracted name from bold: {search_term}")
+                        break
+                    # Pattern 2: "Name's" possessive form (e.g., "Stephen Wong's profile")
+                    name_match = re.search(r"([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)'s", content)
+                    if name_match:
+                        search_term = name_match.group(1).strip()
+                        if self.debug_mode:
+                            _logger.info(f"[AI Assistant] Extracted name from possessive: {search_term}")
+                        break
+                    # Pattern 3: "found/找到 Name" pattern
+                    name_match = re.search(r'(?:found|找到)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)', content)
+                    if name_match:
+                        search_term = name_match.group(1).strip()
+                        if self.debug_mode:
+                            _logger.info(f"[AI Assistant] Extracted name from found pattern: {search_term}")
+                        break
+                # Also check user's previous query for the name
+                elif msg.get('role') == 'user':
+                    user_query = msg.get('content', '')
+                    # Check if user searched for a name (e.g., "find Stephen Wong")
+                    name_match = re.search(r'(?:find|search|找|查)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)', user_query, re.IGNORECASE)
+                    if name_match:
+                        search_term = name_match.group(1).strip()
+                        if self.debug_mode:
+                            _logger.info(f"[AI Assistant] Extracted name from user query: {search_term}")
                         break
 
         # Determine if searching leads or partners

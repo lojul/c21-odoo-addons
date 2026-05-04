@@ -156,7 +156,13 @@ export class AiChatWidget extends Component {
         // Escape HTML to prevent XSS
         let formatted = escape(content);
 
-        // Bold: **text**
+        // Markdown links: [text](url) - convert to clickable links
+        // Handle links inside bold: **[text](url)**
+        formatted = formatted.replace(/\*\*\[([^\]]+)\]\(([^)]+)\)\*\*/g, '<strong><a href="$2" class="o_ai_chat_link">$1</a></strong>');
+        // Regular markdown links: [text](url)
+        formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="o_ai_chat_link">$1</a>');
+
+        // Bold: **text** (after link processing to avoid conflicts)
         formatted = formatted.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
 
         // Line breaks
