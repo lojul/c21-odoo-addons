@@ -90,11 +90,29 @@ class Orchestrator:
 
         # Check for person names FIRST (before other patterns)
         # Person names should go to CRM search, not property search
-        # Pattern: "FirstName LastName" (case-insensitive) or Chinese name (2-4 chars)
+
+        # Pattern: "find/search + name" should go to CRM
+        find_name_match = re.match(r'^(find|search|look\s*for|查找|搜尋|找)\s+([A-Za-z]+(?:\s+[A-Za-z]+)?|\u4e00-\u9fff]{2,4})$', query_stripped, re.IGNORECASE)
+        if find_name_match:
+            if self.debug_mode:
+                _logger.info(f"[AI Assistant] Detected intent: crm_search (find + name)")
+            return 'crm_search'
+
+        # Pattern: "FirstName LastName" (case-insensitive)
         if re.match(r'^[A-Za-z]+\s+[A-Za-z]+$', query_stripped):
             if self.debug_mode:
                 _logger.info(f"[AI Assistant] Detected intent: crm_search (person name)")
             return 'crm_search'
+
+        # Pattern: Single capitalized word that looks like a name (3+ chars, not a common word)
+        if re.match(r'^[A-Za-z]{3,}$', query_stripped):
+            common_words = {'find', 'search', 'show', 'list', 'help', 'what', 'where', 'when', 'office', 'property'}
+            if query_stripped.lower() not in common_words:
+                if self.debug_mode:
+                    _logger.info(f"[AI Assistant] Detected intent: crm_search (single name)")
+                return 'crm_search'
+
+        # Pattern: Chinese name (2-4 chars)
         if re.match(r'^[\u4e00-\u9fff]{2,4}$', query_stripped):
             if self.debug_mode:
                 _logger.info(f"[AI Assistant] Detected intent: crm_search (Chinese name)")
@@ -232,17 +250,37 @@ class Orchestrator:
             'response_time': time.time() - start_time,
         }
 
+    def _extract_search_term(self, query):
+        """
+        Extract the actual search term from a query.
+        Removes common prefixes like 'find', 'search', 'look for', etc.
+        """
+        # Remove common search prefixes
+        prefixes = [
+            r'^(find|search|look\s*for|show|get|查找|搜尋|找|查)\s+',
+            r'^(who\s+is|what\s+is|tell\s+me\s+about)\s+',
+            r'^(contact|customer|client|聯絡人|客戶)\s+',
+        ]
+
+        cleaned = query.strip()
+        for prefix in prefixes:
+            cleaned = re.sub(prefix, '', cleaned, flags=re.IGNORECASE).strip()
+
+        return cleaned if cleaned else query
+
     def _handle_crm_search(self, query, session, conversation_history, start_time):
         """Handle CRM search queries"""
         query_lower = query.lower()
 
         # Check if this is a follow-up request (open/view/show profile)
         is_followup = any(word in query_lower for word in [
-            'open', 'view', 'show', 'profile', '打開', '查看', '檔案'
-        ])
+            'open', 'view', 'profile', '打開', '查看', '檔案'
+        ]) and not any(word in query_lower for word in ['find', 'search', '找', '查'])
 
-        # Extract name from context if it's a follow-up request
-        search_term = query
+        # Extract the actual search term (remove "find", "search", etc.)
+        search_term = self._extract_search_term(query)
+
+        # For follow-up requests, try to get name from context
         if is_followup and conversation_history:
             # Look for a name in previous assistant responses
             for msg in reversed(conversation_history):
