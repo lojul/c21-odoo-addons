@@ -221,22 +221,14 @@ class Orchestrator:
                 'response_time': time.time() - start_time,
             }
 
-        # No results - use LLM to respond
-        messages = conversation_history or []
-        messages.append({'role': 'user', 'content': query})
-
-        llm_result = self.llm_service.chat(
-            messages,
-            context="No properties found matching the search criteria."
-        )
-
+        # No results - return simple message (don't use LLM to avoid hallucination)
         return {
-            'response': llm_result.get('content', '未找到符合條件的物業。'),
+            'response': '未找到符合條件的物業。請嘗試調整搜尋條件。',
             'intent': 'property_search',
             'search_results': [],
             'sources': [],
-            'model': llm_result.get('model'),
-            'tokens': llm_result.get('tokens_used', 0),
+            'model': None,
+            'tokens': 0,
             'response_time': time.time() - start_time,
         }
 

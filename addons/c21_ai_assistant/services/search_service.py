@@ -112,6 +112,8 @@ class SearchService:
                 domain.append(('gross_area', '>=', filters['min_area']))
             if filters.get('max_area'):
                 domain.append(('gross_area', '<=', filters['max_area']))
+            if filters.get('min_rent'):
+                domain.append(('asking_rent', '>=', filters['min_rent']))
             if filters.get('max_rent'):
                 domain.append(('asking_rent', '<=', filters['max_rent']))
             if filters.get('publish_status'):
@@ -347,15 +349,28 @@ class SearchService:
             else:
                 filters['min_area'] = area_value  # Default to minimum
 
-        # Extract rent patterns (e.g., "$50000", "5萬")
-        rent_match = re.search(r'\$?(\d+(?:,\d+)?)\s*(?:萬|万|k)?(?:/月|per month)?', query, re.IGNORECASE)
-        if rent_match:
-            rent_value = int(rent_match.group(1).replace(',', ''))
-            if '萬' in query or '万' in query:
-                rent_value *= 10000
-            elif 'k' in query.lower():
-                rent_value *= 1000
-            filters['max_rent'] = rent_value
+        # Extract rent patterns (e.g., "$50000", "5萬", "20k-30k")
+        # First try range pattern: "20k-30k" or "20000-30000"
+        rent_range_match = re.search(r'(\d+)\s*k?\s*[-~到]\s*(\d+)\s*k?', query, re.IGNORECASE)
+        if rent_range_match:
+            min_val = int(rent_range_match.group(1))
+            max_val = int(rent_range_match.group(2))
+            # Check if using 'k' notation
+            if 'k' in query.lower():
+                min_val *= 1000
+                max_val *= 1000
+            filters['min_rent'] = min_val
+            filters['max_rent'] = max_val
+        else:
+            # Single value pattern (e.g., "$50000", "5萬")
+            rent_match = re.search(r'\$?(\d+(?:,\d+)?)\s*(?:萬|万|k)?(?:/月|per month)?', query, re.IGNORECASE)
+            if rent_match:
+                rent_value = int(rent_match.group(1).replace(',', ''))
+                if '萬' in query or '万' in query:
+                    rent_value *= 10000
+                elif 'k' in query.lower():
+                    rent_value *= 1000
+                filters['max_rent'] = rent_value
 
         # Extract district patterns
         districts = ['中環', 'Central', '金鐘', 'Admiralty', '灣仔', 'Wan Chai',
