@@ -153,30 +153,42 @@ class Orchestrator:
         """
         start_time = time.time()
 
-        # Detect intent
-        intent = self.detect_intent(query)
+        # Use AI to analyze the query (intelligent intent detection)
+        analysis = self.llm_service.analyze_query(query, conversation_history)
+        intent = analysis.get('intent', 'general')
+        ai_search_term = analysis.get('search_term', query)
+        ai_filters = analysis.get('filters', {})
+        is_followup = analysis.get('is_followup', False)
+        model_type = analysis.get('model_type', 'partner')
 
         if self.debug_mode:
-            _logger.info(f"[AI Assistant] Processing query: {query[:100]}... (intent: {intent})")
+            _logger.info(f"[AI Assistant] AI Analysis - intent: {intent}, search_term: {ai_search_term}, filters: {ai_filters}")
 
-        # Handle based on intent
+        # Handle based on AI-detected intent
         if intent == 'greeting':
             return self._handle_greeting(query, start_time)
 
+        if intent == 'rejected':
+            return self._handle_irrelevant_query(query, start_time)
+
         if intent == 'property_search' and self.property_search_enabled:
-            return self._handle_property_search(query, session, conversation_history, start_time)
+            return self._handle_property_search_ai(
+                query, ai_search_term, ai_filters, session, conversation_history, is_followup, start_time
+            )
 
         if intent == 'crm_search' and self.crm_search_enabled:
-            return self._handle_crm_search(query, session, conversation_history, start_time)
+            return self._handle_crm_search_ai(
+                query, ai_search_term, ai_filters, model_type, session, conversation_history, is_followup, start_time
+            )
 
         if intent == 'document_search' and self.rag_enabled:
             return self._handle_document_search(query, session, start_time)
 
-        # For general queries, check if it's relevant to the business
-        if self.general_qa_enabled and self._is_relevant_query(query):
+        # For general queries
+        if self.general_qa_enabled:
             return self._handle_general_query(query, session, conversation_history, start_time)
 
-        # Reject irrelevant questions
+        # Fallback
         return self._handle_irrelevant_query(query, start_time)
 
     def _handle_greeting(self, query, start_time):
@@ -203,8 +215,91 @@ class Orchestrator:
             'response_time': time.time() - start_time,
         }
 
+    def _handle_property_search_ai(self, query, search_term, filters, session, conversation_history, is_followup, start_time):
+        """Handle property search with AI-extracted parameters"""
+
+        # For follow-up requests, check stored context first
+        if is_followup:
+            stored_context = session.get_search_context()
+            if stored_context and stored_context.get('type') == 'property' and stored_context.get('results'):
+                results = stored_context['results']
+                if len(results) == 1:
+                    prop = results[0]
+                    record_id = prop.get('id')
+                    name = prop.get('name_cn') or prop.get('name') or '未命名'
+                    link = f"/web#id={record_id}&model=c21.property.listing&view_type=form"
+                    response = f"**[{name}]({link})** 的資料:\n"
+                    if prop.get('address'):
+                        response += f"地址: {prop['address']}\n"
+                    if prop.get('gross_area'):
+                        response += f"面積: {prop['gross_area']:,.0f} 呎\n"
+                    if prop.get('asking_rent'):
+                        response += f"租金: HK${prop['asking_rent']:,.0f}/月"
+                    return {
+                        'response': response,
+                        'intent': 'property_search',
+                        'search_results': results,
+                        'sources': [],
+                        'model': 'AI',
+                        'tokens': 0,
+                        'response_time': time.time() - start_time,
+                    }
+
+        # Search with AI-extracted parameters
+        # First try with extracted search term
+        search_result = self.search_service.search_properties(search_term, filters)
+
+        # If no results, try searching with the district filter as search term
+        if not search_result.get('results') and filters.get('district'):
+            search_result = self.search_service.search_properties(filters['district'], {})
+
+        # If still no results and we have a building_name filter, search that
+        if not search_result.get('results') and filters.get('building_name'):
+            search_result = self.search_service.search_properties(filters['building_name'], {})
+
+        # Increment session stat
+        session.increment_stat('property')
+
+        # If we have results, return formatted results directly (with clickable links)
+        if search_result.get('results'):
+            formatted = search_result.get('formatted', '')
+
+            # Store context for follow-up queries
+            session.set_search_context('property', search_result['results'], query)
+
+            return {
+                'response': formatted,
+                'intent': 'property_search',
+                'search_results': search_result['results'],
+                'sources': [],
+                'model': 'AI',
+                'tokens': 0,
+                'response_time': time.time() - start_time,
+            }
+
+        # No results - return helpful message with search tips
+        tips = """未找到符合條件的物業。
+
+**搜尋提示：**
+• 按地區搜尋：「中環寫字樓」「銅鑼灣商舖」
+• 按租金範圍：「20k-50k」「租金5萬以下」
+• 按面積搜尋：「1000呎以上」「2000sqft」
+• 按類型搜尋：「寫字樓」「商舖」「工廈」「coworking」
+
+請嘗試其他搜尋條件。"""
+
+        return {
+            'response': tips,
+            'intent': 'property_search',
+            'search_results': [],
+            'sources': [],
+            'model': 'AI',
+            'tokens': 0,
+            'response_time': time.time() - start_time,
+        }
+
     def _handle_property_search(self, query, session, conversation_history, start_time):
-        """Handle property search queries"""
+        """Handle property search queries (legacy - kept for compatibility)"""
         # Extract search parameters
         params = self.search_service.extract_search_params(query)
 
@@ -273,8 +368,87 @@ class Orchestrator:
 
         return cleaned if cleaned else query
 
+    def _handle_crm_search_ai(self, query, search_term, filters, model_type, session, conversation_history, is_followup, start_time):
+        """Handle CRM search with AI-extracted parameters"""
+
+        # For follow-up requests, check stored context first
+        if is_followup:
+            stored_context = session.get_search_context()
+            if stored_context and stored_context.get('type') == 'crm' and stored_context.get('results'):
+                results = stored_context['results']
+                if len(results) == 1:
+                    record = results[0]
+                    record_id = record.get('id')
+                    record_name = record.get('name', '')
+                    link = f"/web#id={record_id}&model=res.partner&view_type=form"
+                    response = f"**[{record_name}]({link})** 的資料:\n"
+                    if record.get('company'):
+                        response += f"公司: {record['company']}\n"
+                    if record.get('email'):
+                        response += f"電郵: {record['email']}\n"
+                    if record.get('phone'):
+                        response += f"電話: {record['phone']}"
+                    return {
+                        'response': response,
+                        'intent': 'crm_search',
+                        'search_results': results,
+                        'sources': [],
+                        'model': 'AI',
+                        'tokens': 0,
+                        'response_time': time.time() - start_time,
+                    }
+
+        # Search CRM with AI-extracted parameters
+        search_result = self.search_service.search_crm(search_term, model_type, filters)
+
+        # If no results in partner, try leads
+        if not search_result.get('results') and model_type == 'partner':
+            search_result = self.search_service.search_crm(search_term, 'lead', filters)
+            if search_result.get('results'):
+                model_type = 'lead'
+
+        # Increment session stat
+        session.increment_stat('crm')
+
+        if search_result.get('results'):
+            formatted = search_result.get('formatted', '')
+
+            # Store context for follow-up queries
+            session.set_search_context('crm', search_result['results'], query)
+
+            return {
+                'response': formatted,
+                'intent': 'crm_search',
+                'search_results': search_result['results'],
+                'sources': [],
+                'model': 'AI',
+                'tokens': 0,
+                'response_time': time.time() - start_time,
+            }
+
+        # No results - return helpful message with search tips
+        tips = """未找到符合條件的聯絡人/客戶。
+
+**搜尋提示：**
+• 按姓名搜尋：「Stephen Wong」「陳大文」
+• 按公司搜尋：「ABC Company」
+• 按電郵搜尋：「john@example.com」
+• 搜尋潛在客戶：「lead ABC」「prospect 陳生」
+
+請嘗試其他搜尋條件。"""
+
+        return {
+            'response': tips,
+            'intent': 'crm_search',
+            'search_results': [],
+            'sources': [],
+            'model': 'AI',
+            'tokens': 0,
+            'response_time': time.time() - start_time,
+        }
+
     def _handle_crm_search(self, query, session, conversation_history, start_time):
-        """Handle CRM search queries"""
+        """Handle CRM search queries (legacy - kept for compatibility)"""
         query_lower = query.lower()
 
         # Check if this is a follow-up request (open/view/show profile)

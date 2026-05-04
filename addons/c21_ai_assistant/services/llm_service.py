@@ -202,3 +202,95 @@ Company: {company_name}"""
             'tokens_used': data.get('eval_count', 0) + data.get('prompt_eval_count', 0),
             'model': self.model,
         }
+
+    def analyze_query(self, query, conversation_history=None):
+        """
+        Use LLM to intelligently analyze a user query and extract:
+        - Intent (property_search, crm_search, document_search, greeting, general, rejected)
+        - Search parameters (for property: location, property_type, rent_range, area_range, etc.)
+        - Search term (the actual thing to search for)
+
+        Returns:
+            dict with 'intent', 'search_term', 'filters', 'is_followup'
+        """
+        # Build context from conversation history
+        history_context = ""
+        if conversation_history:
+            recent = conversation_history[-4:]  # Last 2 exchanges
+            history_context = "\n".join([
+                f"{msg['role'].upper()}: {msg['content'][:200]}"
+                for msg in recent
+            ])
+
+        analysis_prompt = f"""Analyze this user query for a Hong Kong commercial real estate assistant.
+
+CONVERSATION HISTORY:
+{history_context if history_context else "(No previous messages)"}
+
+CURRENT QUERY: "{query}"
+
+Determine:
+1. intent: One of:
+   - "property_search" - looking for properties, buildings, offices, shops, locations
+   - "crm_search" - looking for people, contacts, customers, leads
+   - "document_search" - looking for documents, files, PDFs, particulars
+   - "greeting" - hello, hi, help
+   - "rejected" - off-topic (coding, recipes, games, etc.)
+   - "general" - other business-related questions
+
+2. search_term: The main thing to search for (location name, person name, building name, etc.)
+
+3. filters: Extract any specific criteria mentioned:
+   - district: location/area (e.g., "中環", "Ma On Shan", "銅鑼灣")
+   - property_type: office/retail/industrial/coworking
+   - min_rent / max_rent: monthly rent in HKD
+   - min_area / max_area: area in sqft
+   - building_name: specific building mentioned
+
+4. is_followup: true if referring to previous results ("his profile", "open it", "the first one")
+
+5. model_type: for crm_search, specify "partner" for contacts or "lead" for sales leads
+
+Respond ONLY with valid JSON, no explanation:
+{{"intent": "...", "search_term": "...", "filters": {{}}, "is_followup": false, "model_type": "partner"}}"""
+
+        messages = [
+            {'role': 'system', 'content': 'You are a query analyzer. Return only valid JSON.'},
+            {'role': 'user', 'content': analysis_prompt}
+        ]
+
+        try:
+            result = self.chat(messages)
+            content = result.get('content', '{}')
+
+            # Extract JSON from response (handle markdown code blocks)
+            if '```json' in content:
+                content = content.split('```json')[1].split('```')[0]
+            elif '```' in content:
+                content = content.split('```')[1].split('```')[0]
+
+            parsed = json.loads(content.strip())
+
+            if self.debug_mode:
+                _logger.info(f"[AI Assistant] Query analysis: {parsed}")
+
+            return {
+                'intent': parsed.get('intent', 'general'),
+                'search_term': parsed.get('search_term', query),
+                'filters': parsed.get('filters', {}),
+                'is_followup': parsed.get('is_followup', False),
+                'model_type': parsed.get('model_type', 'partner'),
+                'tokens_used': result.get('tokens_used', 0),
+            }
+
+        except (json.JSONDecodeError, Exception) as e:
+            _logger.warning(f"[AI Assistant] Query analysis failed: {e}, falling back to simple detection")
+            # Fallback to simple detection
+            return {
+                'intent': 'general',
+                'search_term': query,
+                'filters': {},
+                'is_followup': False,
+                'model_type': 'partner',
+                'tokens_used': 0,
+            }

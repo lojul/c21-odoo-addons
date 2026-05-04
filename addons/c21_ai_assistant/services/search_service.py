@@ -89,9 +89,10 @@ class SearchService:
         """Build search domain for properties"""
         domain = []
 
-        # Text search across multiple fields
+        # Text search across multiple fields including district
         if query:
             query_lower = query.lower()
+            domain.append('|')
             domain.append('|')
             domain.append('|')
             domain.append('|')
@@ -100,6 +101,7 @@ class SearchService:
             domain.append(('name_cn', 'ilike', query))
             domain.append(('building_name', 'ilike', query))
             domain.append(('address', 'ilike', query))
+            domain.append(('district', 'ilike', query))
             domain.append(('ref_code', 'ilike', query))
 
         # Apply filters
