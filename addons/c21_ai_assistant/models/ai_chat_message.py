@@ -38,6 +38,7 @@ class AiChatMessage(models.Model):
         ('document_search', 'Document Search'),
         ('general', 'General Q&A'),
         ('greeting', 'Greeting'),
+        ('rejected', 'Rejected (Off-topic)'),
         ('unknown', 'Unknown'),
     ], string='Intent')
 

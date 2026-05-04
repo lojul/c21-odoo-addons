@@ -28,6 +28,16 @@ class Orchestrator:
             r'租金|rent|lease|出租',
             r'面積|sqft|呎|平方',
             r'搜尋|找|search|find|show|list',
+            # Common locations/districts - route to property search
+            r'中環|central|金鐘|admiralty|灣仔|wan\s*chai',
+            r'銅鑼灣|causeway\s*bay|北角|north\s*point|鰂魚涌|quarry\s*bay',
+            r'尖沙咀|tsim\s*sha\s*tsui|旺角|mong\s*kok|觀塘|kwun\s*tong',
+            r'荃灣|tsuen\s*wan|沙田|sha\s*tin|上環|sheung\s*wan',
+            r'馬鞍山|ma\s*on\s*shan|將軍澳|tseung\s*kwan\s*o|大埔|tai\s*po',
+            r'元朗|yuen\s*long|屯門|tuen\s*mun|葵涌|kwai\s*chung',
+            r'柴灣|chai\s*wan|黃竹坑|wong\s*chuk\s*hang|鑽石山|diamond\s*hill',
+            # Building names often contain these words
+            r'commercial\s*centre|商業中心|tower|大廈|plaza|廣場|building',
         ],
         'crm_search': [
             r'客戶|customer|client',
