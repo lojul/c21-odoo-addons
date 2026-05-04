@@ -1,6 +1,6 @@
 /** @odoo-module **/
 
-import { Component, useState, useRef, onMounted } from "@odoo/owl";
+import { Component, useState, useRef, onMounted, markup } from "@odoo/owl";
 import { registry } from "@web/core/registry";
 import { useService } from "@web/core/utils/hooks";
 import { escape } from "@web/core/utils/strings";
@@ -153,7 +153,7 @@ export class AiChatWidget extends Component {
     formatMessage(content) {
         if (!content) return "";
 
-        // Basic markdown-like formatting
+        // Escape HTML to prevent XSS
         let formatted = escape(content);
 
         // Bold: **text**
@@ -162,7 +162,8 @@ export class AiChatWidget extends Component {
         // Line breaks
         formatted = formatted.replace(/\n/g, "<br>");
 
-        return formatted;
+        // Return as markup to render HTML
+        return markup(formatted);
     }
 
     formatTime(timestamp) {
