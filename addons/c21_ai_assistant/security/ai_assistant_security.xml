@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- User Group - Can use AI Assistant -->
+        <record id="group_ai_assistant_user" model="res.groups">
+            <field name="name">C21 AI Assistant User</field>
+            <field name="comment">Can use the AI Assistant chat</field>
+        </record>
+
+        <!-- Admin Group - Can configure AI Assistant -->
+        <record id="group_ai_assistant_admin" model="res.groups">
+            <field name="name">C21 AI Assistant Admin</field>
+            <field name="implied_ids" eval="[(4, ref('group_ai_assistant_user'))]"/>
+            <field name="comment">Can configure AI Assistant settings and view all chat logs</field>
+        </record>
+
+        <!-- Grant AI Assistant User to all internal users by default -->
+        <record id="base.group_user" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_ai_assistant_user'))]"/>
+        </record>
+
+        <!-- Grant AI Assistant Admin to Settings group -->
+        <record id="base.group_system" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_ai_assistant_admin'))]"/>
+        </record>
+    </data>
+</odoo>

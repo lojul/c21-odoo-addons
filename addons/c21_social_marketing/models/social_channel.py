@@ -7,23 +7,23 @@ class SocialChannel(models.Model):
     _description = 'Social Media Channel'
     _order = 'sequence, name'
 
-    name = fields.Char(string='名稱', required=True)
+    name = fields.Char(string='Name', required=True)
     platform = fields.Selection([
         ('instagram', 'Instagram'),
         ('facebook', 'Facebook'),
         ('threads', 'Threads'),
-    ], string='平台', required=True)
+    ], string='Platform', required=True)
     buffer_channel_id = fields.Char(string='Buffer Channel ID', required=True)
-    active = fields.Boolean(string='啟用', default=True)
-    sequence = fields.Integer(string='排序', default=10)
+    active = fields.Boolean(string='Active', default=True)
+    sequence = fields.Integer(string='Sequence', default=10)
 
     # Stats
-    last_post_time = fields.Datetime(string='上次發文')
-    post_count = fields.Integer(string='發文數量', compute='_compute_post_count')
+    last_post_time = fields.Datetime(string='Last Post Time')
+    post_count = fields.Integer(string='Post Count', compute='_compute_post_count')
 
     # Platform-specific settings
-    include_image = fields.Boolean(string='包含圖片', default=True)
-    hashtags = fields.Text(string='預設標籤', help='Platform-specific hashtags')
+    include_image = fields.Boolean(string='Include Image', default=True)
+    hashtags = fields.Text(string='Default Hashtags', help='Platform-specific hashtags')
 
     @api.depends('name')
     def _compute_post_count(self):

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Chat Session List View -->
+    <record id="view_ai_chat_session_list" model="ir.ui.view">
+        <field name="name">ai.chat.session.list</field>
+        <field name="model">ai.chat.session</field>
+        <field name="arch" type="xml">
+            <list string="Chat History" default_order="create_date desc">
+                <field name="display_name"/>
+                <field name="user_id"/>
+                <field name="message_count"/>
+                <field name="last_activity"/>
+                <field name="state" widget="badge" decoration-success="state == 'active'" decoration-muted="state == 'expired'" decoration-info="state == 'closed'"/>
+                <field name="property_searches"/>
+                <field name="crm_searches"/>
+                <field name="rag_searches"/>
+                <field name="total_tokens"/>
+                <field name="create_date"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Chat Session Form View -->
+    <record id="view_ai_chat_session_form" model="ir.ui.view">
+        <field name="name">ai.chat.session.form</field>
+        <field name="model">ai.chat.session</field>
+        <field name="arch" type="xml">
+            <form string="Chat Details">
+                <header>
+                    <button name="action_close" string="Close Session" type="object" invisible="state != 'active'" class="btn-secondary"/>
+                    <button name="action_reopen" string="Reopen" type="object" invisible="state != 'closed'" class="btn-secondary"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id"/>
+                            <field name="user_id"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="last_activity"/>
+                            <field name="message_count"/>
+                        </group>
+                    </group>
+                    <group string="Statistics">
+                        <group>
+                            <field name="property_searches"/>
+                            <field name="crm_searches"/>
+                        </group>
+                        <group>
+                            <field name="rag_searches"/>
+                            <field name="total_tokens"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Messages" name="messages">
+                            <field name="message_ids" mode="list" readonly="1">
+                                <list string="Messages" default_order="create_date asc" create="false" delete="false">
+                                    <field name="create_date"/>
+                                    <field name="role" widget="badge" decoration-info="role == 'user'" decoration-success="role == 'assistant'" decoration-muted="role == 'system'"/>
+                                    <field name="content" widget="text"/>
+                                    <field name="intent"/>
+                                    <field name="model_used"/>
+                                    <field name="tokens_used"/>
+                                    <field name="response_time"/>
+                                    <field name="is_error" widget="boolean"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Summary" name="summary" invisible="not summary">
+                            <field name="summary" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Chat Session Search View -->
+    <record id="view_ai_chat_session_search" model="ir.ui.view">
+        <field name="name">ai.chat.session.search</field>
+        <field name="model">ai.chat.session</field>
+        <field name="arch" type="xml">
+            <search string="Search Chats">
+                <filter string="Active" name="active" domain="[('state', '=', 'active')]"/>
+                <filter string="Expired" name="expired" domain="[('state', '=', 'expired')]"/>
+                <filter string="Closed" name="closed" domain="[('state', '=', 'closed')]"/>
+                <separator/>
+                <filter string="Today" name="today" domain="[('create_date', '>=', context_today().strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="My Sessions" name="my_sessions" domain="[('user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="User" name="group_user" context="{'group_by': 'user_id'}"/>
+                <filter string="State" name="group_state" context="{'group_by': 'state'}"/>
+                <filter string="Date" name="group_date" context="{'group_by': 'create_date:day'}"/>
+                <searchpanel>
+                    <field name="state" string="State"/>
+                    <field name="user_id" string="User"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <!-- Chat Message Form View (for viewing details) -->
+    <record id="view_ai_chat_message_form" model="ir.ui.view">
+        <field name="name">ai.chat.message.form</field>
+        <field name="model">ai.chat.message</field>
+        <field name="arch" type="xml">
+            <form string="Message Details" create="false" edit="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="session_id"/>
+                            <field name="user_id"/>
+                            <field name="role"/>
+                            <field name="intent"/>
+                        </group>
+                        <group>
+                            <field name="create_date"/>
+                            <field name="model_used"/>
+                            <field name="tokens_used"/>
+                            <field name="response_time"/>
+                            <field name="is_error"/>
+                        </group>
+                    </group>
+                    <group string="Content">
+                        <field name="content" nolabel="1" readonly="1"/>
+                    </group>
+                    <group string="Error Message" invisible="not is_error">
+                        <field name="error_message" nolabel="1" readonly="1"/>
+                    </group>
+                    <group string="Search Results" invisible="not search_results">
+                        <field name="search_results" nolabel="1" readonly="1" widget="text"/>
+                    </group>
+                    <group string="Sources" invisible="not sources">
+                        <field name="sources" nolabel="1" readonly="1" widget="text"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action for Chat Sessions -->
+    <record id="action_ai_chat_session" model="ir.actions.act_window">
+        <field name="name">Chat History</field>
+        <field name="res_model">ai.chat.session</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_ai_chat_session_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No chat history yet
+            </p>
+            <p>
+                Use the AI Assistant button in the top-right to start a conversation
+            </p>
+        </field>
+    </record>
+</odoo>

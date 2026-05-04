@@ -6,17 +6,17 @@
         <field name="name">c21.social.post.form</field>
         <field name="model">c21.social.post</field>
         <field name="arch" type="xml">
-            <form string="社交媒體帖文">
+            <form string="Social Media Post">
                 <header>
-                    <button name="action_generate_captions" type="object" string="AI 生成內容"
+                    <button name="action_generate_captions" type="object" string="AI Generate Content"
                             class="btn-secondary" invisible="state != 'draft'"/>
-                    <button name="action_submit_for_approval" type="object" string="提交審批"
+                    <button name="action_submit_for_approval" type="object" string="Submit for Approval"
                             class="btn-primary" invisible="state != 'draft'"/>
-                    <button name="action_approve" type="object" string="審批通過"
+                    <button name="action_approve" type="object" string="Approve"
                             class="btn-success" invisible="state != 'pending'"/>
-                    <button name="action_reject" type="object" string="退回"
+                    <button name="action_reject" type="object" string="Reject"
                             class="btn-secondary" invisible="state != 'pending'"/>
-                    <button name="action_send_to_buffer" type="object" string="發送至 Buffer"
+                    <button name="action_send_to_buffer" type="object" string="Send to Buffer"
                             class="btn-primary" invisible="state not in ('approved',)"/>
                     <field name="state" widget="statusbar" statusbar_visible="draft,pending,approved,scheduled,posted"/>
                 </header>
@@ -24,32 +24,32 @@
                     <div class="oe_button_box" name="button_box">
                     </div>
                     <group>
-                        <group string="內容">
-                            <field name="headline_zh" placeholder="20字內繁體中文標題"/>
-                            <field name="data_point" placeholder="關鍵數據點"/>
+                        <group string="Content">
+                            <field name="headline_zh" placeholder="Chinese headline (max 20 chars)"/>
+                            <field name="data_point" placeholder="Key data point"/>
                             <field name="district"/>
                             <field name="source"/>
                             <field name="background_color" widget="radio"/>
                         </group>
-                        <group string="圖片預覽">
+                        <group string="Image Preview">
                             <field name="image" widget="image" options="{'size': [300, 375]}"/>
                             <button name="action_generate_image" type="object"
-                                    string="重新生成圖片" class="btn-outline-secondary"
+                                    string="Regenerate Image" class="btn-outline-secondary"
                                     icon="fa-refresh" invisible="not headline_zh"/>
-                            <field name="image_url" readonly="1" string="圖片連結"/>
+                            <field name="image_url" readonly="1" string="Image URL"/>
                         </group>
                     </group>
                     <notebook>
                         <page string="Instagram" name="instagram">
-                            <field name="ig_caption" placeholder="Instagram 說明文（100字內）"/>
+                            <field name="ig_caption" placeholder="Instagram caption (max 100 chars)"/>
                         </page>
                         <page string="Facebook" name="facebook">
-                            <field name="fb_caption" placeholder="Facebook 說明文（200字內）"/>
+                            <field name="fb_caption" placeholder="Facebook caption (max 200 chars)"/>
                         </page>
                         <page string="Threads" name="threads">
-                            <field name="threads_caption" placeholder="Threads 說明文"/>
+                            <field name="threads_caption" placeholder="Threads caption"/>
                         </page>
-                        <page string="發佈設定" name="settings">
+                        <page string="Publish Settings" name="settings">
                             <group>
                                 <field name="channel_ids" widget="many2many_checkboxes"/>
                                 <field name="scheduled_time"/>
@@ -57,7 +57,7 @@
                                 <field name="is_auto_generated" readonly="1"/>
                             </group>
                         </page>
-                        <page string="相關新聞" name="news">
+                        <page string="Related News" name="news">
                             <field name="news_ids">
                                 <list>
                                     <field name="name"/>
@@ -66,7 +66,7 @@
                                 </list>
                             </field>
                         </page>
-                        <page string="技術資訊" name="technical" groups="base.group_system">
+                        <page string="Technical Info" name="technical" groups="base.group_system">
                             <group>
                                 <field name="buffer_response" readonly="1"/>
                                 <field name="error_message" readonly="1" invisible="not error_message"/>
@@ -84,8 +84,8 @@
         <field name="name">c21.social.post.list</field>
         <field name="model">c21.social.post</field>
         <field name="arch" type="xml">
-            <list string="社交媒體帖文" default_order="create_date desc">
-                <field name="create_date" string="建立時間"/>
+            <list string="Social Media Posts" default_order="create_date desc">
+                <field name="create_date" string="Created"/>
                 <field name="headline_zh"/>
                 <field name="district"/>
                 <field name="source"/>
@@ -95,7 +95,7 @@
                        decoration-warning="state == 'pending'"
                        decoration-success="state in ('approved', 'scheduled', 'posted')"
                        decoration-danger="state == 'failed'"/>
-                <field name="is_auto_generated" string="自動"/>
+                <field name="is_auto_generated" string="Auto"/>
             </list>
         </field>
     </record>
@@ -137,33 +137,33 @@
         <field name="name">c21.social.post.search</field>
         <field name="model">c21.social.post</field>
         <field name="arch" type="xml">
-            <search string="搜尋帖文">
+            <search string="Search Posts">
                 <field name="headline_zh"/>
                 <field name="district"/>
                 <field name="source"/>
-                <filter string="草稿" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="待審批" name="pending" domain="[('state', '=', 'pending')]"/>
-                <filter string="已審批" name="approved" domain="[('state', '=', 'approved')]"/>
-                <filter string="已發佈" name="posted" domain="[('state', '=', 'posted')]"/>
-                <filter string="失敗" name="failed" domain="[('state', '=', 'failed')]"/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Pending" name="pending" domain="[('state', '=', 'pending')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Posted" name="posted" domain="[('state', '=', 'posted')]"/>
+                <filter string="Failed" name="failed" domain="[('state', '=', 'failed')]"/>
                 <separator/>
-                <filter string="自動生成" name="auto" domain="[('is_auto_generated', '=', True)]"/>
+                <filter string="Auto Generated" name="auto" domain="[('is_auto_generated', '=', True)]"/>
             </search>
         </field>
     </record>
 
     <!-- Post Action -->
     <record id="action_social_post" model="ir.actions.act_window">
-        <field name="name">帖文</field>
+        <field name="name">Posts</field>
         <field name="res_model">c21.social.post</field>
         <field name="view_mode">kanban,list,form</field>
         <field name="context">{}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                建立您的第一個社交媒體帖文
+                Create your first social media post
             </p>
             <p>
-                系統會自動抓取新聞並生成帖文內容。
+                The system will automatically fetch news and generate post content.
             </p>
         </field>
     </record>

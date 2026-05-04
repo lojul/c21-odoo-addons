@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, _
 
 
 class SocialNews(models.Model):
@@ -7,19 +7,19 @@ class SocialNews(models.Model):
     _description = 'Scraped News Item'
     _order = 'fetch_date desc, id desc'
 
-    name = fields.Char(string='標題', required=True)
-    description = fields.Text(string='描述')
-    url = fields.Char(string='連結')
-    source = fields.Char(string='來源')
-    feed_id = fields.Many2one('c21.social.feed', string='RSS來源', ondelete='cascade')
-    fetch_date = fields.Datetime(string='抓取時間', default=fields.Datetime.now)
-    publish_date = fields.Datetime(string='發佈時間')
-    used = fields.Boolean(string='已使用', default=False)
-    post_ids = fields.Many2many('c21.social.post', string='相關帖文')
+    name = fields.Char(string='Title', required=True)
+    description = fields.Text(string='Description')
+    url = fields.Char(string='URL')
+    source = fields.Char(string='Source')
+    feed_id = fields.Many2one('c21.social.feed', string='RSS Feed', ondelete='cascade')
+    fetch_date = fields.Datetime(string='Fetch Date', default=fields.Datetime.now)
+    publish_date = fields.Datetime(string='Publish Date')
+    used = fields.Boolean(string='Used', default=False)
+    post_ids = fields.Many2many('c21.social.post', string='Related Posts')
 
     # Property news relevance
-    is_property_news = fields.Boolean(string='地產新聞', default=False)
-    relevance_score = fields.Integer(string='相關性', default=0)
+    is_property_news = fields.Boolean(string='Property News', default=False)
+    relevance_score = fields.Integer(string='Relevance Score', default=0)
 
     # URL uniqueness handled in code (search before create)
 
@@ -50,13 +50,13 @@ class SocialNews(models.Model):
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
                 'params': {
-                    'message': '請先設定 OpenRouter API Key',
+                    'message': _('Please configure OpenRouter API Key first'),
                     'type': 'danger',
                 }
             }
 
         # Prepare news content
-        news_content = f"標題: {self.name}\n來源: {self.source}\n摘要: {self.description[:500] if self.description else '無摘要'}"
+        news_content = f"Title: {self.name}\nSource: {self.source}\nSummary: {self.description[:500] if self.description else 'No summary'}"
 
         # Generate AI captions
         try:
@@ -66,7 +66,7 @@ class SocialNews(models.Model):
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
                 'params': {
-                    'message': f'AI 生成失敗: {str(e)}',
+                    'message': _('AI generation failed: %s') % str(e),
                     'type': 'danger',
                 }
             }
@@ -82,7 +82,7 @@ class SocialNews(models.Model):
                 'type': 'ir.actions.client',
                 'tag': 'display_notification',
                 'params': {
-                    'message': f'圖片生成失敗: {str(e)}',
+                    'message': _('Image generation failed: %s') % str(e),
                     'type': 'danger',
                 }
             }

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_ai_assistant" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.ai.assistant</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="C21 AI Assistant" string="C21 AI Assistant" name="c21_ai_assistant" groups="c21_ai_assistant.group_ai_assistant_admin">
+                    <block title="AI Provider Settings" name="ai_provider_settings">
+                        <setting string="AI Provider" help="Select AI service provider">
+                            <field name="ai_assistant_provider" widget="radio"/>
+                        </setting>
+                        <setting string="Model Name" help="AI model identifier">
+                            <field name="ai_assistant_model"/>
+                            <div class="text-muted">
+                                OpenRouter: meta-llama/llama-3.3-70b-instruct, mistralai/mistral-large<br/>
+                                Azure: gpt-4o, gpt-4o-mini<br/>
+                                Ollama: llama3.2, qwen2.5
+                            </div>
+                        </setting>
+                        <setting string="Temperature" help="Controls response creativity (0.0 = deterministic, 1.0 = creative)">
+                            <field name="ai_assistant_temperature" widget="float"/>
+                        </setting>
+                        <setting string="Max Tokens" help="Maximum response length">
+                            <field name="ai_assistant_max_tokens"/>
+                        </setting>
+                    </block>
+
+                    <block title="API Keys" name="api_keys_settings">
+                        <setting string="OpenRouter API Key" invisible="ai_assistant_provider != 'openrouter'">
+                            <field name="ai_assistant_openrouter_api_key" password="True"/>
+                        </setting>
+                        <setting string="Azure OpenAI Endpoint" invisible="ai_assistant_provider != 'azure'">
+                            <field name="ai_assistant_azure_endpoint" placeholder="https://your-resource.openai.azure.com"/>
+                        </setting>
+                        <setting string="Azure OpenAI API Key" invisible="ai_assistant_provider != 'azure'">
+                            <field name="ai_assistant_azure_api_key" password="True"/>
+                        </setting>
+                        <setting string="Azure Deployment Name" invisible="ai_assistant_provider != 'azure'">
+                            <field name="ai_assistant_azure_deployment"/>
+                        </setting>
+                        <setting string="Ollama URL" invisible="ai_assistant_provider != 'ollama'">
+                            <field name="ai_assistant_ollama_url" placeholder="http://localhost:11434"/>
+                        </setting>
+                    </block>
+
+                    <block title="Feature Toggles" name="feature_toggles">
+                        <setting string="Property Search" help="Enable property listing search">
+                            <field name="ai_assistant_property_search"/>
+                        </setting>
+                        <setting string="CRM Search" help="Enable CRM leads and contacts search">
+                            <field name="ai_assistant_crm_search"/>
+                        </setting>
+                        <setting string="Document Search (RAG)" help="Search property documents via n8n">
+                            <field name="ai_assistant_rag_enabled"/>
+                        </setting>
+                        <setting string="General Q&amp;A" help="Allow AI to answer general questions">
+                            <field name="ai_assistant_general_qa"/>
+                        </setting>
+                    </block>
+
+                    <block title="n8n RAG Settings" name="rag_settings" invisible="not ai_assistant_rag_enabled">
+                        <setting string="n8n Webhook URL" help="RAG workflow webhook URL">
+                            <field name="ai_assistant_rag_endpoint" placeholder="https://your-n8n.app.n8n.cloud/webhook/xxx"/>
+                        </setting>
+                        <setting string="n8n API Key" help="RAG webhook authentication key">
+                            <field name="ai_assistant_rag_api_key" password="True"/>
+                        </setting>
+                    </block>
+
+                    <block title="Prompt Settings" name="prompt_settings">
+                        <setting string="Welcome Message" help="Message shown when user opens chat">
+                            <field name="ai_assistant_welcome_message" widget="text"/>
+                        </setting>
+                        <setting string="System Prompt" help="AI assistant behavior instructions">
+                            <field name="ai_assistant_system_prompt" widget="text"/>
+                            <div class="text-muted">
+                                Available variables: {current_date}, {user_name}, {company_name}
+                            </div>
+                        </setting>
+                    </block>
+
+                    <block title="Advanced Settings" name="advanced_settings">
+                        <setting string="Max Search Results" help="Maximum results per search">
+                            <field name="ai_assistant_max_search_results"/>
+                        </setting>
+                        <setting string="Session Timeout" help="Session expires after idle time (minutes)">
+                            <field name="ai_assistant_session_timeout"/>
+                        </setting>
+                        <setting string="Debug Mode" help="Enable detailed logging">
+                            <field name="ai_assistant_debug_mode"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action to open AI Assistant settings directly -->
+    <record id="action_ai_assistant_settings" model="ir.actions.act_window">
+        <field name="name">C21 AI Assistant Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+        <field name="context">{'module': 'c21_ai_assistant'}</field>
+    </record>
+</odoo>

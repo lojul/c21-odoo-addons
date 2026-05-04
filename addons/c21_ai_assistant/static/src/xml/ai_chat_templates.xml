@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <!-- Main Systray Template (renders floating button) -->
+    <t t-name="c21_ai_assistant.AiChatSystray">
+        <!-- Floating Button Container (fixed position) -->
+        <div class="o_ai_chat_floating" t-if="state.hasAccess">
+            <!-- Floating Action Button -->
+            <button
+                t-attf-class="o_ai_chat_fab {{ state.isOpen ? 'o_ai_chat_fab_active' : '' }}"
+                t-on-click="toggleChat"
+                title="AI Assistant"
+            >
+                <i t-if="!state.isOpen" class="fa fa-comments"/>
+                <i t-else="" class="fa fa-times"/>
+                <span class="o_ai_chat_fab_badge" t-if="!state.isOpen">AI</span>
+            </button>
+
+            <!-- Chat Panel -->
+            <div t-if="state.isOpen" class="o_ai_chat_panel">
+                <!-- Header -->
+                <div class="o_ai_chat_header">
+                    <div class="o_ai_chat_title">
+                        <i class="fa fa-robot me-2"/>
+                        <span>AI Assistant</span>
+                    </div>
+                    <div class="o_ai_chat_actions">
+                        <button class="btn btn-sm btn-link" t-on-click="clearChat" title="New Chat">
+                            <i class="fa fa-refresh"/>
+                        </button>
+                        <button class="btn btn-sm btn-link" t-on-click="closeChat" title="Close">
+                            <i class="fa fa-times"/>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="o_ai_chat_messages" t-ref="messagesContainer">
+                    <t t-foreach="state.messages" t-as="msg" t-key="msg_index">
+                        <div t-attf-class="o_ai_chat_message o_ai_chat_message_{{ msg.role }} {{ msg.isError ? 'o_ai_chat_message_error' : '' }}">
+                            <div class="o_ai_chat_message_avatar">
+                                <i t-if="msg.role === 'user'" class="fa fa-user"/>
+                                <i t-else="" class="fa fa-robot"/>
+                            </div>
+                            <div class="o_ai_chat_message_content">
+                                <div class="o_ai_chat_message_text" t-out="formatMessage(msg.content)"/>
+                                <div class="o_ai_chat_message_meta">
+                                    <span class="o_ai_chat_message_time" t-out="formatTime(msg.timestamp)"/>
+                                    <span t-if="msg.intent" class="o_ai_chat_message_intent badge bg-secondary ms-1" t-out="msg.intent"/>
+                                </div>
+
+                                <!-- Search Results (if any) -->
+                                <t t-if="msg.searchResults and msg.searchResults.length > 0">
+                                    <div class="o_ai_chat_search_results mt-2">
+                                        <small class="text-muted">
+                                            <i class="fa fa-search me-1"/>
+                                            <span t-out="msg.searchResults.length"/> results
+                                        </small>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </t>
+
+                    <!-- Loading indicator -->
+                    <div t-if="state.isLoading" class="o_ai_chat_message o_ai_chat_message_assistant">
+                        <div class="o_ai_chat_message_avatar">
+                            <i class="fa fa-robot"/>
+                        </div>
+                        <div class="o_ai_chat_message_content">
+                            <div class="o_ai_chat_typing">
+                                <span class="o_ai_chat_typing_dot"/>
+                                <span class="o_ai_chat_typing_dot"/>
+                                <span class="o_ai_chat_typing_dot"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="o_ai_chat_input_area">
+                    <textarea
+                        class="o_ai_chat_input"
+                        placeholder="Type a message..."
+                        t-att-value="state.inputValue"
+                        t-on-input="onInputChange"
+                        t-on-keydown="onKeyDown"
+                        t-att-disabled="state.isLoading"
+                        rows="1"
+                    />
+                    <button
+                        class="o_ai_chat_send_btn btn btn-primary"
+                        t-on-click="sendMessage"
+                        t-att-disabled="state.isLoading or !state.inputValue.trim()"
+                    >
+                        <i class="fa fa-paper-plane"/>
+                    </button>
+                </div>
+
+                <!-- Footer -->
+                <div class="o_ai_chat_footer">
+                    <small class="text-muted">
+                        Press Enter to send, Shift+Enter for new line
+                    </small>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

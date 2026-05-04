@@ -31,12 +31,12 @@ class ResConfigSettings(models.TransientModel):
 
     # Automation
     social_auto_approve = fields.Boolean(
-        string='自動審批',
+        string='Auto Approve',
         config_parameter='c21_social_marketing.auto_approve',
         help='Auto-approve generated posts (skip pending state)'
     )
     social_auto_send = fields.Boolean(
-        string='自動發送',
+        string='Auto Send',
         config_parameter='c21_social_marketing.auto_send',
         help='Auto-send approved posts to Buffer'
     )

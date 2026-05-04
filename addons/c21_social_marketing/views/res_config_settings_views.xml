@@ -9,28 +9,28 @@
         <field name="inherit_id" ref="base.res_config_settings_view_form"/>
         <field name="arch" type="xml">
             <xpath expr="//form" position="inside">
-                <app data-string="Social Marketing" string="Social Marketing" name="c21_social_marketing" logo="/c21_social_marketing/static/description/icon.png">
-                    <block title="API 設定" name="api_settings">
-                        <setting string="OpenRouter API Key" help="用於 AI 生成帖文內容 (DeepSeek)">
+                <app data-string="C21 Social Marketing" string="C21 Social Marketing" name="c21_social_marketing" logo="/c21_social_marketing/static/description/icon.png">
+                    <block title="API Settings" name="api_settings">
+                        <setting string="OpenRouter API Key" help="For AI-generated post content (DeepSeek)">
                             <field name="social_openrouter_api_key" password="True"/>
                         </setting>
-                        <setting string="Buffer API Token" help="用於發佈帖文到社交媒體">
+                        <setting string="Buffer API Token" help="For posting to social media">
                             <field name="social_buffer_api_token" password="True"/>
                         </setting>
-                        <setting string="imgbb API Key" help="用於圖片託管">
+                        <setting string="imgbb API Key" help="For image hosting">
                             <field name="social_imgbb_api_key" password="True"/>
                         </setting>
                     </block>
-                    <block title="AI 設定" name="ai_settings">
-                        <setting string="AI 模型" help="OpenRouter 模型 ID">
+                    <block title="AI Settings" name="ai_settings">
+                        <setting string="AI Model" help="OpenRouter model ID">
                             <field name="social_ai_model" placeholder="deepseek/deepseek-chat"/>
                         </setting>
                     </block>
-                    <block title="自動化設定" name="automation_settings">
-                        <setting string="自動審批" help="生成的帖文自動通過審批">
+                    <block title="Automation Settings" name="automation_settings">
+                        <setting string="Auto Approve" help="Auto-approve generated posts">
                             <field name="social_auto_approve"/>
                         </setting>
-                        <setting string="自動發送" help="審批後自動發送到 Buffer">
+                        <setting string="Auto Send" help="Auto-send to Buffer after approval">
                             <field name="social_auto_send"/>
                         </setting>
                     </block>
@@ -41,7 +41,7 @@
 
     <!-- Settings Action -->
     <record id="action_social_marketing_config" model="ir.actions.act_window">
-        <field name="name">Social Marketing 設定</field>
+        <field name="name">C21 Social Marketing Settings</field>
         <field name="res_model">res.config.settings</field>
         <field name="view_mode">form</field>
         <field name="target">current</field>

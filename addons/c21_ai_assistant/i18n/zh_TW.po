@@ -1,0 +1,388 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* c21_ai_assistant
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-04 00:00+0000\n"
+"PO-Revision-Date: 2026-05-04 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Chinese (Traditional)\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: c21_ai_assistant
+#: model:ir.module.module,name:c21_ai_assistant.module_c21_ai_assistant
+msgid "C21 - AI Assistant"
+msgstr "C21 - AI 助手"
+
+#. module: c21_ai_assistant
+#: model:ir.ui.menu,name:c21_ai_assistant.menu_ai_assistant_root
+msgid "C21 AI Assistant"
+msgstr "C21 AI 助手"
+
+#. module: c21_ai_assistant
+#: model:ir.ui.menu,name:c21_ai_assistant.menu_ai_chat_sessions
+msgid "Chat History"
+msgstr "對話記錄"
+
+#. module: c21_ai_assistant
+#: model:ir.ui.menu,name:c21_ai_assistant.menu_ai_assistant_settings
+msgid "Settings"
+msgstr "設定"
+
+#. module: c21_ai_assistant
+#: model:res.groups,name:c21_ai_assistant.group_ai_assistant_user
+msgid "C21 AI Assistant User"
+msgstr "C21 AI 助手使用者"
+
+#. module: c21_ai_assistant
+#: model:res.groups,name:c21_ai_assistant.group_ai_assistant_admin
+msgid "C21 AI Assistant Admin"
+msgstr "C21 AI 助手管理員"
+
+#. module: c21_ai_assistant
+#: model:ir.model,name:c21_ai_assistant.model_ai_chat_session
+msgid "AI Chat Session"
+msgstr "AI 對話"
+
+#. module: c21_ai_assistant
+#: model:ir.model,name:c21_ai_assistant.model_ai_chat_message
+msgid "AI Chat Message"
+msgstr "AI 訊息"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__session_id
+msgid "Session ID"
+msgstr "對話 ID"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__user_id
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__user_id
+msgid "User"
+msgstr "使用者"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__company_id
+msgid "Company"
+msgstr "公司"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__message_count
+msgid "Message Count"
+msgstr "訊息數量"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__last_activity
+msgid "Last Activity"
+msgstr "最後活動"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__state
+msgid "State"
+msgstr "狀態"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_session__state__active
+msgid "Active"
+msgstr "進行中"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_session__state__expired
+msgid "Expired"
+msgstr "已過期"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_session__state__closed
+msgid "Closed"
+msgstr "已關閉"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__summary
+msgid "Summary"
+msgstr "摘要"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__total_tokens
+msgid "Total Tokens"
+msgstr "總 Tokens"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__property_searches
+msgid "Property Searches"
+msgstr "物業搜尋次數"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__crm_searches
+msgid "CRM Searches"
+msgstr "CRM 搜尋次數"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_session__rag_searches
+msgid "Document Searches"
+msgstr "文件搜尋次數"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__session_id
+msgid "Session"
+msgstr "對話"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__role
+msgid "Role"
+msgstr "角色"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__role__user
+msgid "User"
+msgstr "使用者"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__role__assistant
+msgid "Assistant"
+msgstr "AI 助手"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__role__system
+msgid "System"
+msgstr "系統"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__content
+msgid "Content"
+msgstr "內容"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__intent
+msgid "Intent"
+msgstr "意圖"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__intent__property_search
+msgid "Property Search"
+msgstr "物業搜尋"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__intent__crm_search
+msgid "CRM Search"
+msgstr "CRM 搜尋"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__intent__document_search
+msgid "Document Search"
+msgstr "文件搜尋"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__intent__general
+msgid "General Q&A"
+msgstr "一般問答"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__intent__greeting
+msgid "Greeting"
+msgstr "問候"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields.selection,name:c21_ai_assistant.selection__ai_chat_message__intent__unknown
+msgid "Unknown"
+msgstr "未知"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__model_used
+msgid "Model Used"
+msgstr "使用的模型"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__tokens_used
+msgid "Tokens Used"
+msgstr "使用的 Tokens"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__response_time
+msgid "Response Time (s)"
+msgstr "回應時間 (秒)"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__search_results
+msgid "Search Results"
+msgstr "搜尋結果"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__sources
+msgid "Sources"
+msgstr "來源"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__is_error
+msgid "Is Error"
+msgstr "是否錯誤"
+
+#. module: c21_ai_assistant
+#: model:ir.model.fields,field_description:c21_ai_assistant.field_ai_chat_message__error_message
+msgid "Error Message"
+msgstr "錯誤訊息"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_list
+msgid "Chat History"
+msgstr "對話記錄"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_form
+msgid "Chat Details"
+msgstr "對話詳情"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_form
+msgid "Close Session"
+msgstr "關閉對話"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_form
+msgid "Reopen"
+msgstr "重新開啟"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_form
+msgid "Statistics"
+msgstr "統計"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_form
+msgid "Messages"
+msgstr "訊息"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_search
+msgid "Today"
+msgstr "今天"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_search
+msgid "My Sessions"
+msgstr "我的對話"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_session_search
+msgid "Date"
+msgstr "日期"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.view_ai_chat_message_form
+msgid "Message Details"
+msgstr "訊息詳情"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.action_ai_chat_session
+msgid "No chat history yet"
+msgstr "還沒有對話記錄"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.action_ai_chat_session
+msgid "Use the AI Assistant button in the top-right to start a conversation"
+msgstr "使用右上角的 AI 助手按鈕開始對話"
+
+#. module: c21_ai_assistant
+#: model:ir.actions.act_window,name:c21_ai_assistant.action_ai_assistant_settings
+msgid "C21 AI Assistant Settings"
+msgstr "C21 AI 助手設定"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "AI Provider Settings"
+msgstr "AI 提供者設定"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "AI Provider"
+msgstr "AI 提供者"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Model Name"
+msgstr "模型名稱"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Max Tokens"
+msgstr "最大 Tokens"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "API Keys"
+msgstr "API 金鑰"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Feature Toggles"
+msgstr "功能開關"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Property Search"
+msgstr "物業搜尋"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "CRM Search"
+msgstr "CRM 搜尋"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Document Search (RAG)"
+msgstr "文件搜尋 (RAG)"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "General Q&A"
+msgstr "一般問答"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "n8n RAG Settings"
+msgstr "n8n RAG 設定"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Prompt Settings"
+msgstr "提示設定"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Welcome Message"
+msgstr "歡迎訊息"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "System Prompt"
+msgstr "系統提示"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Advanced Settings"
+msgstr "進階設定"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Max Search Results"
+msgstr "最大搜尋結果"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Session Timeout"
+msgstr "對話過期時間"
+
+#. module: c21_ai_assistant
+#: model_terms:ir.ui.view,arch_db:c21_ai_assistant.res_config_settings_view_form_ai_assistant
+msgid "Debug Mode"
+msgstr "調試模式"
+
+#. module: c21_ai_assistant
+#: code:addons/c21_ai_assistant/models/ai_chat_message.py:0
+msgid "Sorry, an error occurred while processing your request. Please try again later."
+msgstr "抱歉，處理您的請求時發生錯誤。請稍後再試。"

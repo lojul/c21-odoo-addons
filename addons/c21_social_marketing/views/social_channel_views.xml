@@ -6,22 +6,22 @@
         <field name="name">c21.social.channel.form</field>
         <field name="model">c21.social.channel</field>
         <field name="arch" type="xml">
-            <form string="社交媒體頻道">
+            <form string="Social Media Channel">
                 <sheet>
                     <group>
-                        <group string="基本資訊">
+                        <group string="Basic Info">
                             <field name="name"/>
                             <field name="platform"/>
                             <field name="buffer_channel_id"/>
                             <field name="active"/>
                             <field name="sequence"/>
                         </group>
-                        <group string="設定">
+                        <group string="Settings">
                             <field name="include_image"/>
-                            <field name="hashtags" placeholder="平台專屬標籤"/>
+                            <field name="hashtags" placeholder="Platform-specific hashtags"/>
                         </group>
                     </group>
-                    <group string="統計">
+                    <group string="Statistics">
                         <field name="last_post_time" readonly="1"/>
                         <field name="post_count" readonly="1"/>
                     </group>
@@ -35,7 +35,7 @@
         <field name="name">c21.social.channel.list</field>
         <field name="model">c21.social.channel</field>
         <field name="arch" type="xml">
-            <list string="社交媒體頻道" editable="bottom">
+            <list string="Social Media Channels" editable="bottom">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="platform"/>
@@ -50,7 +50,7 @@
 
     <!-- Channel Action -->
     <record id="action_social_channel" model="ir.actions.act_window">
-        <field name="name">頻道</field>
+        <field name="name">Channels</field>
         <field name="res_model">c21.social.channel</field>
         <field name="view_mode">list,form</field>
     </record>

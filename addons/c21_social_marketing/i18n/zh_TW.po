@@ -1,0 +1,708 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* c21_social_marketing
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 19.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-04 00:00+0000\n"
+"PO-Revision-Date: 2026-05-04 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Chinese (Traditional)\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. module: c21_social_marketing
+#: model:ir.module.module,name:c21_social_marketing.module_c21_social_marketing
+msgid "C21 Social Marketing"
+msgstr "C21 社交媒體行銷"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_marketing_root
+msgid "C21 Social Marketing"
+msgstr "C21 社交媒體行銷"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_posts
+msgid "Posts"
+msgstr "帖文"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_news
+msgid "News"
+msgstr "新聞"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_config
+msgid "Configuration"
+msgstr "設定"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_channels
+msgid "Channels"
+msgstr "頻道"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_feeds
+msgid "RSS Feeds"
+msgstr "RSS 來源"
+
+#. module: c21_social_marketing
+#: model:ir.ui.menu,name:c21_social_marketing.menu_social_settings
+msgid "API Settings"
+msgstr "API 設定"
+
+#. module: c21_social_marketing
+#: model:ir.model,name:c21_social_marketing.model_c21_social_post
+msgid "Social Media Post"
+msgstr "社交媒體帖文"
+
+#. module: c21_social_marketing
+#: model:ir.model,name:c21_social_marketing.model_c21_social_news
+msgid "Scraped News Item"
+msgstr "抓取的新聞"
+
+#. module: c21_social_marketing
+#: model:ir.model,name:c21_social_marketing.model_c21_social_feed
+msgid "RSS Feed Source"
+msgstr "RSS 來源"
+
+#. module: c21_social_marketing
+#: model:ir.model,name:c21_social_marketing.model_c21_social_channel
+msgid "Social Media Channel"
+msgstr "社交媒體頻道"
+
+#. module: c21_social_marketing
+#: model:ir.actions.act_window,name:c21_social_marketing.action_social_post
+msgid "Posts"
+msgstr "帖文"
+
+#. module: c21_social_marketing
+#: model:ir.actions.act_window,name:c21_social_marketing.action_social_news
+msgid "News"
+msgstr "新聞"
+
+#. module: c21_social_marketing
+#: model:ir.actions.act_window,name:c21_social_marketing.action_social_feed
+msgid "RSS Feeds"
+msgstr "RSS 來源"
+
+#. module: c21_social_marketing
+#: model:ir.actions.act_window,name:c21_social_marketing.action_social_channel
+msgid "Channels"
+msgstr "頻道"
+
+#. module: c21_social_marketing
+#: model:ir.actions.act_window,name:c21_social_marketing.action_social_marketing_config
+msgid "C21 Social Marketing Settings"
+msgstr "C21 社交媒體行銷設定"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__name
+msgid "Name"
+msgstr "名稱"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__headline_zh
+msgid "Chinese Headline"
+msgstr "中文標題"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__data_point
+msgid "Data Point"
+msgstr "數據重點"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__district
+msgid "District"
+msgstr "地區"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__source
+msgid "News Source"
+msgstr "新聞來源"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__ig_caption
+msgid "Instagram Caption"
+msgstr "Instagram 說明"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__fb_caption
+msgid "Facebook Caption"
+msgstr "Facebook 說明"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__threads_caption
+msgid "Threads Caption"
+msgstr "Threads 說明"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__background_color
+msgid "Background Color"
+msgstr "背景顏色"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__background_color__navy_blue
+msgid "Navy Blue (Default)"
+msgstr "深藍 (預設)"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__background_color__sage_green
+msgid "Sage Green (Positive)"
+msgstr "灰綠 (正面)"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__background_color__charcoal
+msgid "Charcoal (Cautious)"
+msgstr "炭灰 (謹慎)"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__background_color__terracotta
+msgid "Terracotta (Major Deal)"
+msgstr "陶土 (重大交易)"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__image
+msgid "Image"
+msgstr "圖片"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__image_filename
+msgid "Image Filename"
+msgstr "圖片檔名"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__image_url
+msgid "Image URL"
+msgstr "圖片連結"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__channel_ids
+msgid "Publish Channels"
+msgstr "發佈平台"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__state
+msgid "State"
+msgstr "狀態"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__state__draft
+msgid "Draft"
+msgstr "草稿"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__state__pending
+msgid "Pending"
+msgstr "待審批"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__state__approved
+msgid "Approved"
+msgstr "已審批"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__state__scheduled
+msgid "Scheduled"
+msgstr "已排程"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__state__posted
+msgid "Posted"
+msgstr "已發佈"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_post__state__failed
+msgid "Failed"
+msgstr "失敗"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__scheduled_time
+msgid "Scheduled Time"
+msgstr "排程時間"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__posted_time
+msgid "Posted Time"
+msgstr "發佈時間"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__buffer_response
+msgid "Buffer Response"
+msgstr "Buffer 回應"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__error_message
+msgid "Error Message"
+msgstr "錯誤訊息"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__news_ids
+msgid "Related News"
+msgstr "相關新聞"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_post__is_auto_generated
+msgid "Auto Generated"
+msgstr "自動生成"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__name
+msgid "Title"
+msgstr "標題"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__description
+msgid "Description"
+msgstr "描述"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__url
+msgid "URL"
+msgstr "連結"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__source
+msgid "Source"
+msgstr "來源"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__feed_id
+msgid "RSS Feed"
+msgstr "RSS 來源"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__fetch_date
+msgid "Fetch Date"
+msgstr "抓取時間"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__publish_date
+msgid "Publish Date"
+msgstr "發佈時間"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__used
+msgid "Used"
+msgstr "已使用"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__post_ids
+msgid "Related Posts"
+msgstr "相關帖文"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__is_property_news
+msgid "Property News"
+msgstr "地產新聞"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_news__relevance_score
+msgid "Relevance Score"
+msgstr "相關性"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__name
+msgid "Name"
+msgstr "名稱"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__url
+msgid "RSS URL"
+msgstr "RSS 連結"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__priority
+msgid "Priority"
+msgstr "優先級"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__active
+msgid "Active"
+msgstr "啟用"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__language
+msgid "Language"
+msgstr "語言"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_feed__language__zh
+msgid "Chinese"
+msgstr "中文"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields.selection,name:c21_social_marketing.selection__c21_social_feed__language__en
+msgid "English"
+msgstr "英文"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__last_fetch
+msgid "Last Fetch"
+msgstr "上次抓取"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_feed__news_count
+msgid "News Count"
+msgstr "新聞數量"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__name
+msgid "Name"
+msgstr "名稱"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__platform
+msgid "Platform"
+msgstr "平台"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__buffer_channel_id
+msgid "Buffer Channel ID"
+msgstr "Buffer 頻道 ID"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__active
+msgid "Active"
+msgstr "啟用"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__sequence
+msgid "Sequence"
+msgstr "排序"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__last_post_time
+msgid "Last Post Time"
+msgstr "上次發文"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__post_count
+msgid "Post Count"
+msgstr "發文數量"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__include_image
+msgid "Include Image"
+msgstr "包含圖片"
+
+#. module: c21_social_marketing
+#: model:ir.model.fields,field_description:c21_social_marketing.field_c21_social_channel__hashtags
+msgid "Default Hashtags"
+msgstr "預設標籤"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Social Media Post"
+msgstr "社交媒體帖文"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "AI Generate Content"
+msgstr "AI 生成內容"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Submit for Approval"
+msgstr "提交審批"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Approve"
+msgstr "審批通過"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Reject"
+msgstr "退回"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Send to Buffer"
+msgstr "發送至 Buffer"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Content"
+msgstr "內容"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Image Preview"
+msgstr "圖片預覽"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Regenerate Image"
+msgstr "重新生成圖片"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Publish Settings"
+msgstr "發佈設定"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Related News"
+msgstr "相關新聞"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_form
+msgid "Technical Info"
+msgstr "技術資訊"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_list
+msgid "Social Media Posts"
+msgstr "社交媒體帖文"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_list
+msgid "Created"
+msgstr "建立時間"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_list
+msgid "Auto"
+msgstr "自動"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_search
+msgid "Search Posts"
+msgstr "搜尋帖文"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_post_search
+msgid "Auto Generated"
+msgstr "自動生成"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.action_social_post
+msgid "Create your first social media post"
+msgstr "建立您的第一個社交媒體帖文"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.action_social_post
+msgid "The system will automatically fetch news and generate post content."
+msgstr "系統會自動抓取新聞並生成帖文內容。"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_feed_form
+msgid "RSS Feed"
+msgstr "RSS 來源"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_feed_form
+msgid "Fetch Now"
+msgstr "立即抓取"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_feed_form
+msgid "Basic Info"
+msgstr "基本資訊"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_feed_form
+msgid "Statistics"
+msgstr "統計"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_feed_list
+msgid "Fetch"
+msgstr "抓取"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_news_form
+msgid "Generate Post"
+msgstr "生成帖文"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_news_form
+msgid "News Info"
+msgstr "新聞資訊"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_news_form
+msgid "Relevance"
+msgstr "相關性"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_news_search
+msgid "Search News"
+msgstr "搜尋新聞"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_news_search
+msgid "Property News"
+msgstr "地產新聞"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_news_search
+msgid "Unused"
+msgstr "未使用"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_channel_form
+msgid "Social Media Channel"
+msgstr "社交媒體頻道"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_channel_form
+msgid "Settings"
+msgstr "設定"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.view_social_channel_list
+msgid "Social Media Channels"
+msgstr "社交媒體頻道"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "API Settings"
+msgstr "API 設定"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "For AI-generated post content (DeepSeek)"
+msgstr "用於 AI 生成帖文內容 (DeepSeek)"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "For posting to social media"
+msgstr "用於發佈帖文到社交媒體"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "For image hosting"
+msgstr "用於圖片託管"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "AI Settings"
+msgstr "AI 設定"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "AI Model"
+msgstr "AI 模型"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "OpenRouter model ID"
+msgstr "OpenRouter 模型 ID"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "Automation Settings"
+msgstr "自動化設定"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "Auto Approve"
+msgstr "自動審批"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "Auto-approve generated posts"
+msgstr "生成的帖文自動通過審批"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "Auto Send"
+msgstr "自動發送"
+
+#. module: c21_social_marketing
+#: model_terms:ir.ui.view,arch_db:c21_social_marketing.res_config_settings_view_form
+msgid "Auto-send to Buffer after approval"
+msgstr "審批後自動發送到 Buffer"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Image generation failed: %s"
+msgstr "圖片生成失敗: %s"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Please configure OpenRouter API Key in Settings"
+msgstr "請先在設定中配置 OpenRouter API Key"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Captions generated successfully"
+msgstr "說明文已生成"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Caption generation failed: %s"
+msgstr "說明文生成失敗: %s"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Please generate an image first"
+msgstr "請先生成圖片"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Please generate captions first"
+msgstr "請先生成說明文"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Can only send approved posts"
+msgstr "只能發送已審批的帖文"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Please configure Buffer API Token in Settings"
+msgstr "請先在設定中配置 Buffer API Token"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Instagram posts require an image"
+msgstr "Instagram 帖文需要圖片"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Please configure imgbb API Key in Settings"
+msgstr "請先在設定中配置 imgbb API Key"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Image upload failed, please try again"
+msgstr "圖片上傳失敗，請重試"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Sent to %d channels"
+msgstr "已發送至 %d 個平台"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_post.py:0
+msgid "Send failed: %s"
+msgstr "發送失敗: %s"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_news.py:0
+msgid "Please configure OpenRouter API Key first"
+msgstr "請先設定 OpenRouter API Key"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_news.py:0
+msgid "AI generation failed: %s"
+msgstr "AI 生成失敗: %s"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_news.py:0
+msgid "Image generation failed: %s"
+msgstr "圖片生成失敗: %s"
+
+#. module: c21_social_marketing
+#: code:addons/c21_social_marketing/models/social_feed.py:0
+msgid "Fetched %s"
+msgstr "已抓取 %s"
+
