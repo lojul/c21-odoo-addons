@@ -133,18 +133,21 @@ class SearchService:
         return ', '.join(filter(None, parts))
 
     def _format_property_results(self, results):
-        """Format property results for display"""
+        """Format property results for display with clickable links"""
         if not results:
             return "未找到符合條件的物業。"
 
         lines = [f"找到 {len(results)} 個物業:\n"]
         for i, prop in enumerate(results[:5], 1):
+            record_id = prop.get('id')
             name = prop.get('name_cn') or prop.get('name') or '未命名'
             address = prop.get('address') or ''
             area = prop.get('gross_area') or 0
             rent = prop.get('asking_rent') or 0
 
-            line = f"{i}. **{name}**"
+            # Make name a clickable link to the property form
+            link = f"/web#id={record_id}&model=c21.property.listing&view_type=form"
+            line = f"{i}. **[{name}]({link})**"
             if address:
                 line += f"\n   地址: {address}"
             if area:

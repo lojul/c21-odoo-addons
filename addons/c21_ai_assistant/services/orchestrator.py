@@ -207,29 +207,19 @@ class Orchestrator:
         # Increment session stat
         session.increment_stat('property')
 
-        # If we have results, format them
+        # If we have results, return formatted results directly (with clickable links)
         if search_result.get('results'):
             formatted = search_result.get('formatted', '')
 
-            # Optionally use LLM to enhance the response
-            if len(search_result['results']) > 0:
-                # Build context from search results
-                context = f"Property search results:\n{formatted}"
-
-                messages = conversation_history or []
-                messages.append({'role': 'user', 'content': query})
-
-                llm_result = self.llm_service.chat(messages, context=context)
-
-                return {
-                    'response': llm_result.get('content', formatted),
-                    'intent': 'property_search',
-                    'search_results': search_result['results'],
-                    'sources': [],
-                    'model': llm_result.get('model'),
-                    'tokens': llm_result.get('tokens_used', 0),
-                    'response_time': time.time() - start_time,
-                }
+            return {
+                'response': formatted,
+                'intent': 'property_search',
+                'search_results': search_result['results'],
+                'sources': [],
+                'model': None,
+                'tokens': 0,
+                'response_time': time.time() - start_time,
+            }
 
         # No results - use LLM to respond
         messages = conversation_history or []
