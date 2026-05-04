@@ -282,12 +282,19 @@ class Orchestrator:
                         break
 
         # Determine if searching leads or partners
-        model_type = 'lead'
-        if any(word in query_lower for word in ['聯絡人', 'contact', '客戶', 'customer', 'profile', '檔案']):
-            model_type = 'partner'
+        # Default to partner for person name searches
+        model_type = 'partner'  # Default to contacts
+        if any(word in query_lower for word in ['lead', 'leads', '潛在客戶', 'prospect', 'opportunity', '商機']):
+            model_type = 'lead'
 
-        # Search CRM
+        # Search CRM - try partners first, then leads if no results
         search_result = self.search_service.search_crm(search_term, model_type)
+
+        # If no results found in partners, try leads
+        if not search_result.get('results') and model_type == 'partner':
+            search_result = self.search_service.search_crm(search_term, 'lead')
+            if search_result.get('results'):
+                model_type = 'lead'
 
         # Increment session stat
         session.increment_stat('crm')
@@ -327,20 +334,14 @@ class Orchestrator:
                     'response_time': time.time() - start_time,
                 }
 
-            context = f"CRM search results:\n{formatted}"
-
-            messages = conversation_history or []
-            messages.append({'role': 'user', 'content': query})
-
-            llm_result = self.llm_service.chat(messages, context=context)
-
+            # Return formatted results directly (don't let LLM paraphrase)
             return {
-                'response': llm_result.get('content', formatted),
+                'response': formatted,
                 'intent': 'crm_search',
                 'search_results': search_result['results'],
                 'sources': [],
-                'model': llm_result.get('model'),
-                'tokens': llm_result.get('tokens_used', 0),
+                'model': None,
+                'tokens': 0,
                 'response_time': time.time() - start_time,
             }
 
