@@ -245,9 +245,20 @@ class Orchestrator:
                         'response_time': time.time() - start_time,
                     }
 
-        # Search with AI-extracted parameters
-        # First try with extracted search term
-        search_result = self.search_service.search_properties(search_term, filters)
+        # Check if this is a general inquiry (e.g., "what do you have", "show all", "list properties")
+        general_inquiry_terms = ['all', 'any', 'available', 'have', 'list', 'show', 'what', '有什麼', '有咩', '全部', '所有']
+        is_general_inquiry = (
+            not search_term or
+            search_term.lower() in general_inquiry_terms or
+            any(term in search_term.lower() for term in general_inquiry_terms)
+        )
+
+        # For general inquiries, show recent/all properties
+        if is_general_inquiry and not filters:
+            search_result = self.search_service.search_properties('', {})  # Empty search = show all
+        else:
+            # Search with AI-extracted parameters
+            search_result = self.search_service.search_properties(search_term, filters)
 
         # If no results, try searching with the district filter as search term
         if not search_result.get('results') and filters.get('district'):
