@@ -35,12 +35,17 @@ class Orchestrator:
             r'聯絡人|contact|contacts',
             r'銷售|sales|deal',
             r'pipeline|管道',
+            # Follow-up requests for CRM records
+            r'profile|檔案|個人資料',
+            r'open\s+(his|her|their|the)|打開|查看',
+            r'view\s+(his|her|their|the|profile)',
+            r'show\s+(his|her|their|the|profile|me)',
         ],
         'document_search': [
             r'文件|document|file|pdf',
             r'particular|particulars|詳情',
             r'合約|contract|agreement',
-            r'資料|information|details',
+            # Removed generic 'information|details' as it's too broad
         ],
         'greeting': [
             r'^(hi|hello|hey|你好|哈囉|早晨|午安|晚安)',
@@ -223,13 +228,36 @@ class Orchestrator:
 
     def _handle_crm_search(self, query, session, conversation_history, start_time):
         """Handle CRM search queries"""
+        query_lower = query.lower()
+
+        # Check if this is a follow-up request (open/view/show profile)
+        is_followup = any(word in query_lower for word in [
+            'open', 'view', 'show', 'profile', '打開', '查看', '檔案'
+        ])
+
+        # Extract name from context if it's a follow-up request
+        search_term = query
+        if is_followup and conversation_history:
+            # Look for a name in previous assistant responses
+            # Format from _format_partner_results: "1. **Stephen Wong** (Company)"
+            for msg in reversed(conversation_history):
+                if msg.get('role') == 'assistant':
+                    content = msg.get('content', '')
+                    # Match names in bold markdown: **Name**
+                    name_match = re.search(r'\*\*([^*]+)\*\*', content)
+                    if name_match:
+                        search_term = name_match.group(1).strip()
+                        if self.debug_mode:
+                            _logger.info(f"[AI Assistant] Extracted name from context: {search_term}")
+                        break
+
         # Determine if searching leads or partners
         model_type = 'lead'
-        if any(word in query.lower() for word in ['聯絡人', 'contact', '客戶', 'customer']):
+        if any(word in query_lower for word in ['聯絡人', 'contact', '客戶', 'customer', 'profile', '檔案']):
             model_type = 'partner'
 
         # Search CRM
-        search_result = self.search_service.search_crm(query, model_type)
+        search_result = self.search_service.search_crm(search_term, model_type)
 
         # Increment session stat
         session.increment_stat('crm')
@@ -237,6 +265,38 @@ class Orchestrator:
         # Format and respond
         if search_result.get('results'):
             formatted = search_result.get('formatted', '')
+
+            # If it's a follow-up request to open/view, provide direct links
+            if is_followup and len(search_result['results']) == 1:
+                record = search_result['results'][0]
+                record_id = record.get('id')
+                record_name = record.get('name', '')
+                record_email = record.get('email', '')
+                record_phone = record.get('phone', '')
+                record_company = record.get('company', '')
+
+                # Build a response with action link
+                response_parts = [f"**{record_name}** 的個人資料:"]
+                if record_company:
+                    response_parts.append(f"公司: {record_company}")
+                if record_email:
+                    response_parts.append(f"電郵: {record_email}")
+                if record_phone:
+                    response_parts.append(f"電話: {record_phone}")
+
+                model_name = 'crm.lead' if model_type == 'lead' else 'res.partner'
+                response_parts.append(f"\n要在 Odoo 打開此記錄，請點擊: `/web#id={record_id}&model={model_name}&view_type=form`")
+
+                return {
+                    'response': '\n'.join(response_parts),
+                    'intent': 'crm_search',
+                    'search_results': search_result['results'],
+                    'sources': [],
+                    'model': None,
+                    'tokens': 0,
+                    'response_time': time.time() - start_time,
+                }
+
             context = f"CRM search results:\n{formatted}"
 
             messages = conversation_history or []
