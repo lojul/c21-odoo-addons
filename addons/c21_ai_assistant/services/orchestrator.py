@@ -86,6 +86,19 @@ class Orchestrator:
                  'greeting', 'general'
         """
         query_lower = query.lower()
+        query_stripped = query.strip()
+
+        # Check for person names FIRST (before other patterns)
+        # Person names should go to CRM search, not property search
+        # Pattern: "FirstName LastName" (case-insensitive) or Chinese name (2-4 chars)
+        if re.match(r'^[A-Za-z]+\s+[A-Za-z]+$', query_stripped):
+            if self.debug_mode:
+                _logger.info(f"[AI Assistant] Detected intent: crm_search (person name)")
+            return 'crm_search'
+        if re.match(r'^[\u4e00-\u9fff]{2,4}$', query_stripped):
+            if self.debug_mode:
+                _logger.info(f"[AI Assistant] Detected intent: crm_search (Chinese name)")
+            return 'crm_search'
 
         # Check each intent pattern
         for intent, patterns in self.INTENT_PATTERNS.items():
@@ -390,9 +403,35 @@ class Orchestrator:
     def _is_relevant_query(self, query):
         """
         Check if a query is relevant to C21 business operations.
-        Returns True only for queries about properties, CRM, real estate, or company operations.
+        Returns True for queries about properties, CRM, real estate, company operations,
+        or queries that look like person name searches.
         """
         query_lower = query.lower()
+
+        # Reject obvious off-topic queries FIRST
+        irrelevant_patterns = [
+            r'\b(python|javascript|java|coding|programming|code)\b',
+            r'\b(recipe|cook|cooking|food)\b',
+            r'\b(movie|film|music|song|game|gaming)\b',
+            r'\b(weather|天氣)\b',
+            r'\b(joke|笑話)\b',
+            r'\b(translate|翻譯)\b',
+            r'\b(math|calculate|計算|equation)\b',
+            r'\b(homework|功課|essay|poem)\b',
+            r'write.*(code|program|script|essay|story|poem)',
+            r'help.*(code|program|script)',
+        ]
+
+        for pattern in irrelevant_patterns:
+            if re.search(pattern, query_lower, re.IGNORECASE):
+                return False
+
+        # Check for person names (2+ words that look like names, case-insensitive)
+        # This allows searching for contacts like "Stephen Wong" or "stephen wong"
+        if re.match(r'^[A-Za-z]+\s+[A-Za-z]+$', query.strip()):
+            return True  # Looks like a person name
+        if re.match(r'^[\u4e00-\u9fff]{2,4}$', query.strip()):
+            return True  # Looks like a Chinese name
 
         # Relevant keywords for a real estate company
         relevant_patterns = [
@@ -416,30 +455,21 @@ class Orchestrator:
             # General business queries
             r'佣金|commission',
             r'成交|transaction|deal',
+            # Search actions
+            r'find|search|look|show|查|找|搜',
+            # Profile/info requests
+            r'profile|info|detail|資料|檔案',
         ]
 
         for pattern in relevant_patterns:
             if re.search(pattern, query_lower, re.IGNORECASE):
                 return True
 
-        # Reject obvious off-topic queries
-        irrelevant_patterns = [
-            r'python|javascript|java|coding|programming|code',
-            r'recipe|cook|food|restaurant',
-            r'movie|film|music|song|game',
-            r'weather|天氣',
-            r'joke|笑話',
-            r'translate|翻譯',
-            r'math|calculate|計算',
-            r'homework|功課',
-            r'write.*essay|write.*story|write.*poem',
-        ]
+        # Default: allow short queries (likely names or simple searches)
+        # Only reject longer queries that don't match any pattern
+        if len(query.strip()) <= 20:
+            return True
 
-        for pattern in irrelevant_patterns:
-            if re.search(pattern, query_lower, re.IGNORECASE):
-                return False
-
-        # Default: reject if no relevant keywords found
         return False
 
     def _handle_irrelevant_query(self, query, start_time):
