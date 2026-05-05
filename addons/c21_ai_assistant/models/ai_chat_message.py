@@ -36,6 +36,7 @@ class AiChatMessage(models.Model):
         ('property_search', 'Property Search'),
         ('crm_search', 'CRM Search'),
         ('document_search', 'Document Search'),
+        ('news_search', 'News Search'),
         ('general', 'General Q&A'),
         ('greeting', 'Greeting'),
         ('rejected', 'Rejected (Off-topic)'),

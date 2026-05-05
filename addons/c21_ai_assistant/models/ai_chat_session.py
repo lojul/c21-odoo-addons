@@ -81,6 +81,10 @@ class AiChatSession(models.Model):
         string='Document Searches',
         default=0)
 
+    news_searches = fields.Integer(
+        string='News Searches',
+        default=0)
+
     @api.depends('user_id', 'create_date')
     def _compute_display_name(self):
         for record in self:
@@ -161,6 +165,7 @@ class AiChatSession(models.Model):
             'property': 'property_searches',
             'crm': 'crm_searches',
             'rag': 'rag_searches',
+            'news': 'news_searches',
         }
         if stat_type in field_map:
             self.write({field_map[stat_type]: self[field_map[stat_type]] + 1})

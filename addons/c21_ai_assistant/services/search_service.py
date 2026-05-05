@@ -130,6 +130,7 @@ class SearchService:
         query_district_code = self._normalize_district(query) if query else None
 
         # Text search across multiple fields including district
+        # For n conditions with OR, need n-1 '|' operators
         if query:
             query_lower = query.lower()
             domain.append('|')
@@ -137,7 +138,7 @@ class SearchService:
             domain.append('|')
             domain.append('|')
             domain.append('|')
-            domain.append('|')
+            # 6 conditions below, so 5 OR operators above
             domain.append(('name', 'ilike', query))
             domain.append(('name_cn', 'ilike', query))
             domain.append(('building_name', 'ilike', query))
@@ -370,6 +371,98 @@ class SearchService:
 
         if len(results) > 5:
             lines.append(f"\n... 還有 {len(results) - 5} 個結果")
+
+        return "\n".join(lines)
+
+    def search_news(self, query, filters=None):
+        """
+        Search property news
+
+        Args:
+            query: Search query string
+            filters: Optional dict of filters
+
+        Returns:
+            dict with 'results', 'count', 'formatted'
+        """
+        # Check if the model exists
+        if 'c21.social.news' not in self.env:
+            return {'error': 'Social marketing module not installed', 'results': [], 'count': 0}
+
+        try:
+            News = self.env['c21.social.news']
+
+            # Build domain
+            domain = []
+            if query:
+                domain.append('|')
+                domain.append('|')
+                domain.append(('name', 'ilike', query))
+                domain.append(('description', 'ilike', query))
+                domain.append(('source', 'ilike', query))
+
+            # Apply filters
+            if filters:
+                if filters.get('is_property_news'):
+                    domain.append(('is_property_news', '=', True))
+                if filters.get('days'):
+                    from datetime import datetime, timedelta
+                    cutoff = datetime.now() - timedelta(days=filters['days'])
+                    domain.append(('fetch_date', '>=', cutoff))
+
+            # Search with limit, order by most recent
+            news_items = News.search(domain, limit=self.max_results, order='fetch_date desc')
+
+            results = []
+            for news in news_items:
+                results.append({
+                    'id': news.id,
+                    'title': news.name or '',
+                    'description': (news.description[:200] + '...' if news.description and len(news.description) > 200 else news.description) or '',
+                    'url': news.url or '',
+                    'source': news.source or '',
+                    'fetch_date': news.fetch_date.strftime('%Y-%m-%d %H:%M') if news.fetch_date else '',
+                    'publish_date': news.publish_date.strftime('%Y-%m-%d') if news.publish_date else '',
+                    'is_property_news': news.is_property_news,
+                })
+
+            return {
+                'results': results,
+                'count': len(results),
+                'total': News.search_count(domain),
+                'formatted': self._format_news_results(results),
+            }
+
+        except Exception as e:
+            _logger.error(f"[AI Assistant] News search error: {str(e)}")
+            return {'error': str(e), 'results': [], 'count': 0}
+
+    def _format_news_results(self, results):
+        """Format news results for display"""
+        if not results:
+            return "未找到相關新聞。"
+
+        lines = [f"找到 {len(results)} 則新聞:\n"]
+        for i, news in enumerate(results[:5], 1):
+            title = news.get('title', '未命名')
+            source = news.get('source', '')
+            date = news.get('fetch_date', '')
+            url = news.get('url', '')
+            description = news.get('description', '')
+
+            line = f"{i}. **{title}**"
+            if source:
+                line += f" ({source})"
+            if date:
+                line += f"\n   日期: {date}"
+            if description:
+                line += f"\n   {description}"
+            if url:
+                line += f"\n   [閱讀更多]({url})"
+            lines.append(line)
+
+        if len(results) > 5:
+            lines.append(f"\n... 還有 {len(results) - 5} 則新聞")
 
         return "\n".join(lines)
 

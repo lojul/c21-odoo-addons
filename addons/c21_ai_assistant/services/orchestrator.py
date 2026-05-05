@@ -168,6 +168,17 @@ class Orchestrator:
         if intent == 'greeting':
             return self._handle_greeting(query, start_time)
 
+        # Check for news search using pattern (before rejected check)
+        # This ensures news queries aren't incorrectly rejected
+        if intent == 'news_search' or self._is_news_query(query):
+            return self._handle_news_search(query, ai_search_term, session, start_time)
+
+        # Check for address/street names - should be property search, not CRM
+        # Override CRM intent if query looks like a street/address
+        if intent == 'crm_search' and self._is_address_query(query):
+            intent = 'property_search'
+            ai_search_term = query
+
         if intent == 'rejected':
             return self._handle_irrelevant_query(query, start_time)
 
@@ -680,6 +691,91 @@ class Orchestrator:
             'search_results': [],
             'sources': rag_result.get('sources', []),
             'model': 'RAG',
+            'tokens': 0,
+            'response_time': time.time() - start_time,
+        }
+
+    def _is_address_query(self, query):
+        """Check if query looks like a street/address name"""
+        # Common HK street suffixes
+        street_patterns = [
+            r'街$', r'道$', r'路$', r'巷$', r'里$', r'坊$',  # Street suffixes
+            r'街\d+號', r'道\d+號', r'路\d+號',  # Street + number
+            r'大廈', r'中心', r'廣場', r'大樓', r'商場',  # Building types
+            r'tower', r'centre', r'center', r'plaza', r'building',
+            r'\d+號',  # Building number
+        ]
+        for pattern in street_patterns:
+            if re.search(pattern, query, re.IGNORECASE):
+                return True
+        return False
+
+    def _is_news_query(self, query):
+        """Check if query is asking for news using pattern matching"""
+        query_lower = query.lower()
+        news_patterns = [
+            r'新聞|news|headline',
+            r'市場|market',
+            r'最新|latest|recent',
+            r'消息|update|updates',
+            r'報導|report|article',
+            r'趨勢|trend|trends',
+        ]
+        for pattern in news_patterns:
+            if re.search(pattern, query_lower, re.IGNORECASE):
+                return True
+        return False
+
+    def _handle_news_search(self, query, search_term, session, start_time):
+        """Handle news search queries"""
+        # Check if this is a general "show me news" request vs specific search
+        general_news_phrases = [
+            '最新新聞', '最新消息', '新聞', 'latest news', 'recent news',
+            'news', 'market news', '市場新聞', '物業新聞', 'property news',
+            '有什麼新聞', 'what news', 'show news', '顯示新聞',
+            'latest market news', '最新市場新聞', 'market updates', '市場消息'
+        ]
+
+        # If query is a general phrase, search without filter (show all recent)
+        effective_search = search_term or query
+        if effective_search.lower().strip() in [p.lower() for p in general_news_phrases]:
+            effective_search = ''  # Empty search returns all recent news
+
+        # Search news in Odoo
+        search_result = self.search_service.search_news(effective_search)
+
+        # Increment session stat
+        session.increment_stat('news')
+
+        if search_result.get('results'):
+            formatted = search_result.get('formatted', '')
+
+            return {
+                'response': formatted,
+                'intent': 'news_search',
+                'search_results': search_result['results'],
+                'sources': [],
+                'model': 'Odoo',
+                'tokens': 0,
+                'response_time': time.time() - start_time,
+            }
+
+        # No results
+        tips = """未找到相關新聞。
+
+**搜尋提示：**
+• 搜尋關鍵字：「租金」「商廈」「零售」
+• 按來源搜尋：「SCMP」「經濟日報」
+• 最新新聞會自動抓取
+
+請嘗試其他關鍵字。"""
+
+        return {
+            'response': tips,
+            'intent': 'news_search',
+            'search_results': [],
+            'sources': [],
+            'model': None,
             'tokens': 0,
             'response_time': time.time() - start_time,
         }
