@@ -20,6 +20,7 @@ DISTRICT_SELECTION = [
     ('mong_kok', 'Mong Kok (旺角)'),
     ('kowloon_bay', 'Kowloon Bay (九龍灣)'),
     ('kwun_tong', 'Kwun Tong (觀塘)'),
+    ('lam_tin', 'Lam Tin (藍田)'),
     ('san_po_kong', 'San Po Kong (新蒲崗)'),
     ('cheung_sha_wan', 'Cheung Sha Wan (長沙灣)'),
     ('sham_shui_po', 'Sham Shui Po (深水埗)'),
