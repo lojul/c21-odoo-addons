@@ -1,0 +1,468 @@
+/* ==========================================================================
+   C21 Property Reports - CSS Styling
+   C21 Gold Branding: #C5A572 (primary gold), #1A1A1A (dark), #F5F5F5 (light)
+   ========================================================================== */
+
+/* Variables */
+:root {
+    --c21-gold: #C5A572;
+    --c21-gold-dark: #A08050;
+    --c21-gold-light: #D4BC91;
+    --c21-dark: #1A1A1A;
+    --c21-light: #F5F5F5;
+    --c21-gray: #666666;
+    --c21-border: #E0E0E0;
+}
+
+/* ==========================================================================
+   Common Styles
+   ========================================================================== */
+
+.c21-property-report,
+.c21-comparison-report {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--c21-dark);
+    font-size: 10pt;
+    line-height: 1.4;
+}
+
+/* Header */
+.c21-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 3px solid var(--c21-gold);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.c21-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.c21-logo {
+    height: 50px;
+    width: auto;
+}
+
+.c21-brand-name {
+    font-size: 14pt;
+    font-weight: bold;
+    color: var(--c21-gold);
+    letter-spacing: 2px;
+}
+
+.c21-header-title h1 {
+    font-size: 18pt;
+    font-weight: bold;
+    color: var(--c21-dark);
+    margin: 0;
+    text-align: center;
+}
+
+.c21-header-title h2 {
+    font-size: 12pt;
+    color: var(--c21-gray);
+    margin: 2px 0 0 0;
+    text-align: center;
+}
+
+.c21-header-date {
+    font-size: 9pt;
+    color: var(--c21-gray);
+}
+
+/* Section Titles */
+.c21-section-title {
+    font-size: 11pt;
+    font-weight: bold;
+    color: var(--c21-gold);
+    border-bottom: 1px solid var(--c21-gold);
+    padding-bottom: 5px;
+    margin: 20px 0 10px 0;
+}
+
+/* Footer */
+.c21-footer {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 2px solid var(--c21-gold);
+}
+
+.c21-disclaimer {
+    font-size: 7pt;
+    color: var(--c21-gray);
+    font-style: italic;
+    margin-bottom: 10px;
+}
+
+.c21-footer-brand {
+    font-size: 9pt;
+    font-weight: bold;
+    color: var(--c21-gold);
+    text-align: center;
+}
+
+/* ==========================================================================
+   Property Particulars Report
+   ========================================================================== */
+
+/* Title Section */
+.c21-title-section {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background: linear-gradient(135deg, var(--c21-light) 0%, #fff 100%);
+    border-left: 4px solid var(--c21-gold);
+}
+
+.c21-property-name {
+    font-size: 16pt;
+    font-weight: bold;
+    color: var(--c21-dark);
+    margin: 0;
+}
+
+.c21-property-name-cn {
+    font-size: 14pt;
+    color: var(--c21-gray);
+    margin: 5px 0 0 0;
+}
+
+.c21-ref-code {
+    font-size: 9pt;
+    color: var(--c21-gold);
+    margin-top: 5px;
+}
+
+/* Cover Image */
+.c21-cover-image {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.c21-main-image {
+    max-width: 100%;
+    max-height: 300px;
+    border: 2px solid var(--c21-gold);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Details Table */
+.c21-details-section {
+    margin: 20px 0;
+}
+
+.c21-details-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.c21-details-table tr {
+    border-bottom: 1px solid var(--c21-border);
+}
+
+.c21-details-table td {
+    padding: 8px 10px;
+    vertical-align: top;
+}
+
+.c21-label {
+    width: 35%;
+    font-weight: bold;
+    color: var(--c21-gray);
+    font-size: 9pt;
+}
+
+.c21-value {
+    font-size: 10pt;
+    color: var(--c21-dark);
+}
+
+.c21-value.c21-highlight {
+    font-size: 12pt;
+    font-weight: bold;
+    color: var(--c21-gold-dark);
+}
+
+/* Amenities & Business Types */
+.c21-amenities-section,
+.c21-business-section {
+    margin: 15px 0;
+}
+
+.c21-amenities-list,
+.c21-business-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.c21-amenity-tag,
+.c21-business-tag {
+    display: inline-block;
+    background: var(--c21-light);
+    border: 1px solid var(--c21-gold-light);
+    border-radius: 3px;
+    padding: 4px 10px;
+    font-size: 8pt;
+    color: var(--c21-dark);
+}
+
+/* Description */
+.c21-description-section {
+    margin: 15px 0;
+}
+
+.c21-description {
+    font-size: 9pt;
+    line-height: 1.5;
+    color: var(--c21-gray);
+    text-align: justify;
+}
+
+/* Gallery */
+.c21-gallery-section {
+    margin: 20px 0;
+}
+
+.c21-gallery {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.c21-gallery-item {
+    flex: 1;
+    max-width: 30%;
+}
+
+.c21-gallery-image {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid var(--c21-gold-light);
+}
+
+/* Contact Section */
+.c21-contact-section {
+    margin: 20px 0;
+    background: var(--c21-light);
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.c21-contact-card {
+    margin-bottom: 10px;
+}
+
+.c21-contact-card:last-child {
+    margin-bottom: 0;
+}
+
+.c21-contact-name {
+    font-weight: bold;
+    color: var(--c21-gold-dark);
+    font-size: 10pt;
+}
+
+.c21-contact-detail {
+    font-size: 9pt;
+    color: var(--c21-gray);
+}
+
+/* ==========================================================================
+   Property Comparison Report
+   ========================================================================== */
+
+/* Summary Bar */
+.c21-comparison-summary {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    background: var(--c21-light);
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.c21-summary-item {
+    text-align: center;
+}
+
+.c21-summary-label {
+    display: block;
+    font-size: 8pt;
+    color: var(--c21-gray);
+    text-transform: uppercase;
+}
+
+.c21-summary-value {
+    display: block;
+    font-size: 14pt;
+    font-weight: bold;
+    color: var(--c21-gold-dark);
+}
+
+/* Comparison Table */
+.c21-comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 9pt;
+}
+
+.c21-comparison-table th,
+.c21-comparison-table td {
+    border: 1px solid var(--c21-border);
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.c21-comp-header {
+    background: var(--c21-gold);
+    color: white;
+    font-weight: bold;
+    width: 20%;
+}
+
+.c21-comp-property {
+    background: var(--c21-gold-light);
+    color: var(--c21-dark);
+}
+
+.c21-comp-name {
+    font-weight: bold;
+    font-size: 9pt;
+}
+
+.c21-comp-ref {
+    font-size: 7pt;
+    color: var(--c21-gray);
+}
+
+.c21-comp-label {
+    text-align: left;
+    font-weight: bold;
+    background: var(--c21-light);
+    color: var(--c21-gray);
+}
+
+.c21-comp-value {
+    background: white;
+}
+
+.c21-comp-price {
+    font-weight: bold;
+    color: var(--c21-gold-dark);
+}
+
+.c21-comp-image-row td {
+    padding: 5px;
+}
+
+.c21-comp-thumbnail {
+    max-width: 100px;
+    max-height: 60px;
+    border: 1px solid var(--c21-gold-light);
+}
+
+.c21-comp-highlight-row td {
+    background: #FFF9F0;
+}
+
+/* Highlight Classes */
+.c21-highlight {
+    color: var(--c21-gold-dark) !important;
+    font-weight: bold;
+}
+
+.c21-best-value {
+    color: #2E7D32 !important;
+    font-weight: bold;
+}
+
+/* Legend */
+.c21-comparison-legend {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    font-size: 8pt;
+    margin: 10px 0;
+}
+
+.c21-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.c21-legend-icon {
+    font-size: 10pt;
+}
+
+.c21-legend-icon.c21-best-value {
+    color: #2E7D32;
+}
+
+.c21-legend-icon.c21-highlight {
+    color: var(--c21-gold-dark);
+}
+
+/* Range Summary Table */
+.c21-range-summary {
+    margin: 20px 0;
+}
+
+.c21-range-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+}
+
+.c21-range-table th {
+    background: var(--c21-gold);
+    color: white;
+    padding: 8px;
+    text-align: center;
+}
+
+.c21-range-table td {
+    border: 1px solid var(--c21-border);
+    padding: 8px;
+    text-align: center;
+}
+
+.c21-range-table tr:nth-child(even) td {
+    background: var(--c21-light);
+}
+
+/* ==========================================================================
+   Print Optimizations
+   ========================================================================== */
+
+@media print {
+    .c21-property-report,
+    .c21-comparison-report {
+        font-size: 9pt;
+    }
+
+    .c21-header {
+        page-break-after: avoid;
+    }
+
+    .c21-footer {
+        page-break-before: avoid;
+    }
+
+    .c21-main-image {
+        max-height: 250px;
+    }
+
+    .c21-comparison-table {
+        page-break-inside: avoid;
+    }
+}

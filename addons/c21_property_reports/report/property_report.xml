@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Property Particulars Report Action -->
+    <record id="action_report_property_particulars" model="ir.actions.report">
+        <field name="name">Property Particulars / 物業資料</field>
+        <field name="model">c21.property.listing</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">c21_property_reports.report_property_particulars</field>
+        <field name="report_file">c21_property_reports.report_property_particulars</field>
+        <field name="binding_model_id" ref="c21_property_listing.model_c21_property_listing"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Property Comparison Report Action -->
+    <record id="action_report_property_comparison" model="ir.actions.report">
+        <field name="name">Property Comparison / 物業比較</field>
+        <field name="model">c21.property.listing</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">c21_property_reports.report_property_comparison</field>
+        <field name="report_file">c21_property_reports.report_property_comparison</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- Custom Paper Format for Landscape Comparison Report -->
+    <record id="paperformat_property_comparison" model="report.paperformat">
+        <field name="name">Property Comparison (Landscape)</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+</odoo>

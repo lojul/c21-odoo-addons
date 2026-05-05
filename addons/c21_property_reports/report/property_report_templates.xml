@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- =====================================================
+         PROPERTY PARTICULARS REPORT (Single Property)
+         ===================================================== -->
+    <template id="report_property_particulars">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page c21-property-report">
+                        <!-- Header with Logo -->
+                        <div class="c21-header">
+                            <div class="c21-logo-section">
+                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="c21-logo"/>
+                                <span class="c21-brand-name">CENTURY 21</span>
+                            </div>
+                            <div class="c21-header-title">
+                                <h1>Property Particulars</h1>
+                                <h2>物業資料</h2>
+                            </div>
+                            <div class="c21-header-date">
+                                <span t-esc="report_date"/>
+                            </div>
+                        </div>
+
+                        <!-- Property Title Section -->
+                        <div class="c21-title-section">
+                            <h2 class="c21-property-name">
+                                <t t-esc="doc.name"/>
+                            </h2>
+                            <h3 t-if="doc.name_cn" class="c21-property-name-cn">
+                                <t t-esc="doc.name_cn"/>
+                            </h3>
+                            <div class="c21-ref-code" t-if="doc.ref_code">
+                                Ref: <t t-esc="doc.ref_code"/>
+                            </div>
+                        </div>
+
+                        <!-- Cover Image -->
+                        <div class="c21-cover-image" t-if="doc.image_ids">
+                            <t t-set="cover_image" t-value="doc.image_ids[0] if doc.image_ids else False"/>
+                            <img t-if="cover_image and cover_image.image"
+                                 t-att-src="image_data_uri(cover_image.image)"
+                                 class="c21-main-image"/>
+                        </div>
+
+                        <!-- Key Details Grid -->
+                        <div class="c21-details-section">
+                            <h3 class="c21-section-title">Key Details / 主要資料</h3>
+                            <table class="c21-details-table">
+                                <tbody>
+                                    <!-- Location -->
+                                    <tr>
+                                        <td class="c21-label">Address / 地址</td>
+                                        <td class="c21-value">
+                                            <t t-if="doc.building_name"><t t-esc="doc.building_name"/><br/></t>
+                                            <t t-if="doc.address"><t t-esc="doc.address"/></t>
+                                            <t t-if="doc.floor">, <t t-esc="doc.floor"/>F</t>
+                                            <t t-if="doc.unit">, Unit <t t-esc="doc.unit"/></t>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.district">
+                                        <td class="c21-label">District / 地區</td>
+                                        <td class="c21-value"><t t-esc="doc.district"/></td>
+                                    </tr>
+                                    <tr t-if="doc.property_type_id">
+                                        <td class="c21-label">Property Type / 物業類型</td>
+                                        <td class="c21-value"><t t-esc="doc.property_type_id.name"/></td>
+                                    </tr>
+                                    <tr t-if="doc.building_grade">
+                                        <td class="c21-label">Building Grade / 寫字樓級別</td>
+                                        <td class="c21-value">Grade <t t-esc="doc.building_grade"/></td>
+                                    </tr>
+
+                                    <!-- Area -->
+                                    <tr t-if="doc.gross_area">
+                                        <td class="c21-label">Gross Area / 建築面積</td>
+                                        <td class="c21-value">
+                                            <t t-esc="'{:,.0f}'.format(doc.gross_area)"/> sq.ft.
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.net_area">
+                                        <td class="c21-label">Net Area / 實用面積</td>
+                                        <td class="c21-value">
+                                            <t t-esc="'{:,.0f}'.format(doc.net_area)"/> sq.ft.
+                                        </td>
+                                    </tr>
+
+                                    <!-- Pricing -->
+                                    <tr t-if="doc.asking_rent">
+                                        <td class="c21-label">Monthly Rent / 月租</td>
+                                        <td class="c21-value c21-highlight">
+                                            HK$ <t t-esc="'{:,.0f}'.format(doc.asking_rent)"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.rent_per_sqft">
+                                        <td class="c21-label">Rent per sq.ft. / 每呎租金</td>
+                                        <td class="c21-value">
+                                            HK$ <t t-esc="'{:,.2f}'.format(doc.rent_per_sqft)"/>
+                                        </td>
+                                    </tr>
+
+                                    <!-- Lease Info -->
+                                    <tr t-if="doc.available_from">
+                                        <td class="c21-label">Available From / 可租日期</td>
+                                        <td class="c21-value"><t t-esc="doc.available_from"/></td>
+                                    </tr>
+                                    <tr t-if="doc.lease_terms">
+                                        <td class="c21-label">Lease Terms / 租約條款</td>
+                                        <td class="c21-value"><t t-esc="doc.lease_terms"/></td>
+                                    </tr>
+                                    <tr t-if="doc.tenant_name">
+                                        <td class="c21-label">Current Tenant / 現租客</td>
+                                        <td class="c21-value"><t t-esc="doc.tenant_name"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Amenities -->
+                        <div class="c21-amenities-section" t-if="doc.amenity_ids">
+                            <h3 class="c21-section-title">Amenities / 設施</h3>
+                            <div class="c21-amenities-list">
+                                <t t-foreach="doc.amenity_ids" t-as="amenity">
+                                    <span class="c21-amenity-tag">
+                                        <t t-esc="amenity.name"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Business Types -->
+                        <div class="c21-business-section" t-if="doc.business_type_ids">
+                            <h3 class="c21-section-title">Suitable For / 適合行業</h3>
+                            <div class="c21-business-list">
+                                <t t-foreach="doc.business_type_ids" t-as="btype">
+                                    <span class="c21-business-tag">
+                                        <t t-esc="btype.name"/>
+                                    </span>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Description -->
+                        <div class="c21-description-section" t-if="doc.description">
+                            <h3 class="c21-section-title">Description / 描述</h3>
+                            <p class="c21-description">
+                                <t t-esc="doc.description"/>
+                            </p>
+                        </div>
+
+                        <!-- Additional Images -->
+                        <div class="c21-gallery-section" t-if="len(doc.image_ids) > 1">
+                            <h3 class="c21-section-title">Gallery / 圖片</h3>
+                            <div class="c21-gallery">
+                                <t t-foreach="doc.image_ids[1:4]" t-as="img">
+                                    <div class="c21-gallery-item">
+                                        <img t-if="img.image"
+                                             t-att-src="image_data_uri(img.image)"
+                                             class="c21-gallery-image"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- Contact Section -->
+                        <div class="c21-contact-section" t-if="doc.contact_ids">
+                            <h3 class="c21-section-title">Contact / 聯絡</h3>
+                            <t t-foreach="doc.contact_ids[:2]" t-as="contact">
+                                <div class="c21-contact-card">
+                                    <div class="c21-contact-name"><t t-esc="contact.name"/></div>
+                                    <div t-if="contact.phone" class="c21-contact-detail">
+                                        Tel: <t t-esc="contact.phone"/>
+                                    </div>
+                                    <div t-if="contact.email" class="c21-contact-detail">
+                                        Email: <t t-esc="contact.email"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="c21-footer">
+                            <div class="c21-disclaimer">
+                                The information contained herein is provided for general reference only.
+                                Century 21 makes no representations or warranties about the accuracy of this information.
+                            </div>
+                            <div class="c21-footer-brand">
+                                Century 21 Hong Kong | www.c21net.com
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- =====================================================
+         PROPERTY COMPARISON REPORT (Multiple Properties)
+         ===================================================== -->
+    <template id="report_property_comparison">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page c21-comparison-report">
+                    <!-- Header -->
+                    <div class="c21-header">
+                        <div class="c21-logo-section">
+                            <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="c21-logo"/>
+                            <span class="c21-brand-name">CENTURY 21</span>
+                        </div>
+                        <div class="c21-header-title">
+                            <h1>Property Comparison</h1>
+                            <h2>物業比較</h2>
+                        </div>
+                        <div class="c21-header-date">
+                            <span t-esc="report_date"/>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Summary -->
+                    <div class="c21-comparison-summary" t-if="comparison">
+                        <div class="c21-summary-item">
+                            <span class="c21-summary-label">Properties Compared</span>
+                            <span class="c21-summary-value"><t t-esc="comparison.get('property_count', 0)"/></span>
+                        </div>
+                        <div class="c21-summary-item" t-if="comparison.get('area', {}).get('avg')">
+                            <span class="c21-summary-label">Avg. Area</span>
+                            <span class="c21-summary-value">
+                                <t t-esc="'{:,.0f}'.format(comparison['area']['avg'])"/> sq.ft.
+                            </span>
+                        </div>
+                        <div class="c21-summary-item" t-if="comparison.get('rent', {}).get('avg')">
+                            <span class="c21-summary-label">Avg. Rent</span>
+                            <span class="c21-summary-value">
+                                HK$ <t t-esc="'{:,.0f}'.format(comparison['rent']['avg'])"/>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Comparison Table -->
+                    <table class="c21-comparison-table">
+                        <thead>
+                            <tr>
+                                <th class="c21-comp-header">Property / 物業</th>
+                                <t t-foreach="docs" t-as="doc">
+                                    <th class="c21-comp-property">
+                                        <div class="c21-comp-name"><t t-esc="doc.name[:30]"/></div>
+                                        <div t-if="doc.ref_code" class="c21-comp-ref">
+                                            <t t-esc="doc.ref_code"/>
+                                        </div>
+                                    </th>
+                                </t>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Cover Image Row -->
+                            <tr class="c21-comp-image-row">
+                                <td class="c21-comp-label">Image / 圖片</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-if="doc.image_ids">
+                                            <img t-att-src="image_data_uri(doc.image_ids[0].image)"
+                                                 class="c21-comp-thumbnail"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- District -->
+                            <tr>
+                                <td class="c21-comp-label">District / 地區</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-esc="doc.district or '-'"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Property Type -->
+                            <tr>
+                                <td class="c21-comp-label">Type / 類型</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-esc="doc.property_type_id.name if doc.property_type_id else '-'"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Building Grade -->
+                            <tr>
+                                <td class="c21-comp-label">Grade / 級別</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-if="doc.building_grade">Grade <t t-esc="doc.building_grade"/></t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Gross Area -->
+                            <tr>
+                                <td class="c21-comp-label">Gross Area / 建築面積</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-if="doc.gross_area">
+                                            <span t-att-class="'c21-highlight' if comparison.get('largest_id') == doc.id else ''">
+                                                <t t-esc="'{:,.0f}'.format(doc.gross_area)"/> sq.ft.
+                                            </span>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Net Area -->
+                            <tr>
+                                <td class="c21-comp-label">Net Area / 實用面積</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-if="doc.net_area">
+                                            <t t-esc="'{:,.0f}'.format(doc.net_area)"/> sq.ft.
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Monthly Rent -->
+                            <tr class="c21-comp-highlight-row">
+                                <td class="c21-comp-label">Monthly Rent / 月租</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value c21-comp-price">
+                                        <t t-if="doc.asking_rent">
+                                            HK$ <t t-esc="'{:,.0f}'.format(doc.asking_rent)"/>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Rent per sqft -->
+                            <tr>
+                                <td class="c21-comp-label">Price/sq.ft. / 每呎租金</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-if="doc.rent_per_sqft">
+                                            <span t-att-class="'c21-best-value' if comparison.get('best_value_id') == doc.id else ''">
+                                                HK$ <t t-esc="'{:,.2f}'.format(doc.rent_per_sqft)"/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">-</t>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Available From -->
+                            <tr>
+                                <td class="c21-comp-label">Available From / 可租日期</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-esc="doc.available_from or 'Immediate'"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            <!-- Amenities Count -->
+                            <tr>
+                                <td class="c21-comp-label">Amenities / 設施數目</td>
+                                <t t-foreach="docs" t-as="doc">
+                                    <td class="c21-comp-value">
+                                        <t t-esc="len(doc.amenity_ids) if doc.amenity_ids else 0"/>
+                                    </td>
+                                </t>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Legend -->
+                    <div class="c21-comparison-legend">
+                        <div class="c21-legend-item">
+                            <span class="c21-legend-icon c21-best-value">●</span>
+                            <span>Best Value (Lowest price/sq.ft.)</span>
+                        </div>
+                        <div class="c21-legend-item">
+                            <span class="c21-legend-icon c21-highlight">●</span>
+                            <span>Largest Property</span>
+                        </div>
+                    </div>
+
+                    <!-- Range Summary -->
+                    <div class="c21-range-summary" t-if="comparison">
+                        <h3 class="c21-section-title">Range Summary / 範圍摘要</h3>
+                        <table class="c21-range-table">
+                            <thead>
+                                <tr>
+                                    <th>Metric</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                    <th>Avg</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-if="comparison.get('area', {}).get('max')">
+                                    <td>Area (sq.ft.)</td>
+                                    <td><t t-esc="'{:,.0f}'.format(comparison['area']['min'])"/></td>
+                                    <td><t t-esc="'{:,.0f}'.format(comparison['area']['max'])"/></td>
+                                    <td><t t-esc="'{:,.0f}'.format(comparison['area']['avg'])"/></td>
+                                </tr>
+                                <tr t-if="comparison.get('rent', {}).get('max')">
+                                    <td>Monthly Rent (HK$)</td>
+                                    <td><t t-esc="'{:,.0f}'.format(comparison['rent']['min'])"/></td>
+                                    <td><t t-esc="'{:,.0f}'.format(comparison['rent']['max'])"/></td>
+                                    <td><t t-esc="'{:,.0f}'.format(comparison['rent']['avg'])"/></td>
+                                </tr>
+                                <tr t-if="comparison.get('price_per_sqft', {}).get('max')">
+                                    <td>Price/sq.ft. (HK$)</td>
+                                    <td><t t-esc="'{:,.2f}'.format(comparison['price_per_sqft']['min'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(comparison['price_per_sqft']['max'])"/></td>
+                                    <td><t t-esc="'{:,.2f}'.format(comparison['price_per_sqft']['avg'])"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="c21-footer">
+                        <div class="c21-disclaimer">
+                            The information contained herein is provided for general reference only.
+                            Century 21 makes no representations or warranties about the accuracy of this information.
+                        </div>
+                        <div class="c21-footer-brand">
+                            Century 21 Hong Kong | www.c21net.com
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
