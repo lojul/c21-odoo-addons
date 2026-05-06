@@ -72,6 +72,46 @@ Create view inheritance XML with xpath:
 </xpath>
 ```
 
+## n8n Workflows
+
+### Location
+- Workflow files: `/n8n/`
+- Triggered by: OneDrive folder watch
+
+### Property Document Processor v1.2.1 (List Support Fixed)
+- **File**: `n8n/Property Document Processor v1.2-list.json`
+- **Purpose**: Process PDFs from OneDrive, extract property data, upload to Odoo
+- **Supports**: Single property PDFs, bulk listing tables (旺舖出租精選), images
+
+#### Document Types
+| Type | Ref Code Prefix | Example |
+|------|-----------------|---------|
+| Single listing PDF | `PROP-YYYYMMDD-XXX` | Individual property documents |
+| Bulk list PDF | `MB-XXXXXX` | Table with multiple properties (樓盤編號) |
+| Manual import | `SPP-XXXXX`, `LS-XXXX` | CSV/manual imports |
+
+#### Key Nodes for List Processing
+```
+Split Into Items → Loop List Items → Map to Schema → Index Azure → Odoo Upsert
+                        ↑                                              ↓
+                        └──────────────────────────────────────────────┘
+```
+
+#### Troubleshooting
+- **Only 1 item processed**: Check "Loop List Items" node exists after "Split Into Items"
+- **No items created**: Check AI Classification output
+- **Images missing**: List PDFs don't contain photos; need separate image files
+
+#### Config Node
+The "Config (API Keys)" node contains placeholders - update with actual keys:
+- `AZURE_DOC_INTEL_KEY` - Azure Document Intelligence
+- `AZURE_OPENAI_KEY` - Azure OpenAI for embeddings
+- `AZURE_SEARCH_API_KEY` - Azure AI Search
+- `ODOO_API_KEY` - Odoo JSON-RPC API key
+
+### Fix History
+- **v1.2.1** (2026-05-06): Added missing `Loop List Items` (SplitInBatches) node to iterate through all extracted list items. Previously only processed first item.
+
 ## Documentation Files
 - `WORK_SUMMARY.md` - Detailed work history and procedures
 - `CHANGELOG_v2.md` - Version changelog
