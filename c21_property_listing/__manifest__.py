@@ -1,6 +1,6 @@
 {
     'name': 'C21 Property Management',
-    'version': '19.0.3.0.0',
+    'version': '19.0.3.1.0',
     'category': 'Real Estate',
     'summary': 'Manage co-working spaces and leasing properties',
     'description': """
@@ -19,6 +19,12 @@ Features:
 - Approval workflow
 - Mass update actions
 - REST API for website integration
+
+v19.0.3.1.0 - Added:
+- Expanded district selection (17 new districts)
+- HK Island: Kennedy Town, Happy Valley, Tin Hau, Fortress Hill, Chai Wan
+- Kowloon: Prince Edward, Yau Ma Tei, Kowloon City, Hung Hom, Kai Tak, To Kwa Wan
+- NT: Fanling, Sheung Shui, Tseung Kwan O, Ma On Shan, Tin Shui Wai, Tung Chung
 
 v19.0.3.0.0 - Added:
 - Sale pricing fields (售價, 底售, 售呎價, 底售呎價)
