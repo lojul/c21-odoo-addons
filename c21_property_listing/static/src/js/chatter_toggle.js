@@ -1,25 +1,53 @@
 /** @odoo-module **/
 
+// Track if we've already set up the observer
+let observerInitialized = false;
+let lastUrl = '';
+
 function initChatterToggle() {
+    // Only run on property listing form views
+    const url = window.location.href;
+    if (!url.includes('c21.property.listing') && !url.includes('c21_property_listing')) {
+        return;
+    }
+
     const chatter = document.querySelector('.o-mail-Form-chatter, .o-mail-Chatter');
     if (!chatter) return;
 
-    if (document.querySelector('.c21_chatter_toggle_btn')) return;
+    // Check if button already exists in control panel
+    if (document.querySelector('.c21_chatter_toggle_btn')) {
+        // Button exists, just reapply state if needed
+        reapplyState();
+        return;
+    }
 
-    // Try multiple possible insertion points
-    let insertTarget = document.querySelector('.o_cp_pager');
-    let insertParent = insertTarget?.parentNode;
+    // Try multiple possible insertion points - prioritize control panel
+    let insertTarget = null;
+    let insertParent = null;
 
-    // Fallback: try control panel buttons area
-    if (!insertTarget) {
-        insertParent = document.querySelector('.o_control_panel_actions, .o_cp_buttons');
+    // Option 1: Near the pager (1/1 navigation)
+    insertTarget = document.querySelector('.o_cp_pager');
+    insertParent = insertTarget?.parentNode;
+
+    // Option 2: Control panel actions area
+    if (!insertParent) {
+        insertParent = document.querySelector('.o_control_panel_actions');
         insertTarget = insertParent?.firstChild;
     }
 
-    // Fallback: try breadcrumb area
+    // Option 3: Control panel buttons
     if (!insertParent) {
-        insertParent = document.querySelector('.o_control_panel_breadcrumbs');
-        insertTarget = null; // append at end
+        insertParent = document.querySelector('.o_cp_buttons');
+        insertTarget = insertParent?.firstChild;
+    }
+
+    // Option 4: Near the action menu (gear)
+    if (!insertParent) {
+        const actionMenu = document.querySelector('.o_cp_action_menus');
+        if (actionMenu) {
+            insertParent = actionMenu.parentNode;
+            insertTarget = actionMenu;
+        }
     }
 
     if (!insertParent) return;
@@ -106,19 +134,68 @@ function reapplyState() {
 }
 
 let debounceTimer = null;
-const observer = new MutationObserver(() => {
-    clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => {
-        initChatterToggle();
-        reapplyState();
-    }, 200);
-});
 
-if (document.body) {
-    observer.observe(document.body, { childList: true, subtree: true });
+function setupObserver() {
+    if (observerInitialized) return;
+
+    const observer = new MutationObserver((mutations) => {
+        // Check if any mutation involves form views or chatter
+        const relevantMutation = mutations.some(m => {
+            const target = m.target;
+            if (target.classList) {
+                return target.classList.contains('o_form_view') ||
+                       target.classList.contains('o-mail-Form-chatter') ||
+                       target.classList.contains('o-mail-Chatter') ||
+                       target.classList.contains('o_control_panel');
+            }
+            return false;
+        });
+
+        // Also check URL changes (navigation between records)
+        const currentUrl = window.location.href;
+        const urlChanged = currentUrl !== lastUrl;
+        lastUrl = currentUrl;
+
+        if (relevantMutation || urlChanged) {
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                initChatterToggle();
+            }, 300);
+        }
+    });
+
+    if (document.body) {
+        observer.observe(document.body, { childList: true, subtree: true });
+        observerInitialized = true;
+    }
 }
 
-// Multiple init attempts for reliability
-setTimeout(initChatterToggle, 500);
-setTimeout(initChatterToggle, 1000);
-setTimeout(initChatterToggle, 2000);
+// Use Odoo's whenReady to ensure DOM is ready
+function onDOMReady(fn) {
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fn);
+    } else {
+        fn();
+    }
+}
+
+onDOMReady(() => {
+    setupObserver();
+
+    // Multiple init attempts with increasing delays for reliability
+    // This handles async component loading in Odoo 17+
+    setTimeout(initChatterToggle, 500);
+    setTimeout(initChatterToggle, 1000);
+    setTimeout(initChatterToggle, 2000);
+    setTimeout(initChatterToggle, 3000);
+});
+
+// Also listen for URL hash changes (SPA navigation)
+window.addEventListener('hashchange', () => {
+    setTimeout(initChatterToggle, 500);
+});
+
+// Listen for popstate (browser back/forward)
+window.addEventListener('popstate', () => {
+    setTimeout(initChatterToggle, 500);
+});

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add Print button to Property Listing Form via inheritance -->
+    <record id="c21_property_listing_view_form_inherit_reports" model="ir.ui.view">
+        <field name="name">c21.property.listing.form.inherit.reports</field>
+        <field name="model">c21.property.listing</field>
+        <field name="inherit_id" ref="c21_property_listing.c21_property_listing_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_print_particulars" type="object"
+                        class="oe_stat_button" icon="fa-print"
+                        string="Print"
+                        title="Print Property Particulars / 列印物業資料"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -27,6 +27,7 @@ Features:
     ],
     'data': [
         'security/ir.model.access.csv',
+        'views/property_listing_views.xml',
         'wizard/property_comparison_wizard_views.xml',
         'report/property_report.xml',
         'report/property_report_templates.xml',
