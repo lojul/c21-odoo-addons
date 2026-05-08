@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Lead Form View -->
+    <record id="view_crm_lead_form_facebook" model="ir.ui.view">
+        <field name="name">crm.lead.form.facebook</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='extra']" position="after">
+                <page string="Social Media Source" name="social_media_source">
+                    <group>
+                        <group string="Source Information">
+                            <field name="x_lead_source"/>
+                            <field name="x_source_url" widget="url"/>
+                            <field name="x_facebook_comment_id"/>
+                            <field name="x_facebook_post_id"/>
+                        </group>
+                        <group string="Original Content">
+                            <field name="x_original_message"/>
+                            <field name="x_post_context"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Lead Source to Lead List View -->
+    <record id="view_crm_lead_tree_facebook" model="ir.ui.view">
+        <field name="name">crm.lead.tree.facebook</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="x_lead_source" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add filters to Lead Search -->
+    <record id="view_crm_lead_search_facebook" model="ir.ui.view">
+        <field name="name">crm.lead.search.facebook</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.view_crm_case_leads_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='unassigned']" position="after">
+                <separator/>
+                <filter string="Facebook Leads" name="facebook_leads"
+                        domain="[('x_lead_source', 'in', ['facebook_comment', 'facebook_ad', 'facebook_messenger'])]"/>
+                <filter string="Instagram Leads" name="instagram_leads"
+                        domain="[('x_lead_source', 'in', ['instagram_comment', 'instagram_dm'])]"/>
+            </xpath>
+            <xpath expr="//group" position="inside">
+                <filter string="Lead Source" name="group_lead_source" context="{'group_by': 'x_lead_source'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Extend Opportunity Form View -->
+    <record id="view_crm_opportunity_form_facebook" model="ir.ui.view">
+        <field name="name">crm.opportunity.form.facebook</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="priority" eval="20"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="x_lead_source"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

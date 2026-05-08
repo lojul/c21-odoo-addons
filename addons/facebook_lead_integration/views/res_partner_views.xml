@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extend Contact Form View -->
+    <record id="view_partner_form_facebook" model="ir.ui.view">
+        <field name="name">res.partner.form.facebook</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='internal_notes']" position="after">
+                <page string="Social Media" name="social_media">
+                    <group>
+                        <group string="Facebook Information">
+                            <field name="x_facebook_id"/>
+                            <field name="x_facebook_profile_url" widget="url"/>
+                            <field name="x_lead_source"/>
+                            <field name="x_source_post_url" widget="url"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Facebook ID to Contact List View -->
+    <record id="view_partner_tree_facebook" model="ir.ui.view">
+        <field name="name">res.partner.tree.facebook</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+                <field name="x_lead_source" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Add Facebook ID to Contact Search -->
+    <record id="view_partner_search_facebook" model="ir.ui.view">
+        <field name="name">res.partner.search.facebook</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="x_facebook_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='inactive']" position="after">
+                <separator/>
+                <filter string="Facebook Leads" name="facebook_leads"
+                        domain="[('x_lead_source', 'in', ['facebook_comment', 'facebook_ad', 'facebook_messenger'])]"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
