@@ -32,10 +32,22 @@ class ResUsers(models.Model):
                 ('oauth_uid', '=', False),
             ])
             if not oauth_user:
-                # Also try matching by email field
+                # Also try matching by partner email field with provider set
                 oauth_user = self.search([
-                    ('email', '=', email),
+                    ('partner_id.email', '=', email),
                     ('oauth_provider_id', '=', provider),
+                    ('oauth_uid', '=', False),
+                ])
+            if not oauth_user:
+                # Try matching by login without requiring provider (existing users)
+                oauth_user = self.search([
+                    ('login', '=', email),
+                    ('oauth_uid', '=', False),
+                ])
+            if not oauth_user:
+                # Try matching by partner email without requiring provider (existing users)
+                oauth_user = self.search([
+                    ('partner_id.email', '=', email),
                     ('oauth_uid', '=', False),
                 ])
 
@@ -44,8 +56,11 @@ class ResUsers(models.Model):
                     "Auto-linking user %s to OAuth UID %s (matched by email)",
                     oauth_user.login, oauth_uid
                 )
-                # Update the oauth_uid for this user (use sudo for access during callback)
-                oauth_user.sudo().write({'oauth_uid': oauth_uid})
+                # Update oauth fields for this user (use sudo for access during callback)
+                oauth_user.sudo().write({
+                    'oauth_uid': oauth_uid,
+                    'oauth_provider_id': provider,
+                })
 
         if not oauth_user and email:
             # Auto-create new user for first-time SSO login
