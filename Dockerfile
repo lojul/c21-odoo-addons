@@ -3,6 +3,7 @@ FROM odoo:19.0
 # Copy custom addons to Odoo's extra addons directory
 COPY ./c21_property_listing /mnt/extra-addons/c21_property_listing
 COPY ./c21_admin_dashboard /mnt/extra-addons/c21_admin_dashboard
+COPY ./addons/facebook_lead_integration /mnt/extra-addons/facebook_lead_integration
 COPY --chown=root:root ./scripts/sync_addons_and_start.sh /usr/local/bin/sync_addons_and_start.sh
 COPY --chown=root:root ./scripts/bulk_image_import.py /usr/local/bin/bulk_image_import.py
 

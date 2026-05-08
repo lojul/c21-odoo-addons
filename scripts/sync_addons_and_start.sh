@@ -3,7 +3,7 @@ set -euo pipefail
 
 SRC_ROOT="/mnt/extra-addons"
 DST_ROOT="/var/lib/odoo/addons/19.0"
-MODULES=("c21_property_listing" "c21_admin_dashboard")
+MODULES=("c21_property_listing" "c21_admin_dashboard" "facebook_lead_integration")
 
 echo "[startup-sync] Syncing custom addons from image to persistent volume"
 
