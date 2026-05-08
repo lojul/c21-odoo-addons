@@ -44,8 +44,8 @@ class ResUsers(models.Model):
                     "Auto-linking user %s to OAuth UID %s (matched by email)",
                     oauth_user.login, oauth_uid
                 )
-                # Update the oauth_uid for this user
-                oauth_user.write({'oauth_uid': oauth_uid})
+                # Update the oauth_uid for this user (use sudo for access during callback)
+                oauth_user.sudo().write({'oauth_uid': oauth_uid})
 
         if not oauth_user and email:
             # Auto-create new user for first-time SSO login
@@ -54,7 +54,9 @@ class ResUsers(models.Model):
                 email, provider
             )
             name = validation.get('name', email.split('@')[0])
-            oauth_user = self.with_context(
+            # Use sudo() to bypass access checks during user creation
+            # This is needed because env.user is empty during OAuth callback
+            oauth_user = self.sudo().with_context(
                 no_reset_password=True,
                 mail_create_nolog=True,
                 mail_notrack=True,
@@ -79,7 +81,7 @@ class ResUsers(models.Model):
         if len(oauth_user) > 1:
             raise AccessDenied("Multiple users found for OAuth credentials")
 
-        oauth_user.write({'oauth_access_token': params['access_token']})
+        oauth_user.sudo().write({'oauth_access_token': params['access_token']})
         return oauth_user.login
 
     @api.model_create_multi
