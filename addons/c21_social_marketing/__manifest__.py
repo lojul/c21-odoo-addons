@@ -29,6 +29,7 @@ Configuration:
         'security/ir.model.access.csv',
         'data/default_feeds.xml',
         'data/ir_cron.xml',
+        'data/server_actions.xml',
         'views/social_post_views.xml',
         'views/social_channel_views.xml',
         'views/social_feed_views.xml',

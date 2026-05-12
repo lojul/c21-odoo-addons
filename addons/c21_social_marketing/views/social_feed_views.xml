@@ -128,14 +128,4 @@
         <field name="context">{'search_default_property': 1}</field>
     </record>
 
-    <!-- Cleanup News Server Action -->
-    <record id="action_cleanup_news" model="ir.actions.server">
-        <field name="name">清理舊新聞</field>
-        <field name="model_id" ref="model_c21_social_news"/>
-        <field name="binding_model_id" ref="model_c21_social_news"/>
-        <field name="binding_view_types">list</field>
-        <field name="state">code</field>
-        <field name="code">action = model.action_cleanup_all()</field>
-    </record>
-
 </odoo>
