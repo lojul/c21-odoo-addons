@@ -5,7 +5,7 @@ RSS feed scraper for property news.
 import logging
 import re
 import requests
-from datetime import datetime
+from datetime import datetime, timedelta
 from xml.etree import ElementTree
 
 _logger = logging.getLogger(__name__)
@@ -23,14 +23,15 @@ PROPERTY_KEYWORDS = [
 ]
 
 
-def fetch_feed(env, feed, max_items=10):
+def fetch_feed(env, feed, max_items=50, max_age_days=7):
     """
     Fetch and parse RSS feed, create news records.
 
     Args:
         env: Odoo environment
         feed: c21.social.feed record
-        max_items: Maximum items to fetch per feed (default 10)
+        max_items: Maximum items to fetch per feed (default 50)
+        max_age_days: Only fetch items published within this many days (default 7)
     """
     _logger.info(f"Fetching RSS feed: {feed.name} ({feed.url})")
 
@@ -46,16 +47,35 @@ def fetch_feed(env, feed, max_items=10):
 
     # Parse RSS/XML
     items = _parse_rss(content)
-    _logger.info(f"Found {len(items)} items in feed {feed.name}, limiting to {max_items}")
+    _logger.info(f"Found {len(items)} items in feed {feed.name}")
+
+    # Filter by date - only keep recent items
+    now = datetime.now()
+    cutoff_date = now - timedelta(days=max_age_days)
+    filtered_items = []
+
+    for item in items:
+        pub_date = item.get('pub_date')
+        if pub_date:
+            # Skip items with future dates (likely parsing errors)
+            if pub_date > now:
+                _logger.warning(f"Skipping item with future date: {item['title'][:50]} ({pub_date})")
+                continue
+            # Skip items older than max_age_days
+            if pub_date < cutoff_date:
+                continue
+        filtered_items.append(item)
+
+    _logger.info(f"After date filtering: {len(filtered_items)} items within last {max_age_days} days")
 
     # Limit items
-    items = items[:max_items]
+    filtered_items = filtered_items[:max_items]
 
     # Create news records
     news_model = env['c21.social.news']
     created_count = 0
 
-    for item in items:
+    for item in filtered_items:
         # Check if already exists
         existing = news_model.search([('url', '=', item['url'])], limit=1)
         if existing:
@@ -213,11 +233,18 @@ def _check_relevance(title, description):
     return is_property, score
 
 
-def fetch_all_feeds(env):
-    """Fetch all active feeds"""
+def fetch_all_feeds(env, cleanup=True):
+    """Fetch all active feeds and optionally cleanup old news"""
     feeds = env['c21.social.feed'].search([('active', '=', True)])
     for feed in feeds:
         try:
             fetch_feed(env, feed)
         except Exception as e:
             _logger.exception(f"Error fetching feed {feed.name}")
+
+    # Cleanup old and invalid news after fetching
+    if cleanup:
+        news_model = env['c21.social.news']
+        deleted = news_model.cleanup_old_news(days=14)
+        invalid = news_model.cleanup_invalid_news()
+        _logger.info(f"Cleanup: removed {deleted} old news, {invalid} invalid news")

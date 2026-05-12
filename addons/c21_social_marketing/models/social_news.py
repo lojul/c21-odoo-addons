@@ -31,8 +31,35 @@ class SocialNews(models.Model):
             ('fetch_date', '<', cutoff),
             ('used', '=', False)
         ])
+        count = len(old_news)
         old_news.unlink()
-        return len(old_news)
+        return count
+
+    @api.model
+    def cleanup_invalid_news(self):
+        """Remove news with invalid dates (future dates)"""
+        now = fields.Datetime.now()
+        invalid_news = self.search([
+            ('publish_date', '>', now),
+            ('used', '=', False)
+        ])
+        count = len(invalid_news)
+        invalid_news.unlink()
+        return count
+
+    @api.model
+    def action_cleanup_all(self):
+        """Manual cleanup action - remove old and invalid news"""
+        old_count = self.cleanup_old_news(days=14)
+        invalid_count = self.cleanup_invalid_news()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'message': _('Cleanup complete: removed %d old news, %d invalid news') % (old_count, invalid_count),
+                'type': 'success',
+            }
+        }
 
     def action_create_post(self):
         """Create a social post from this news item"""
