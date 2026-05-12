@@ -21,6 +21,47 @@
 - Property Comparison report (2-5 properties)
 - Location: `/addons/c21_property_reports/`
 
+### c21_social_marketing (Application)
+- Automated social media posts for HK property news
+- Location: `/addons/c21_social_marketing/`
+
+#### Key Features
+- RSS news scraping from Google News, SCMP, etc.
+- AI caption generation (DeepSeek via OpenRouter)
+- Image generation with PIL
+- Buffer API integration for FB/IG/Threads
+
+#### RSS Scraper (`utils/rss_scraper.py`)
+- **Date filtering**: Only fetches news from last 30 days
+- **Future date skip**: Skips items with invalid future dates
+- **Duplicate check**: Skips URLs already in database
+- **Auto-cleanup**: Removes old news after each fetch
+
+#### Cleanup Criteria
+- **Old news**: `fetch_date` > 7 days AND `used = False`
+- **Invalid news**: `publish_date` in future AND `used = False`
+- News marked as `used = True` (turned into posts) are never deleted
+
+#### Manual Cleanup
+- Menu: C21 Social Marketing → 清理舊新聞
+- Or via shell: `env['c21.social.news'].action_cleanup_all()`
+
+#### Cron Jobs
+- Fetch news: Every hour
+- Generate posts: 9am, 1pm, 5pm HKT
+- Cleanup old news: Weekly
+
+#### Deployment
+```bash
+./scripts/deploy_social_marketing.sh
+```
+Or manually:
+```bash
+rsync -avz addons/c21_social_marketing/ root@188.166.189.244:/opt/odoo/addons/c21_social_marketing/
+ssh root@188.166.189.244 "cd /opt/odoo && docker compose exec -T odoo odoo -d odoo --db_host=db --db_user=odoo --db_password=odoo_secure_pw_2024 -u c21_social_marketing --stop-after-init"
+ssh root@188.166.189.244 "cd /opt/odoo && docker compose restart odoo"
+```
+
 ## Report System
 
 ### Template Files
@@ -45,13 +86,41 @@
 
 ## Deployment Flow
 
-1. Commit and push to GitHub
-2. On Railway server:
+### Server Info
+- **Host**: `root@188.166.189.244` (Digital Ocean)
+- **Odoo Path**: `/opt/odoo`
+- **DB**: PostgreSQL in Docker (`db` container)
+- **DB Credentials**: `odoo` / `odoo_secure_pw_2024`
+
+### Quick Deploy (Social Marketing)
+```bash
+./scripts/deploy_social_marketing.sh
+```
+
+### Manual Deploy
+1. Copy files to server:
    ```bash
-   git pull origin main
-   docker-compose down && docker-compose up -d --build
+   rsync -avz --delete addons/MODULE_NAME/ root@188.166.189.244:/opt/odoo/addons/MODULE_NAME/
    ```
-3. In Odoo UI: Apps → Upgrade modules
+
+2. Upgrade module:
+   ```bash
+   ssh root@188.166.189.244 "cd /opt/odoo && docker compose exec -T odoo odoo -d odoo --db_host=db --db_user=odoo --db_password=odoo_secure_pw_2024 -u MODULE_NAME --stop-after-init"
+   ```
+
+3. Restart Odoo:
+   ```bash
+   ssh root@188.166.189.244 "cd /opt/odoo && docker compose restart odoo"
+   ```
+
+### Odoo Shell (for debugging)
+```bash
+ssh root@188.166.189.244 "cd /opt/odoo && docker compose exec -T odoo odoo shell -d odoo --db_host=db --db_user=odoo --db_password=odoo_secure_pw_2024 --no-http"
+```
+
+### Docker Notes
+- Dockerfile requires `--break-system-packages` for pip (Python 3.12)
+- Location: `docker/Dockerfile`
 
 ## Common Tasks
 
@@ -111,6 +180,30 @@ The "Config (API Keys)" node contains placeholders - update with actual keys:
 
 ### Fix History
 - **v1.2.1** (2026-05-06): Added missing `Loop List Items` (SplitInBatches) node to iterate through all extracted list items. Previously only processed first item.
+
+### Future: LangGraph Migration
+Consider migrating from n8n to LangGraph for:
+- **Better debugging** - Python stack traces, breakpoints, unit tests
+- **Cleaner code** - Python files vs JS embedded in JSON
+- **Testability** - Unit test each node independently
+- **State management** - First-class support for workflow state
+
+Migration approach:
+1. Keep n8n for simple triggers only
+2. n8n calls LangGraph API endpoint for processing
+3. Or replace entirely with Python script + cron/webhook
+
+### Alternative Triggers (Better than OneDrive)
+| Method | Pros | Cons |
+|--------|------|------|
+| **WhatsApp Bot** | Agents already use WhatsApp; send PDF via chat | Need WhatsApp Business API |
+| **Odoo Upload** | Most integrated; upload in property form | Need custom Odoo module |
+| **Web Form** | Simple HTML upload page | Need to host/secure |
+| **Email** | Send PDF as attachment | Parsing attachments |
+| **Telegram Bot** | Free, easy API | Less common in HK |
+| **S3/Azure Blob Watch** | More reliable than OneDrive | More setup |
+
+**Recommended**: WhatsApp or Odoo built-in upload for best UX.
 
 ## Documentation Files
 - `WORK_SUMMARY.md` - Detailed work history and procedures
