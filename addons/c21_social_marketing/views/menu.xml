@@ -21,6 +21,20 @@
               action="action_social_news"
               sequence="20"/>
 
+    <!-- Cleanup Action -->
+    <record id="action_cleanup_news_menu" model="ir.actions.server">
+        <field name="name">清理舊新聞</field>
+        <field name="model_id" ref="model_c21_social_feed"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_cleanup_news()</field>
+    </record>
+
+    <menuitem id="menu_cleanup_news"
+              name="清理舊新聞"
+              parent="menu_social_marketing_root"
+              action="action_cleanup_news_menu"
+              sequence="25"/>
+
     <!-- Configuration Menu -->
     <menuitem id="menu_social_config"
               name="Configuration"

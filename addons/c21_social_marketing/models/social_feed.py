@@ -38,3 +38,18 @@ class SocialFeed(models.Model):
                 'type': 'success',
             }
         }
+
+    @api.model
+    def action_cleanup_news(self):
+        """Cleanup old and invalid news"""
+        news_model = self.env['c21.social.news']
+        old_count = news_model.cleanup_old_news(days=7)
+        invalid_count = news_model.cleanup_invalid_news()
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'message': _('Cleanup: %d old, %d invalid news removed') % (old_count, invalid_count),
+                'type': 'success',
+            }
+        }
