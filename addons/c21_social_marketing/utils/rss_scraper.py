@@ -23,7 +23,7 @@ PROPERTY_KEYWORDS = [
 ]
 
 
-def fetch_feed(env, feed, max_items=50, max_age_days=7):
+def fetch_feed(env, feed, max_items=50, max_age_days=30):
     """
     Fetch and parse RSS feed, create news records.
 
@@ -53,20 +53,24 @@ def fetch_feed(env, feed, max_items=50, max_age_days=7):
     now = datetime.now()
     cutoff_date = now - timedelta(days=max_age_days)
     filtered_items = []
+    skipped_future = 0
+    skipped_old = 0
 
     for item in items:
         pub_date = item.get('pub_date')
         if pub_date:
             # Skip items with future dates (likely parsing errors)
             if pub_date > now:
-                _logger.warning(f"Skipping item with future date: {item['title'][:50]} ({pub_date})")
+                _logger.warning(f"Skipping future date: {item['title'][:50]} ({pub_date})")
+                skipped_future += 1
                 continue
             # Skip items older than max_age_days
             if pub_date < cutoff_date:
+                skipped_old += 1
                 continue
         filtered_items.append(item)
 
-    _logger.info(f"After date filtering: {len(filtered_items)} items within last {max_age_days} days")
+    _logger.info(f"Date filter: {len(filtered_items)} recent, {skipped_old} old, {skipped_future} future")
 
     # Limit items
     filtered_items = filtered_items[:max_items]
@@ -74,11 +78,13 @@ def fetch_feed(env, feed, max_items=50, max_age_days=7):
     # Create news records
     news_model = env['c21.social.news']
     created_count = 0
+    duplicate_count = 0
 
     for item in filtered_items:
         # Check if already exists
         existing = news_model.search([('url', '=', item['url'])], limit=1)
         if existing:
+            duplicate_count += 1
             continue
 
         # Check relevance
@@ -99,7 +105,7 @@ def fetch_feed(env, feed, max_items=50, max_age_days=7):
     # Update feed last fetch time
     feed.last_fetch = datetime.now()
 
-    _logger.info(f"Created {created_count} new news items from {feed.name}")
+    _logger.info(f"Feed {feed.name}: {created_count} new, {duplicate_count} duplicates")
 
 
 def _parse_rss(content):
