@@ -19,6 +19,96 @@
             <field name="active">True</field>
         </record>
 
+        <!-- HKET 香港經濟日報 Property -->
+        <record id="feed_hket_property" model="c21.social.feed">
+            <field name="name">香港經濟日報 地產</field>
+            <field name="url">https://www.hket.com/rss/property</field>
+            <field name="priority">3</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Oriental Daily 東方日報 -->
+        <record id="feed_orientaldaily" model="c21.social.feed">
+            <field name="name">東方日報 財經地產</field>
+            <field name="url">https://orientaldaily.on.cc/rss/fin.xml</field>
+            <field name="priority">4</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Sing Tao 星島日報 -->
+        <record id="feed_singtao_property" model="c21.social.feed">
+            <field name="name">星島日報 地產</field>
+            <field name="url">https://std.stheadline.com/realtime/hongkong/property.rss</field>
+            <field name="priority">5</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- The Standard English -->
+        <record id="feed_thestandard" model="c21.social.feed">
+            <field name="name">The Standard Business</field>
+            <field name="url">https://www.thestandard.com.hk/rss/business.xml</field>
+            <field name="priority">6</field>
+            <field name="language">en</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- RTHK 香港電台 -->
+        <record id="feed_rthk_finance" model="c21.social.feed">
+            <field name="name">RTHK 財經</field>
+            <field name="url">https://rthk.hk/rthk/news/rss/c_expressnews_cfinance.xml</field>
+            <field name="priority">7</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- am730 財經 -->
+        <record id="feed_am730" model="c21.social.feed">
+            <field name="name">am730 財經</field>
+            <field name="url">https://www.am730.com.hk/rss/column-finance</field>
+            <field name="priority">8</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Google News English HK Property -->
+        <record id="feed_google_news_en" model="c21.social.feed">
+            <field name="name">Google News HK Property (English)</field>
+            <field name="url">https://news.google.com/rss/search?q=Hong+Kong+commercial+property+OR+Hong+Kong+office+OR+Hong+Kong+industrial&amp;hl=en-HK&amp;gl=HK&amp;ceid=HK:en</field>
+            <field name="priority">9</field>
+            <field name="language">en</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Google News 租務/租金 -->
+        <record id="feed_google_news_rental" model="c21.social.feed">
+            <field name="name">Google News 香港租務</field>
+            <field name="url">https://news.google.com/rss/search?q=香港租金+OR+香港租務+OR+香港租盤&amp;hl=zh-TW&amp;gl=HK&amp;ceid=HK:zh-Hant</field>
+            <field name="priority">10</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Google News 工商舖 -->
+        <record id="feed_google_news_shops" model="c21.social.feed">
+            <field name="name">Google News 香港工商舖</field>
+            <field name="url">https://news.google.com/rss/search?q=香港工商舖+OR+香港商舖+OR+香港舖位&amp;hl=zh-TW&amp;gl=HK&amp;ceid=HK:zh-Hant</field>
+            <field name="priority">11</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
+        <!-- Google News 甲級寫字樓 -->
+        <record id="feed_google_news_office" model="c21.social.feed">
+            <field name="name">Google News 甲級寫字樓</field>
+            <field name="url">https://news.google.com/rss/search?q=香港甲級寫字樓+OR+中環寫字樓+OR+核心區商廈&amp;hl=zh-TW&amp;gl=HK&amp;ceid=HK:zh-Hant</field>
+            <field name="priority">12</field>
+            <field name="language">zh</field>
+            <field name="active">True</field>
+        </record>
+
         <!-- Default Channels (user needs to update Buffer IDs) -->
         <record id="channel_instagram" model="c21.social.channel">
             <field name="name">Instagram c21net.hk</field>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'C21 Social Marketing',
-    'version': '19.0.1.1.0',
+    'version': '19.0.1.2.0',
     'category': 'Marketing',
     'summary': 'Automated social media posts for Hong Kong property news',
     'description': """
